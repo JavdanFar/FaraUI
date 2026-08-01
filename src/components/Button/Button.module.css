@@ -1,0 +1,45 @@
+.button {
+  border: none;
+  border-radius: var(--javdan-radius-md);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color var(--javdan-transition-fast);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary {
+  background-color: var(--javdan-color-primary);
+  color: var(--javdan-color-text-inverse);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--javdan-color-primary-hover);
+}
+
+.secondary {
+  background-color: var(--javdan-color-secondary);
+  color: var(--javdan-color-text);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--javdan-color-secondary-hover);
+}
+
+.sm {
+  padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
+  font-size: var(--javdan-font-size-sm);
+}
+
+.md {
+  padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+  font-size: var(--javdan-font-size-md);
+}
+
+.lg {
+  padding: var(--javdan-spacing-md) var(--javdan-spacing-lg);
+  font-size: var(--javdan-font-size-lg);
+}
