@@ -1,0 +1,47 @@
+.input {
+    border: 1px solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    font-family: inherit;
+    color: var(--javdan-color-text);
+    background-color: var(--javdan-color-background);
+    outline: none;
+    transition: border-color var(--javdan-transition-fast);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.input::placeholder {
+    color: var(--javdan-color-border);
+}
+
+.input:focus {
+    border-color: var(--javdan-color-primary);
+}
+
+.input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.error {
+    border-color: #ef4444;
+}
+
+.error:focus {
+    border-color: #ef4444;
+}
+
+.sm {
+    padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
+    font-size: var(--javdan-font-size-sm);
+}
+
+.md {
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    font-size: var(--javdan-font-size-md);
+}
+
+.lg {
+    padding: var(--javdan-spacing-md) var(--javdan-spacing-lg);
+    font-size: var(--javdan-font-size-lg);
+}
