@@ -1,0 +1,6 @@
+.card {
+    background-color: var(--javdan-color-background);
+    border: 1px solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-lg);
+    padding: var(--javdan-spacing-lg);
+}
