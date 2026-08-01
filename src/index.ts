@@ -15,3 +15,6 @@ export type { NotificationBadgeProps } from "./components/NotificationBadge";
 
 export { Avatar } from "./components/Avatar";
 export type { AvatarProps } from "./components/Avatar";
+
+export { Text, Heading } from "./components/Typography";
+export type { TextProps, HeadingProps } from "./components/Typography";
