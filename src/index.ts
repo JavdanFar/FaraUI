@@ -12,3 +12,6 @@ export type { BadgeProps } from "./components/Badge";
 
 export { NotificationBadge } from "./components/NotificationBadge";
 export type { NotificationBadgeProps } from "./components/NotificationBadge";
+
+export { Avatar } from "./components/Avatar";
+export type { AvatarProps } from "./components/Avatar";
