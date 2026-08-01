@@ -24,3 +24,6 @@ export type { CheckboxProps } from "./components/Checkbox";
 
 export { Alert } from "./components/Alert";
 export type { AlertProps } from "./components/Alert";
+
+export { Select } from "./components/Select";
+export type { SelectProps, SelectOption } from "./components/Select";
