@@ -1,0 +1,28 @@
+.wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--javdan-spacing-sm);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: var(--javdan-font-size-md);
+    color: var(--javdan-color-text);
+}
+
+.wrapper:has(.checkbox:disabled) {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1px solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-sm);
+    cursor: pointer;
+    accent-color: var(--javdan-color-primary);
+    margin: 0;
+}
+
+.checkbox:disabled {
+    cursor: not-allowed;
+}
