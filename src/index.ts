@@ -21,3 +21,6 @@ export type { TextProps, HeadingProps } from "./components/Typography";
 
 export { Checkbox } from "./components/Checkbox";
 export type { CheckboxProps } from "./components/Checkbox";
+
+export { Alert } from "./components/Alert";
+export type { AlertProps } from "./components/Alert";
