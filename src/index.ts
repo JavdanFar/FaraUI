@@ -45,3 +45,6 @@ export type { TabsRootProps, TabsListProps, TabsTabProps, TabsPanelProps } from 
 
 export { Tooltip } from "./components/Tooltip";
 export type { TooltipProps } from "./components/Tooltip";
+
+export { DropdownMenu, DropdownMenuItem } from "./components/DropdownMenu";
+export type { DropdownMenuProps, DropdownMenuItemProps } from "./components/DropdownMenu";
