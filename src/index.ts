@@ -27,3 +27,6 @@ export type { AlertProps } from "./components/Alert";
 
 export { Select } from "./components/Select";
 export type { SelectProps, SelectOption } from "./components/Select";
+
+export { Switch } from "./components/Switch";
+export type { SwitchProps } from "./components/Switch";
