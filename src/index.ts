@@ -42,3 +42,6 @@ export type { ModalProps } from "./components/Modal";
 
 export { Tabs } from "./components/Tabs";
 export type { TabsRootProps, TabsListProps, TabsTabProps, TabsPanelProps } from "./components/Tabs";
+
+export { Tooltip } from "./components/Tooltip";
+export type { TooltipProps } from "./components/Tooltip";
