@@ -1,0 +1,50 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--javdan-color-background-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--javdan-z-modal);
+    padding: var(--javdan-spacing-md);
+}
+
+.modal {
+    background-color: var(--javdan-color-background);
+    border-radius: var(--javdan-radius-lg);
+    padding: var(--javdan-spacing-lg);
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: var(--javdan-shadow-lg);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--javdan-spacing-md);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: var(--javdan-font-size-xl);
+    line-height: var(--javdan-line-height-tight);
+    color: var(--javdan-color-text);
+    padding: var(--javdan-spacing-xs);
+    border-radius: var(--javdan-radius-lg);
+    transition: color var(--javdan-transition-fast), background-color var(--javdan-transition-fast);
+}
+
+.closeButton:hover {
+    color: var(--javdan-color-danger-hover);
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.closeButton:focus-visible {
+    outline: none;
+    box-shadow: var(--javdan-shadow-focus);
+}

@@ -36,3 +36,6 @@ export type { RadioProps, RadioGroupProps, RadioOption } from "./components/Radi
 
 export { Spinner } from "./components/Spinner";
 export type { SpinnerProps } from "./components/Spinner";
+
+export { Modal } from "./components/Modal";
+export type { ModalProps } from "./components/Modal";
