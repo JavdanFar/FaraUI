@@ -1,0 +1,91 @@
+.container {
+    position: fixed;
+    bottom: var(--javdan-spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: var(--javdan-spacing-sm);
+    z-index: var(--javdan-z-toast);
+    pointer-events: none;
+}
+
+.toast {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--javdan-spacing-sm);
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    border-radius: var(--javdan-radius-md);
+    font-family: var(--javdan-font-family);
+    font-size: var(--javdan-font-size-md);
+    box-shadow: var(--javdan-shadow-lg);
+    pointer-events: auto;
+    overflow: hidden;
+    animation: slideUp var(--javdan-transition-normal) var(--javdan-easing-standard);
+}
+
+.info {
+    background-color: var(--javdan-color-text);
+    color: var(--javdan-color-text-inverse);
+}
+
+.success {
+    background-color: var(--javdan-color-success);
+    color: var(--javdan-color-text-inverse);
+}
+
+.danger {
+    background-color: var(--javdan-color-danger);
+    color: var(--javdan-color-text-inverse);
+}
+
+.message {
+    flex: 1;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: inherit;
+    font-size: var(--javdan-font-size-lg);
+    line-height: var(--javdan-line-height-tight);
+    padding: 0;
+    opacity: var(--javdan-opacity-hover);
+}
+
+.closeButton:hover {
+    opacity: 1;
+}
+
+.progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.5);
+    animation: shrink linear forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shrink {
+    from {
+        width: 100%;
+    }
+
+    to {
+        width: 0%;
+    }
+}
