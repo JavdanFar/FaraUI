@@ -33,3 +33,6 @@ export type { SwitchProps } from "./components/Switch";
 
 export { Radio, RadioGroup } from "./components/Radio";
 export type { RadioProps, RadioGroupProps, RadioOption } from "./components/Radio";
+
+export { Spinner } from "./components/Spinner";
+export type { SpinnerProps } from "./components/Spinner";
