@@ -151,11 +151,12 @@
     --javdan-z-tooltip: 250;
 
     /* ============================================
-     Icon sizes
-     ============================================ */
+   Icon sizes
+   ============================================ */
     --javdan-icon-size-sm: 16px;
     --javdan-icon-size-md: 20px;
     --javdan-icon-size-lg: 24px;
+    --javdan-icon-size-xl: 36px;
 
     /* ============================================
      Breakpoints (documentation only —
