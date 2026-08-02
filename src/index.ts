@@ -39,3 +39,6 @@ export type { SpinnerProps } from "./components/Spinner";
 
 export { Modal } from "./components/Modal";
 export type { ModalProps } from "./components/Modal";
+
+export { Tabs } from "./components/Tabs";
+export type { TabsRootProps, TabsListProps, TabsTabProps, TabsPanelProps } from "./components/Tabs";
