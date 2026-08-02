@@ -3,20 +3,20 @@
     align-items: center;
     gap: var(--javdan-spacing-sm);
     cursor: pointer;
-    font-family: inherit;
+    font-family: var(--javdan-font-family);
     font-size: var(--javdan-font-size-md);
     color: var(--javdan-color-text);
 }
 
 .wrapper:has(.checkbox:disabled) {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--javdan-opacity-disabled);
 }
 
 .checkbox {
-    width: 18px;
-    height: 18px;
-    border: 1px solid var(--javdan-color-border);
+    width: var(--javdan-icon-size-sm);
+    height: var(--javdan-icon-size-sm);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
     border-radius: var(--javdan-radius-sm);
     cursor: pointer;
     accent-color: var(--javdan-color-primary);
@@ -25,4 +25,9 @@
 
 .checkbox:disabled {
     cursor: not-allowed;
+}
+
+.checkbox:focus-visible {
+    outline: none;
+    box-shadow: var(--javdan-shadow-focus);
 }

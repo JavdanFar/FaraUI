@@ -2,11 +2,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: var(--javdan-radius-full);
     background-color: var(--javdan-color-secondary);
     color: var(--javdan-color-text);
-    font-family: inherit;
-    font-weight: 600;
+    font-family: var(--javdan-font-family);
+    font-weight: var(--javdan-font-weight-semibold);
     overflow: hidden;
     flex-shrink: 0;
 }

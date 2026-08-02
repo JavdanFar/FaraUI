@@ -8,20 +8,20 @@
     top: 0;
     right: 0;
     transform: translate(50%, -50%);
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
-    border-radius: 999px;
+    min-width: var(--javdan-icon-size-sm);
+    height: var(--javdan-icon-size-sm);
+    padding: 0 var(--javdan-spacing-xs);
+    border-radius: var(--javdan-radius-full);
     background-color: var(--javdan-color-primary);
     color: var(--javdan-color-text-inverse);
-    font-size: 11px;
-    font-weight: 600;
+    font-size: var(--javdan-font-size-xs);
+    font-weight: var(--javdan-font-weight-semibold);
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 1;
+    line-height: var(--javdan-line-height-tight);
 }
 
 .danger {
-    background-color: #ef4444;
+    background-color: var(--javdan-color-danger);
 }

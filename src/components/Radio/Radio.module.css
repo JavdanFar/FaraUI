@@ -3,22 +3,27 @@
     align-items: center;
     gap: var(--javdan-spacing-sm);
     cursor: pointer;
-    font-family: inherit;
+    font-family: var(--javdan-font-family);
     font-size: var(--javdan-font-size-md);
     color: var(--javdan-color-text);
 }
 
 .wrapper:has(.radio:disabled) {
     cursor: not-allowed;
-    opacity: 0.5;
+    opacity: var(--javdan-opacity-disabled);
 }
 
 .radio {
-    width: 18px;
-    height: 18px;
+    width: var(--javdan-icon-size-sm);
+    height: var(--javdan-icon-size-sm);
     cursor: pointer;
     accent-color: var(--javdan-color-primary);
     margin: 0;
+}
+
+.radio:focus-visible {
+    outline: none;
+    box-shadow: var(--javdan-shadow-focus);
 }
 
 .group {

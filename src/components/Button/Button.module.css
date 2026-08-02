@@ -2,13 +2,19 @@
   border: none;
   border-radius: var(--javdan-radius-md);
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--javdan-font-family);
+  font-weight: var(--javdan-font-weight-medium);
   transition: background-color var(--javdan-transition-fast);
 }
 
 .button:disabled {
-  opacity: 0.5;
+  opacity: var(--javdan-opacity-disabled);
   cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: none;
+  box-shadow: var(--javdan-shadow-focus);
 }
 
 .primary {
@@ -20,6 +26,10 @@
   background-color: var(--javdan-color-primary-hover);
 }
 
+.primary:active:not(:disabled) {
+  background-color: var(--javdan-color-primary-active);
+}
+
 .secondary {
   background-color: var(--javdan-color-secondary);
   color: var(--javdan-color-text);
@@ -27,6 +37,10 @@
 
 .secondary:hover:not(:disabled) {
   background-color: var(--javdan-color-secondary-hover);
+}
+
+.secondary:active:not(:disabled) {
+  background-color: var(--javdan-color-secondary-active);
 }
 
 .sm {

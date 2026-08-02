@@ -1,25 +1,25 @@
 .spinner {
     display: inline-block;
-    border: 2px solid var(--javdan-color-secondary);
+    border: var(--javdan-border-width-medium) solid var(--javdan-color-secondary);
     border-top-color: var(--javdan-color-primary);
-    border-radius: 50%;
+    border-radius: var(--javdan-radius-full);
     animation: spin 0.9s linear infinite;
 }
 
 .sm {
-    width: 16px;
-    height: 16px;
+    width: var(--javdan-icon-size-sm);
+    height: var(--javdan-icon-size-sm);
 }
 
 .md {
-    width: 24px;
-    height: 24px;
+    width: var(--javdan-icon-size-md);
+    height: var(--javdan-icon-size-md);
 }
 
 .lg {
-    width: 36px;
-    height: 36px;
-    border-width: 3px;
+    width: var(--javdan-icon-size-xl);
+    height: var(--javdan-icon-size-xl);
+    border-width: var(--javdan-border-width-thick);
 }
 
 @keyframes spin {

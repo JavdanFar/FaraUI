@@ -1,17 +1,20 @@
 .text {
     margin: 0;
-    font-family: inherit;
+    font-family: var(--javdan-font-family);
     color: var(--javdan-color-text);
+    line-height: var(--javdan-line-height-normal);
 }
 
 .heading {
     margin: 0;
-    font-family: inherit;
-    font-weight: 700;
+    font-family: var(--javdan-font-family);
+    font-weight: var(--javdan-font-weight-bold);
     color: var(--javdan-color-text);
+    line-height: var(--javdan-line-height-tight);
+    letter-spacing: var(--javdan-letter-spacing-tight);
 }
 
-/* Text Sizes */
+/* Text sizes */
 .textSm {
     font-size: var(--javdan-font-size-sm);
 }
@@ -24,23 +27,23 @@
     font-size: var(--javdan-font-size-lg);
 }
 
-/* Heading Sizes */
+/* Heading sizes */
 .h1 {
-    font-size: 32px;
+    font-size: var(--javdan-font-size-3xl);
 }
 
 .h2 {
-    font-size: 24px;
+    font-size: var(--javdan-font-size-2xl);
 }
 
 .h3 {
-    font-size: 20px;
+    font-size: var(--javdan-font-size-xl);
 }
 
 .h4 {
-    font-size: 16px;
+    font-size: var(--javdan-font-size-lg);
 }
 
 .muted {
-    color: var(--javdan-color-border);
+    color: var(--javdan-color-text-secondary);
 }

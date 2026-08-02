@@ -5,31 +5,31 @@
     padding: var(--javdan-spacing-md);
     border-radius: var(--javdan-radius-md);
     font-size: var(--javdan-font-size-md);
-    border: 1px solid transparent;
+    border: var(--javdan-border-width-thin) solid transparent;
 }
 
 .info {
-    background-color: #eff6ff;
-    border-color: #bfdbfe;
-    color: #1e40af;
+    background-color: var(--javdan-color-info-bg);
+    border-color: var(--javdan-color-info-border);
+    color: var(--javdan-color-info-text);
 }
 
 .success {
-    background-color: #f0fdf4;
-    border-color: #bbf7d0;
-    color: #166534;
+    background-color: var(--javdan-color-success-bg);
+    border-color: var(--javdan-color-success-border);
+    color: var(--javdan-color-success-text);
 }
 
 .warning {
-    background-color: #fffbeb;
-    border-color: #fde68a;
-    color: #92400e;
+    background-color: var(--javdan-color-warning-bg);
+    border-color: var(--javdan-color-warning-border);
+    color: var(--javdan-color-warning-text);
 }
 
 .danger {
-    background-color: #fef2f2;
-    border-color: #fecaca;
-    color: #991b1b;
+    background-color: var(--javdan-color-danger-bg);
+    border-color: var(--javdan-color-danger-border);
+    color: var(--javdan-color-danger-text);
 }
 
 .content {
