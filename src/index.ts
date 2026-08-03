@@ -51,3 +51,6 @@ export type { DropdownMenuProps, DropdownMenuItemProps } from "./components/Drop
 
 export { showToast, Toaster } from "./components/Toast";
 export type { ToastItem } from "./components/Toast";
+
+export { Table } from "./components/Table";
+export type { TableProps, TableColumn } from "./components/Table";

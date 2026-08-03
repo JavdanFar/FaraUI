@@ -1,0 +1,132 @@
+.wrapper {
+    width: 100%;
+}
+
+.tableScroll {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--javdan-font-family);
+    font-size: var(--javdan-font-size-md);
+}
+
+.thead {
+    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+}
+
+.th {
+    text-align: right;
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    color: var(--javdan-color-text-secondary);
+    font-weight: var(--javdan-font-weight-semibold);
+    font-size: var(--javdan-font-size-sm);
+    white-space: nowrap;
+}
+
+.tr {
+    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
+    transition: background-color var(--javdan-transition-fast);
+}
+
+.tbody .tr:hover {
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.td {
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    color: var(--javdan-color-text);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--javdan-spacing-xl);
+    color: var(--javdan-color-text-tertiary);
+    font-size: var(--javdan-font-size-sm);
+}
+
+.thSortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.thSortable:hover {
+    color: var(--javdan-color-text);
+}
+
+.thContent {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--javdan-spacing-2xs);
+}
+
+.sortIcon {
+    font-size: var(--javdan-font-size-xs);
+    opacity: var(--javdan-opacity-disabled);
+}
+
+.sortIconActive {
+    opacity: 1;
+    color: var(--javdan-color-primary);
+}
+
+.filterWrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.filterButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--javdan-color-text-tertiary);
+    border-radius: var(--javdan-radius-sm);
+    transition: color var(--javdan-transition-fast), background-color var(--javdan-transition-fast);
+}
+
+.filterButton:hover {
+    color: var(--javdan-color-text);
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.filterButtonActive {
+    color: var(--javdan-color-primary);
+}
+
+.filterPopover {
+    position: absolute;
+    top: calc(100% + var(--javdan-spacing-2xs));
+    inset-inline-start: 0;
+    min-width: 160px;
+    background-color: var(--javdan-color-background);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    box-shadow: var(--javdan-shadow-md);
+    padding: var(--javdan-spacing-xs);
+    z-index: var(--javdan-z-dropdown);
+}
+
+.filterPopoverInput {
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-sm);
+    font-family: var(--javdan-font-family);
+    font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-text);
+    background-color: var(--javdan-color-background);
+    outline: none;
+}
+
+.filterPopoverInput:focus {
+    border-color: var(--javdan-color-primary);
+}
