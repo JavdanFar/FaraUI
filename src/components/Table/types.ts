@@ -19,4 +19,6 @@ export interface TableProps<T> {
   className?: string;
   enableSorting?: boolean;
   enableFiltering?: boolean;
+  enableGlobalSearch?: boolean;
+  globalSearchPlaceholder?: string;
 }

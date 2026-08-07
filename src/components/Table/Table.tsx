@@ -4,6 +4,7 @@ import styles from "./Table.module.css";
 import type { TableColumn, TableProps } from "./types";
 import { useTableSort } from "./useTableSort";
 import { useTableFilter } from "./useTableFilter";
+import { useGlobalSearch } from "./useGlobalSearch";
 import { FilterIcon } from "./FilterIcon";
 
 function getCellValue<T>(row: T, col: TableColumn<T>): string | number {
@@ -19,7 +20,16 @@ export function Table<T>({
   className,
   enableSorting = false,
   enableFiltering = false,
+  enableGlobalSearch = false,
+  globalSearchPlaceholder = "جستجو...",
 }: TableProps<T>) {
+  const { searchedData, searchTerm, setSearchTerm } = useGlobalSearch(
+    data,
+    columns,
+    enableGlobalSearch,
+    getCellValue,
+  );
+
   const {
     filteredData,
     columnFilters,
@@ -27,7 +37,7 @@ export function Table<T>({
     openFilterKey,
     toggleFilterOpen,
     closeFilter,
-  } = useTableFilter(data, columns, enableFiltering, getCellValue);
+  } = useTableFilter(searchedData, columns, enableFiltering, getCellValue);
 
   const { sortedData, sortKey, sortDirection, toggleSort } = useTableSort(
     filteredData,
@@ -52,6 +62,15 @@ export function Table<T>({
 
   return (
     <div className={clsx(styles.wrapper, className)}>
+      {enableGlobalSearch && (
+        <input
+          className={styles.globalSearch}
+          placeholder={globalSearchPlaceholder}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      )}
+
       <div className={styles.tableScroll}>
         <table className={styles.table}>
           <thead className={styles.thead}>
