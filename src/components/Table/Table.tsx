@@ -18,17 +18,17 @@ export function Table<T>({
   rowKey,
   emptyMessage = "داده‌ای برای نمایش وجود ندارد",
   className,
-  enableSorting = false,
-  enableFiltering = false,
-  enableGlobalSearch = false,
-  globalSearchPlaceholder = "جستجو...",
+  sorting = {},
+  filtering = {},
+  globalSearch = {},
 }: TableProps<T>) {
-  const { searchedData, searchTerm, setSearchTerm } = useGlobalSearch(
-    data,
-    columns,
-    enableGlobalSearch,
-    getCellValue,
-  );
+  const {
+    searchedData,
+    searchTerm,
+    setSearchTerm,
+    enabled: searchEnabled,
+    placeholder: searchPlaceholder,
+  } = useGlobalSearch({ data, columns, config: globalSearch, getCellValue });
 
   const {
     filteredData,
@@ -37,14 +37,16 @@ export function Table<T>({
     openFilterKey,
     toggleFilterOpen,
     closeFilter,
-  } = useTableFilter(searchedData, columns, enableFiltering, getCellValue);
+    enabled: filteringEnabled,
+  } = useTableFilter({ data: searchedData, columns, config: filtering, getCellValue });
 
-  const { sortedData, sortKey, sortDirection, toggleSort } = useTableSort(
-    filteredData,
-    columns,
-    enableSorting,
-    getCellValue,
-  );
+  const {
+    sortedData,
+    sortKey,
+    sortDirection,
+    toggleSort,
+    enabled: sortingEnabled,
+  } = useTableSort({ data: filteredData, columns, config: sorting, getCellValue });
 
   useEffect(() => {
     if (!openFilterKey) return;
@@ -58,14 +60,16 @@ export function Table<T>({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openFilterKey]);
+  }, [openFilterKey, closeFilter]);
+
+  const rowsToRender = sortedData;
 
   return (
     <div className={clsx(styles.wrapper, className)}>
-      {enableGlobalSearch && (
+      {searchEnabled && (
         <input
           className={styles.globalSearch}
-          placeholder={globalSearchPlaceholder}
+          placeholder={searchPlaceholder}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -76,8 +80,8 @@ export function Table<T>({
           <thead className={styles.thead}>
             <tr>
               {columns.map((col) => {
-                const isSortable = enableSorting && col.sortable;
-                const isFilterable = enableFiltering && col.filterable;
+                const isSortable = sortingEnabled && col.sortable;
+                const isFilterable = filteringEnabled && col.filterable;
                 const hasActiveFilter = Boolean(columnFilters[col.key]?.trim());
 
                 return (
@@ -139,14 +143,14 @@ export function Table<T>({
           </thead>
 
           <tbody className={styles.tbody}>
-            {sortedData.length === 0 ? (
+            {rowsToRender.length === 0 ? (
               <tr>
                 <td colSpan={columns.length} className={styles.empty}>
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
-              sortedData.map((row) => (
+              rowsToRender.map((row) => (
                 <tr key={rowKey(row)} className={styles.tr}>
                   {columns.map((col) => (
                     <td key={col.key} className={styles.td}>

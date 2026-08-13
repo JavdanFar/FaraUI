@@ -1,18 +1,38 @@
 import { useMemo, useState } from "react";
-import type { TableColumn } from "./types";
+import type { TableColumn, GlobalSearchConfig } from "./types";
 
-export function useGlobalSearch<T>(
-  data: T[],
-  columns: TableColumn<T>[],
-  enabled: boolean,
-  getCellValue: (row: T, col: TableColumn<T>) => string | number,
-) {
-  const [searchTerm, setSearchTerm] = useState("");
+interface UseGlobalSearchOptions<T> {
+  data: T[];
+  columns: TableColumn<T>[];
+  config: GlobalSearchConfig;
+  getCellValue: (row: T, col: TableColumn<T>) => string | number;
+}
+
+export function useGlobalSearch<T>({
+  data,
+  columns,
+  config,
+  getCellValue,
+}: UseGlobalSearchOptions<T>) {
+  const enabled = config.enabled ?? false;
+  const mode = config.mode ?? "server";
+  const isServer = mode === "server";
+
+  const [internalTerm, setInternalTerm] = useState("");
+  const currentTerm = isServer ? (config.value ?? "") : internalTerm;
+
+  function setSearchTerm(value: string) {
+    if (isServer) {
+      config.onChange?.(value);
+    } else {
+      setInternalTerm(value);
+    }
+  }
 
   const searchedData = useMemo(() => {
-    if (!enabled || !searchTerm.trim()) return data;
+    if (!enabled || isServer || !currentTerm.trim()) return data;
 
-    const term = searchTerm.trim().toLowerCase();
+    const term = currentTerm.trim().toLowerCase();
     return data.filter((row) =>
       columns.some((col) =>
         String(getCellValue(row, col) ?? "")
@@ -20,7 +40,13 @@ export function useGlobalSearch<T>(
           .includes(term),
       ),
     );
-  }, [data, columns, searchTerm, enabled, getCellValue]);
+  }, [data, columns, currentTerm, enabled, isServer, getCellValue]);
 
-  return { searchedData, searchTerm, setSearchTerm };
+  return {
+    searchedData,
+    searchTerm: currentTerm,
+    setSearchTerm,
+    enabled,
+    placeholder: config.placeholder ?? "جستجو...",
+  };
 }

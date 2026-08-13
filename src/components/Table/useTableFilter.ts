@@ -1,31 +1,56 @@
-import { useMemo, useState } from "react";
-import type { TableColumn } from "./types";
+import { useCallback, useMemo, useState } from "react";
+import type { TableColumn, FilteringConfig } from "./types";
 
-export function useTableFilter<T>(
-  data: T[],
-  columns: TableColumn<T>[],
-  enabled: boolean,
-  getCellValue: (row: T, col: TableColumn<T>) => string | number,
-) {
-  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+interface UseTableFilterOptions<T> {
+  data: T[];
+  columns: TableColumn<T>[];
+  config: FilteringConfig;
+  getCellValue: (row: T, col: TableColumn<T>) => string | number;
+}
+
+const emptyFilters: Record<string, string> = {};
+
+export function useTableFilter<T>({
+  data,
+  columns,
+  config,
+  getCellValue,
+}: UseTableFilterOptions<T>) {
+  const enabled = config.enabled ?? false;
+  const mode = config.mode ?? "server";
+  const isServer = mode === "server";
+
+  const [internalFilters, setInternalFilters] = useState<Record<string, string>>({});
+
+  const currentFilters = useMemo(
+    () => (isServer ? (config.state ?? emptyFilters) : internalFilters),
+    [isServer, config.state, internalFilters],
+  );
+
   const [openFilterKey, setOpenFilterKey] = useState<string | null>(null);
 
   function setColumnFilter(key: string, value: string) {
-    setColumnFilters((prev) => ({ ...prev, [key]: value }));
+    const next = { ...currentFilters, [key]: value };
+
+    if (isServer) {
+      config.onChange?.(next);
+    } else {
+      setInternalFilters(next);
+    }
   }
 
   function toggleFilterOpen(key: string) {
     setOpenFilterKey((prev) => (prev === key ? null : key));
   }
 
-  function closeFilter() {
+  const closeFilter = useCallback(() => {
     setOpenFilterKey(null);
-  }
+  }, []);
 
   const filteredData = useMemo(() => {
-    if (!enabled) return data;
+    if (!enabled || isServer) return data;
 
-    const activeFilters = Object.entries(columnFilters).filter(([, value]) => value.trim());
+    const activeFilters = Object.entries(currentFilters).filter(([, value]) => value.trim());
     if (activeFilters.length === 0) return data;
 
     return data.filter((row) =>
@@ -37,14 +62,15 @@ export function useTableFilter<T>(
           .includes(value.toLowerCase());
       }),
     );
-  }, [data, columns, columnFilters, enabled, getCellValue]);
+  }, [data, columns, currentFilters, enabled, isServer, getCellValue]);
 
   return {
     filteredData,
-    columnFilters,
+    columnFilters: currentFilters,
     setColumnFilter,
     openFilterKey,
     toggleFilterOpen,
     closeFilter,
+    enabled,
   };
 }

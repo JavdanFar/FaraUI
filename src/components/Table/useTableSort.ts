@@ -1,57 +1,72 @@
 import { useMemo, useState } from "react";
-import type { TableColumn, SortDirection } from "./types";
+import type { TableColumn, SortState, SortingConfig } from "./types";
 
-export function useTableSort<T>(
-  data: T[],
-  columns: TableColumn<T>[],
-  enabled: boolean,
-  getCellValue: (row: T, col: TableColumn<T>) => string | number,
-) {
-  const [sortKey, setSortKey] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection>(null);
+interface UseTableSortOptions<T> {
+  data: T[];
+  columns: TableColumn<T>[];
+  config: SortingConfig;
+  getCellValue: (row: T, col: TableColumn<T>) => string | number;
+}
+
+const emptySortState: SortState = { key: null, direction: null };
+
+export function useTableSort<T>({ data, columns, config, getCellValue }: UseTableSortOptions<T>) {
+  const enabled = config.enabled ?? false;
+  const mode = config.mode ?? "server";
+  const isServer = mode === "server";
+
+  const [internalState, setInternalState] = useState<SortState>(emptySortState);
+  const currentState = isServer ? (config.state ?? emptySortState) : internalState;
 
   function toggleSort(col: TableColumn<T>) {
     if (!enabled || !col.sortable) return;
 
-    if (sortKey !== col.key) {
-      setSortKey(col.key);
-      setSortDirection("asc");
-      return;
+    let nextState: SortState;
+
+    if (currentState.key !== col.key) {
+      nextState = { key: col.key, direction: "asc" };
+    } else if (currentState.direction === "asc") {
+      nextState = { key: col.key, direction: "desc" };
+    } else {
+      nextState = emptySortState;
     }
 
-    if (sortDirection === "asc") {
-      setSortDirection("desc");
-      return;
+    if (isServer) {
+      config.onChange?.(nextState);
+    } else {
+      setInternalState(nextState);
     }
-
-    setSortKey(null);
-    setSortDirection(null);
   }
 
   const sortedData = useMemo(() => {
-    if (!enabled || !sortKey || !sortDirection) return data;
+    if (!enabled || isServer || !currentState.key || !currentState.direction) return data;
 
-    const column = columns.find((col) => col.key === sortKey);
+    const column = columns.find((col) => col.key === currentState.key);
     if (!column) return data;
 
+    const direction = currentState.direction;
     const result = [...data];
     result.sort((a, b) => {
       const valueA = getCellValue(a, column);
       const valueB = getCellValue(b, column);
 
       if (typeof valueA === "number" && typeof valueB === "number") {
-        return sortDirection === "asc" ? valueA - valueB : valueB - valueA;
+        return direction === "asc" ? valueA - valueB : valueB - valueA;
       }
 
       const strA = String(valueA ?? "");
       const strB = String(valueB ?? "");
-      return sortDirection === "asc"
-        ? strA.localeCompare(strB, "fa")
-        : strB.localeCompare(strA, "fa");
+      return direction === "asc" ? strA.localeCompare(strB, "fa") : strB.localeCompare(strA, "fa");
     });
 
     return result;
-  }, [data, columns, sortKey, sortDirection, enabled, getCellValue]);
+  }, [data, columns, currentState, enabled, isServer, getCellValue]);
 
-  return { sortedData, sortKey, sortDirection, toggleSort };
+  return {
+    sortedData,
+    sortKey: currentState.key,
+    sortDirection: currentState.direction,
+    toggleSort,
+    enabled,
+  };
 }

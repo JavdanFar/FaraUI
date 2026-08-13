@@ -53,4 +53,12 @@ export { showToast, Toaster } from "./components/Toast";
 export type { ToastItem } from "./components/Toast";
 
 export { Table } from "./components/Table";
-export type { TableProps, TableColumn } from "./components/Table";
+export type {
+  TableProps,
+  TableColumn,
+  SortingConfig,
+  FilteringConfig,
+  GlobalSearchConfig,
+  SortState,
+  FeatureMode,
+} from "./components/Table";
