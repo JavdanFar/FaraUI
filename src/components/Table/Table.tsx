@@ -9,6 +9,7 @@ import { useTablePagination } from "./useTablePagination";
 import { useTableSelection } from "./useTableSelection";
 import { FilterIcon } from "./FilterIcon";
 import { TablePagination } from "./TablePagination";
+import { Spinner } from "../Spinner";
 
 function getCellValue<T>(row: T, col: TableColumn<T>): string | number {
   if (col.accessor) return col.accessor(row);
@@ -22,6 +23,7 @@ export function Table<T>({
   emptyMessage = "داده‌ای برای نمایش وجود ندارد",
   className,
   maxHeight,
+  loading = false,
   sorting = {},
   filtering = {},
   globalSearch = {},
@@ -66,7 +68,6 @@ export function Table<T>({
     enabled: paginationEnabled,
   } = useTablePagination({ data: sortedData, config: pagination });
 
-  // Selection only makes sense across the rows currently visible on screen
   const {
     enabled: selectionEnabled,
     toggleRow,
@@ -111,122 +112,133 @@ export function Table<T>({
         />
       )}
 
-      <div className={styles.tableScroll} style={maxHeight ? { maxHeight } : undefined}>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              {selectionEnabled && (
-                <th className={styles.checkboxCell}>
-                  <input
-                    ref={selectAllRef}
-                    type="checkbox"
-                    className={styles.checkbox}
-                    checked={isAllSelected}
-                    onChange={toggleAll}
-                    aria-label="انتخاب همه ردیف‌ها"
-                  />
-                </th>
-              )}
+      <div className={styles.tableContainer}>
+        {loading && (
+          <div className={styles.loadingOverlay}>
+            <Spinner size="lg" />
+          </div>
+        )}
 
-              {columns.map((col) => {
-                const isSortable = sortingEnabled && col.sortable;
-                const isFilterable = filteringEnabled && col.filterable;
-                const hasActiveFilter = Boolean(columnFilters[col.key]?.trim());
-
-                return (
-                  <th key={col.key} className={styles.th}>
-                    <span className={styles.thContent}>
-                      <span
-                        onClick={() => isSortable && toggleSort(col)}
-                        className={clsx(isSortable && styles.thSortable)}
-                      >
-                        {col.header}
-                      </span>
-
-                      {isSortable && (
-                        <span
-                          onClick={() => toggleSort(col)}
-                          className={clsx(
-                            styles.sortIcon,
-                            sortKey === col.key && styles.sortIconActive,
-                          )}
-                        >
-                          {sortKey === col.key && sortDirection === "asc" && "▲"}
-                          {sortKey === col.key && sortDirection === "desc" && "▼"}
-                          {sortKey !== col.key && "⇅"}
-                        </span>
-                      )}
-
-                      {isFilterable && (
-                        <span className={styles.filterWrapper} data-table-filter>
-                          <button
-                            type="button"
-                            className={clsx(
-                              styles.filterButton,
-                              hasActiveFilter && styles.filterButtonActive,
-                            )}
-                            onClick={() => toggleFilterOpen(col.key)}
-                            aria-label={`فیلتر ${col.header}`}
-                          >
-                            <FilterIcon />
-                          </button>
-
-                          {openFilterKey === col.key && (
-                            <span className={styles.filterPopover}>
-                              <input
-                                autoFocus
-                                className={styles.filterPopoverInput}
-                                placeholder="فیلتر..."
-                                value={columnFilters[col.key] ?? ""}
-                                onChange={(e) => setColumnFilter(col.key, e.target.value)}
-                              />
-                            </span>
-                          )}
-                        </span>
-                      )}
-                    </span>
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-
-          <tbody className={styles.tbody}>
-            {rowsToRender.length === 0 ? (
+        <div className={styles.tableScroll} style={maxHeight ? { maxHeight } : undefined}>
+          <table className={styles.table}>
+            <thead className={styles.thead}>
               <tr>
-                <td colSpan={columns.length + (selectionEnabled ? 1 : 0)} className={styles.empty}>
-                  {emptyMessage}
-                </td>
-              </tr>
-            ) : (
-              rowsToRender.map((row) => {
-                const key = rowKey(row);
-                const selected = isRowSelected(key);
+                {selectionEnabled && (
+                  <th className={styles.checkboxCell}>
+                    <input
+                      ref={selectAllRef}
+                      type="checkbox"
+                      className={styles.checkbox}
+                      checked={isAllSelected}
+                      onChange={toggleAll}
+                      aria-label="انتخاب همه ردیف‌ها"
+                    />
+                  </th>
+                )}
 
-                return (
-                  <tr key={key} className={clsx(styles.tr, selected && styles.trSelected)}>
-                    {selectionEnabled && (
-                      <td className={styles.checkboxCell}>
-                        <input
-                          type="checkbox"
-                          className={styles.checkbox}
-                          checked={selected}
-                          onChange={() => toggleRow(key)}
-                          aria-label={`انتخاب ردیف ${key}`}
-                        />
-                      </td>
-                    )}
-                    {columns.map((col) => (
-                      <td key={col.key} className={styles.td}>
-                        {col.render ? col.render(row) : String(getCellValue(row, col) ?? "")}
-                      </td>
-                    ))}
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+                {columns.map((col) => {
+                  const isSortable = sortingEnabled && col.sortable;
+                  const isFilterable = filteringEnabled && col.filterable;
+                  const hasActiveFilter = Boolean(columnFilters[col.key]?.trim());
+
+                  return (
+                    <th key={col.key} className={styles.th}>
+                      <span className={styles.thContent}>
+                        <span
+                          onClick={() => isSortable && toggleSort(col)}
+                          className={clsx(isSortable && styles.thSortable)}
+                        >
+                          {col.header}
+                        </span>
+
+                        {isSortable && (
+                          <span
+                            onClick={() => toggleSort(col)}
+                            className={clsx(
+                              styles.sortIcon,
+                              sortKey === col.key && styles.sortIconActive,
+                            )}
+                          >
+                            {sortKey === col.key && sortDirection === "asc" && "▲"}
+                            {sortKey === col.key && sortDirection === "desc" && "▼"}
+                            {sortKey !== col.key && "⇅"}
+                          </span>
+                        )}
+
+                        {isFilterable && (
+                          <span className={styles.filterWrapper} data-table-filter>
+                            <button
+                              type="button"
+                              className={clsx(
+                                styles.filterButton,
+                                hasActiveFilter && styles.filterButtonActive,
+                              )}
+                              onClick={() => toggleFilterOpen(col.key)}
+                              aria-label={`فیلتر ${col.header}`}
+                            >
+                              <FilterIcon />
+                            </button>
+
+                            {openFilterKey === col.key && (
+                              <span className={styles.filterPopover}>
+                                <input
+                                  autoFocus
+                                  className={styles.filterPopoverInput}
+                                  placeholder="فیلتر..."
+                                  value={columnFilters[col.key] ?? ""}
+                                  onChange={(e) => setColumnFilter(col.key, e.target.value)}
+                                />
+                              </span>
+                            )}
+                          </span>
+                        )}
+                      </span>
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+
+            <tbody className={styles.tbody}>
+              {rowsToRender.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={columns.length + (selectionEnabled ? 1 : 0)}
+                    className={styles.empty}
+                  >
+                    {emptyMessage}
+                  </td>
+                </tr>
+              ) : (
+                rowsToRender.map((row) => {
+                  const key = rowKey(row);
+                  const selected = isRowSelected(key);
+
+                  return (
+                    <tr key={key} className={clsx(styles.tr, selected && styles.trSelected)}>
+                      {selectionEnabled && (
+                        <td className={styles.checkboxCell}>
+                          <input
+                            type="checkbox"
+                            className={styles.checkbox}
+                            checked={selected}
+                            onChange={() => toggleRow(key)}
+                            aria-label={`انتخاب ردیف ${key}`}
+                          />
+                        </td>
+                      )}
+                      {columns.map((col) => (
+                        <td key={col.key} className={styles.td}>
+                          {col.render ? col.render(row) : String(getCellValue(row, col) ?? "")}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {paginationEnabled && totalItems > 0 && (

@@ -57,6 +57,7 @@ export interface TableProps<T> {
   emptyMessage?: string;
   className?: string;
   maxHeight?: string;
+  loading?: boolean;
 
   sorting?: SortingConfig;
   filtering?: FilteringConfig;
