@@ -25,6 +25,7 @@
 .tableScroll {
     width: 100%;
     overflow-x: auto;
+    overflow-y: auto;
 }
 
 .table {
@@ -36,6 +37,10 @@
 
 .thead {
     border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    position: sticky;
+    top: 0;
+    background-color: var(--javdan-color-background);
+    z-index: 1;
 }
 
 .th {

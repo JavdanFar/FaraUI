@@ -21,6 +21,7 @@ export function Table<T>({
   rowKey,
   emptyMessage = "داده‌ای برای نمایش وجود ندارد",
   className,
+  maxHeight,
   sorting = {},
   filtering = {},
   globalSearch = {},
@@ -110,7 +111,7 @@ export function Table<T>({
         />
       )}
 
-      <div className={styles.tableScroll}>
+      <div className={styles.tableScroll} style={maxHeight ? { maxHeight } : undefined}>
         <table className={styles.table}>
           <thead className={styles.thead}>
             <tr>

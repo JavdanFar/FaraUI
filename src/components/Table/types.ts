@@ -56,6 +56,7 @@ export interface TableProps<T> {
   rowKey: (row: T) => string;
   emptyMessage?: string;
   className?: string;
+  maxHeight?: string;
 
   sorting?: SortingConfig;
   filtering?: FilteringConfig;
