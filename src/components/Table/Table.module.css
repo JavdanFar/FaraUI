@@ -214,3 +214,20 @@
     min-width: 48px;
     text-align: center;
 }
+
+.checkboxCell {
+    width: 40px;
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--javdan-color-primary);
+    margin: 0;
+}
+
+.trSelected {
+    background-color: var(--javdan-color-background-secondary);
+}

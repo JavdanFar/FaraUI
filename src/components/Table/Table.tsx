@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import clsx from "clsx";
 import styles from "./Table.module.css";
 import type { TableColumn, TableProps } from "./types";
@@ -6,6 +6,7 @@ import { useTableSort } from "./useTableSort";
 import { useTableFilter } from "./useTableFilter";
 import { useGlobalSearch } from "./useGlobalSearch";
 import { useTablePagination } from "./useTablePagination";
+import { useTableSelection } from "./useTableSelection";
 import { FilterIcon } from "./FilterIcon";
 import { TablePagination } from "./TablePagination";
 
@@ -24,6 +25,7 @@ export function Table<T>({
   filtering = {},
   globalSearch = {},
   pagination = {},
+  selection = {},
 }: TableProps<T>) {
   const {
     searchedData,
@@ -63,6 +65,24 @@ export function Table<T>({
     enabled: paginationEnabled,
   } = useTablePagination({ data: sortedData, config: pagination });
 
+  // Selection only makes sense across the rows currently visible on screen
+  const {
+    enabled: selectionEnabled,
+    toggleRow,
+    toggleAll,
+    isAllSelected,
+    isSomeSelected,
+    isRowSelected,
+  } = useTableSelection({ data: paginatedData, rowKey, config: selection });
+
+  const selectAllRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (selectAllRef.current) {
+      selectAllRef.current.indeterminate = isSomeSelected;
+    }
+  }, [isSomeSelected]);
+
   useEffect(() => {
     if (!openFilterKey) return;
 
@@ -94,6 +114,19 @@ export function Table<T>({
         <table className={styles.table}>
           <thead className={styles.thead}>
             <tr>
+              {selectionEnabled && (
+                <th className={styles.checkboxCell}>
+                  <input
+                    ref={selectAllRef}
+                    type="checkbox"
+                    className={styles.checkbox}
+                    checked={isAllSelected}
+                    onChange={toggleAll}
+                    aria-label="انتخاب همه ردیف‌ها"
+                  />
+                </th>
+              )}
+
               {columns.map((col) => {
                 const isSortable = sortingEnabled && col.sortable;
                 const isFilterable = filteringEnabled && col.filterable;
@@ -160,20 +193,36 @@ export function Table<T>({
           <tbody className={styles.tbody}>
             {rowsToRender.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className={styles.empty}>
+                <td colSpan={columns.length + (selectionEnabled ? 1 : 0)} className={styles.empty}>
                   {emptyMessage}
                 </td>
               </tr>
             ) : (
-              rowsToRender.map((row) => (
-                <tr key={rowKey(row)} className={styles.tr}>
-                  {columns.map((col) => (
-                    <td key={col.key} className={styles.td}>
-                      {col.render ? col.render(row) : String(getCellValue(row, col) ?? "")}
-                    </td>
-                  ))}
-                </tr>
-              ))
+              rowsToRender.map((row) => {
+                const key = rowKey(row);
+                const selected = isRowSelected(key);
+
+                return (
+                  <tr key={key} className={clsx(styles.tr, selected && styles.trSelected)}>
+                    {selectionEnabled && (
+                      <td className={styles.checkboxCell}>
+                        <input
+                          type="checkbox"
+                          className={styles.checkbox}
+                          checked={selected}
+                          onChange={() => toggleRow(key)}
+                          aria-label={`انتخاب ردیف ${key}`}
+                        />
+                      </td>
+                    )}
+                    {columns.map((col) => (
+                      <td key={col.key} className={styles.td}>
+                        {col.render ? col.render(row) : String(getCellValue(row, col) ?? "")}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

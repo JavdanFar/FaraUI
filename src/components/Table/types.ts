@@ -61,4 +61,12 @@ export interface TableProps<T> {
   filtering?: FilteringConfig;
   globalSearch?: GlobalSearchConfig;
   pagination?: PaginationConfig;
+  selection?: SelectionConfig<T>;
+}
+
+export interface SelectionConfig<T> {
+  enabled?: boolean;
+  mode?: FeatureMode;
+  selectedKeys?: string[];
+  onChange?: (selectedKeys: string[], selectedRows: T[]) => void;
 }

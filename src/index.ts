@@ -60,6 +60,7 @@ export type {
   FilteringConfig,
   GlobalSearchConfig,
   PaginationConfig,
+  SelectionConfig,
   SortState,
   FeatureMode,
 } from "./components/Table";
