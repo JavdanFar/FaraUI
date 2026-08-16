@@ -5,6 +5,7 @@ export type {
   SortingConfig,
   FilteringConfig,
   GlobalSearchConfig,
+  PaginationConfig,
   SortState,
   FeatureMode,
 } from "./types";

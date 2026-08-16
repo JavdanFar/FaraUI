@@ -3,6 +3,11 @@ import type { ReactNode } from "react";
 export type SortDirection = "asc" | "desc" | null;
 export type FeatureMode = "server" | "client";
 
+export interface SortState {
+  key: string | null;
+  direction: SortDirection;
+}
+
 export interface TableColumn<T> {
   key: string;
   header: string;
@@ -10,11 +15,6 @@ export interface TableColumn<T> {
   accessor?: (row: T) => string | number;
   sortable?: boolean;
   filterable?: boolean;
-}
-
-export interface SortState {
-  key: string | null;
-  direction: SortDirection;
 }
 
 export interface SortingConfig {
@@ -39,6 +39,17 @@ export interface GlobalSearchConfig {
   placeholder?: string;
 }
 
+export interface PaginationConfig {
+  enabled?: boolean;
+  mode?: FeatureMode;
+  page?: number;
+  totalItems?: number;
+  pageSize?: number;
+  pageSizeOptions?: number[];
+  onPageChange?: (page: number) => void;
+  onPageSizeChange?: (size: number) => void;
+}
+
 export interface TableProps<T> {
   columns: TableColumn<T>[];
   data: T[];
@@ -49,4 +60,5 @@ export interface TableProps<T> {
   sorting?: SortingConfig;
   filtering?: FilteringConfig;
   globalSearch?: GlobalSearchConfig;
+  pagination?: PaginationConfig;
 }

@@ -5,7 +5,9 @@ import type { TableColumn, TableProps } from "./types";
 import { useTableSort } from "./useTableSort";
 import { useTableFilter } from "./useTableFilter";
 import { useGlobalSearch } from "./useGlobalSearch";
+import { useTablePagination } from "./useTablePagination";
 import { FilterIcon } from "./FilterIcon";
+import { TablePagination } from "./TablePagination";
 
 function getCellValue<T>(row: T, col: TableColumn<T>): string | number {
   if (col.accessor) return col.accessor(row);
@@ -21,6 +23,7 @@ export function Table<T>({
   sorting = {},
   filtering = {},
   globalSearch = {},
+  pagination = {},
 }: TableProps<T>) {
   const {
     searchedData,
@@ -48,6 +51,18 @@ export function Table<T>({
     enabled: sortingEnabled,
   } = useTableSort({ data: filteredData, columns, config: sorting, getCellValue });
 
+  const {
+    paginatedData,
+    page,
+    setPage,
+    pageSize,
+    changePageSize,
+    totalPages,
+    totalItems,
+    pageSizeOptions,
+    enabled: paginationEnabled,
+  } = useTablePagination({ data: sortedData, config: pagination });
+
   useEffect(() => {
     if (!openFilterKey) return;
 
@@ -62,7 +77,7 @@ export function Table<T>({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [openFilterKey, closeFilter]);
 
-  const rowsToRender = sortedData;
+  const rowsToRender = paginatedData;
 
   return (
     <div className={clsx(styles.wrapper, className)}>
@@ -163,6 +178,18 @@ export function Table<T>({
           </tbody>
         </table>
       </div>
+
+      {paginationEnabled && totalItems > 0 && (
+        <TablePagination
+          page={page}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          pageSize={pageSize}
+          pageSizeOptions={pageSizeOptions}
+          onPageChange={setPage}
+          onPageSizeChange={changePageSize}
+        />
+      )}
     </div>
   );
 }
