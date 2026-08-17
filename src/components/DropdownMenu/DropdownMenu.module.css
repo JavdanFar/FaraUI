@@ -6,7 +6,7 @@
 .menu {
     position: absolute;
     top: calc(100% + var(--javdan-spacing-2xs));
-    right: 0;
+    inset-inline-end: 0;
     min-width: 180px;
     background-color: var(--javdan-color-background);
     border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
@@ -20,7 +20,7 @@
     display: block;
     width: 100%;
     box-sizing: border-box;
-    text-align: right;
+    text-align: start;
     padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
     border: none;
     background: none;

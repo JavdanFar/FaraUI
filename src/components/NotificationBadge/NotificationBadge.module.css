@@ -6,7 +6,7 @@
 .dot {
     position: absolute;
     top: 0;
-    right: 0;
+    inset-inline-end: 0;
     transform: translate(50%, -50%);
     min-width: var(--javdan-icon-size-sm);
     height: var(--javdan-icon-size-sm);
@@ -20,6 +20,10 @@
     align-items: center;
     justify-content: center;
     line-height: var(--javdan-line-height-tight);
+}
+
+:dir(rtl) .dot {
+    transform: translate(-50%, -50%);
 }
 
 .danger {

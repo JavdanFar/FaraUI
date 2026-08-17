@@ -41,14 +41,14 @@
 .thumb {
     position: absolute;
     top: 2px;
-    left: 2px;
+    inset-inline-start: 2px;
     width: 18px;
     height: 18px;
     background-color: var(--javdan-color-background);
     border-radius: var(--javdan-radius-full);
-    transition: transform var(--javdan-transition-fast);
+    transition: inset-inline-start var(--javdan-transition-fast);
 }
 
 .input:checked+.track .thumb {
-    transform: translateX(18px);
+    inset-inline-start: 20px;
 }

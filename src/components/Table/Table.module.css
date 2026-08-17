@@ -44,7 +44,7 @@
 }
 
 .th {
-    text-align: right;
+    text-align: start;
     padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
     color: var(--javdan-color-text-secondary);
     font-weight: var(--javdan-font-weight-semibold);
