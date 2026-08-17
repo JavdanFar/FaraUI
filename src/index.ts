@@ -64,3 +64,11 @@ export type {
   SortState,
   FeatureMode,
 } from "./components/Table";
+
+export { Accordion } from "./components/Accordion";
+export type {
+  AccordionRootProps,
+  AccordionItemProps,
+  AccordionTriggerProps,
+  AccordionPanelProps,
+} from "./components/Accordion";
