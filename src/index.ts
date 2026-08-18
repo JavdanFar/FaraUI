@@ -78,3 +78,6 @@ export type { PopoverProps } from "./components/Popover";
 
 export { Drawer } from "./components/Drawer";
 export type { DrawerProps } from "./components/Drawer";
+
+export { Sidebar } from "./components/Sidebar";
+export type { SidebarProps } from "./components/Sidebar";

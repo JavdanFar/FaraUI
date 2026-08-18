@@ -1,0 +1,68 @@
+.sidebar {
+    position: relative;
+    height: 100%;
+    width: 280px;
+    flex-shrink: 0;
+    background-color: var(--javdan-color-background);
+    border-inline-end: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    display: flex;
+    flex-direction: column;
+    transition: width var(--javdan-transition-normal);
+}
+
+.collapsed {
+    width: 64px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--javdan-spacing-sm);
+    padding: var(--javdan-spacing-md);
+    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+}
+
+.headerContent {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 1;
+    transition: opacity var(--javdan-transition-fast);
+}
+
+.headerContentHidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.toggleButton {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--javdan-color-text-secondary);
+    border-radius: var(--javdan-radius-sm);
+    transition: background-color var(--javdan-transition-fast), transform var(--javdan-transition-normal);
+}
+
+.toggleButton:hover {
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.toggleButtonCollapsed {
+    transform: rotate(180deg);
+}
+
+.body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--javdan-spacing-md);
+}
