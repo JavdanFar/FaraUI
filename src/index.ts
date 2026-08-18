@@ -90,3 +90,9 @@ export type { DividerProps } from "./components/Divider";
 
 export { Textarea } from "./components/Textarea";
 export type { TextareaProps } from "./components/Textarea";
+
+export { Chip } from "./components/Chip";
+export type { ChipProps } from "./components/Chip";
+
+export { Skeleton } from "./components/Skeleton";
+export type { SkeletonProps } from "./components/Skeleton";
