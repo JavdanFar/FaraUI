@@ -1,0 +1,31 @@
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--javdan-spacing-2xs);
+    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
+    border-radius: var(--javdan-radius-full);
+    font-size: var(--javdan-font-size-sm);
+    font-family: var(--javdan-font-family);
+    background-color: var(--javdan-color-secondary);
+    color: var(--javdan-color-text);
+    line-height: var(--javdan-line-height-tight);
+}
+
+.removeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: inherit;
+    opacity: var(--javdan-opacity-hover);
+    border-radius: var(--javdan-radius-full);
+}
+
+.removeButton:hover {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.1);
+}
