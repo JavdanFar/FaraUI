@@ -87,3 +87,6 @@ export type { ProgressBarProps } from "./components/ProgressBar";
 
 export { Divider } from "./components/Divider";
 export type { DividerProps } from "./components/Divider";
+
+export { Textarea } from "./components/Textarea";
+export type { TextareaProps } from "./components/Textarea";
