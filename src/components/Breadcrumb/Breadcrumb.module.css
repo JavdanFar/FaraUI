@@ -1,0 +1,34 @@
+.list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--javdan-spacing-2xs);
+    font-size: var(--javdan-font-size-sm);
+    font-family: var(--javdan-font-family);
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: var(--javdan-spacing-2xs);
+}
+
+.link {
+    color: var(--javdan-color-text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: var(--javdan-color-primary);
+    text-decoration: underline;
+}
+
+.current {
+    color: var(--javdan-color-text);
+    font-weight: var(--javdan-font-weight-medium);
+}
+
+.separator {
+    color: var(--javdan-color-text-tertiary);
+}
