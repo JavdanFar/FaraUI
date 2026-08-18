@@ -1,0 +1,22 @@
+.wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.content {
+    position: absolute;
+    top: calc(100% + var(--javdan-spacing-xs));
+    inset-inline-start: 0;
+    background-color: var(--javdan-color-background);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    box-shadow: var(--javdan-shadow-md);
+    z-index: var(--javdan-z-popover);
+    padding: var(--javdan-spacing-md);
+    min-width: 200px;
+}
+
+.contentEnd {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+}

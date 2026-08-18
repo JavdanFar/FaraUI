@@ -72,3 +72,6 @@ export type {
   AccordionTriggerProps,
   AccordionPanelProps,
 } from "./components/Accordion";
+
+export { Popover } from "./components/Popover";
+export type { PopoverProps } from "./components/Popover";
