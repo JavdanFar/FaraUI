@@ -84,3 +84,6 @@ export type { SidebarProps } from "./components/Sidebar";
 
 export { ProgressBar } from "./components/ProgressBar";
 export type { ProgressBarProps } from "./components/ProgressBar";
+
+export { Divider } from "./components/Divider";
+export type { DividerProps } from "./components/Divider";

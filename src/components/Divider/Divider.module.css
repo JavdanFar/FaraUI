@@ -1,0 +1,38 @@
+.divider {
+    border: none;
+    background-color: var(--javdan-color-border-light);
+}
+
+.horizontal {
+    width: 100%;
+    height: var(--javdan-border-width-thin);
+    margin: var(--javdan-spacing-md) 0;
+}
+
+.vertical {
+    width: var(--javdan-border-width-thin);
+    height: 100%;
+    align-self: stretch;
+    margin: 0 var(--javdan-spacing-md);
+}
+
+.withLabel {
+    display: flex;
+    align-items: center;
+    gap: var(--javdan-spacing-sm);
+    margin: var(--javdan-spacing-md) 0;
+}
+
+.withLabel::before,
+.withLabel::after {
+    content: '';
+    flex: 1;
+    height: var(--javdan-border-width-thin);
+    background-color: var(--javdan-color-border-light);
+}
+
+.label {
+    font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-text-tertiary);
+    white-space: nowrap;
+}
