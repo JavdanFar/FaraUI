@@ -102,3 +102,6 @@ export type { BreadcrumbProps, BreadcrumbItem } from "./components/Breadcrumb";
 
 export { Rating } from "./components/Rating";
 export type { RatingProps } from "./components/Rating";
+
+export { Slider } from "./components/Slider";
+export type { SliderProps } from "./components/Slider";
