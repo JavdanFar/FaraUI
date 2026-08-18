@@ -99,3 +99,6 @@ export type { SkeletonProps } from "./components/Skeleton";
 
 export { Breadcrumb } from "./components/Breadcrumb";
 export type { BreadcrumbProps, BreadcrumbItem } from "./components/Breadcrumb";
+
+export { Rating } from "./components/Rating";
+export type { RatingProps } from "./components/Rating";
