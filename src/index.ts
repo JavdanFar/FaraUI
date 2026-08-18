@@ -81,3 +81,6 @@ export type { DrawerProps } from "./components/Drawer";
 
 export { Sidebar } from "./components/Sidebar";
 export type { SidebarProps } from "./components/Sidebar";
+
+export { ProgressBar } from "./components/ProgressBar";
+export type { ProgressBarProps } from "./components/ProgressBar";
