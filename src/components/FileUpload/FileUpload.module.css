@@ -10,6 +10,9 @@
     background-color: var(--javdan-color-background-secondary);
     cursor: pointer;
     text-align: center;
+    color: var(--javdan-color-text-secondary);
+    font-family: var(--javdan-font-family);
+    font-size: var(--javdan-font-size-md);
     transition: border-color var(--javdan-transition-fast), background-color var(--javdan-transition-fast);
 }
 
@@ -17,9 +20,19 @@
     border-color: var(--javdan-color-primary);
 }
 
+.dropzone:focus-visible {
+    outline: none;
+    box-shadow: var(--javdan-shadow-focus);
+}
+
 .dropzoneActive {
     border-color: var(--javdan-color-primary);
     background-color: var(--javdan-color-info-bg);
+}
+
+.dropzoneError {
+    border-color: var(--javdan-color-danger);
+    background-color: var(--javdan-color-danger-bg);
 }
 
 .dropzoneDisabled {
@@ -31,58 +44,151 @@
     color: var(--javdan-color-text-tertiary);
 }
 
+.hint {
+    font-size: var(--javdan-font-size-xs);
+    color: var(--javdan-color-text-tertiary);
+}
+
 .hiddenInput {
     display: none;
 }
 
-.fileList {
+.rejections {
     display: flex;
     flex-direction: column;
-    gap: var(--javdan-spacing-xs);
+    gap: var(--javdan-spacing-2xs);
     margin-top: var(--javdan-spacing-sm);
 }
 
-.fileItem {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--javdan-spacing-sm);
-    padding: var(--javdan-spacing-sm);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
+.rejectionItem {
     font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-danger);
 }
 
-.fileName {
+.fileGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--javdan-spacing-sm);
+    margin-top: var(--javdan-spacing-md);
+}
+
+.fileCard {
+    position: relative;
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    overflow: hidden;
+    background-color: var(--javdan-color-background);
+}
+
+.fileCardClickable {
+    cursor: pointer;
+}
+
+.fileCardError {
+    border-color: var(--javdan-color-danger);
+}
+
+.previewImage {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+
+.previewPlaceholder {
+    width: 100%;
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--javdan-color-background-secondary);
+    color: var(--javdan-color-text-tertiary);
+}
+
+.fileCardFooter {
+    padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
+}
+
+.fileCardName {
+    font-size: var(--javdan-font-size-xs);
+    color: var(--javdan-color-text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.fileRemove {
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    cursor: pointer;
+.fileCardSize {
+    font-size: var(--javdan-font-size-xs);
     color: var(--javdan-color-text-tertiary);
 }
 
-.fileRemove:hover {
+.fileCardErrorText {
+    font-size: var(--javdan-font-size-xs);
+    color: var(--javdan-color-danger);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.fileCardRemove {
+    position: absolute;
+    top: var(--javdan-spacing-xs);
+    inset-inline-end: var(--javdan-spacing-xs);
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: var(--javdan-radius-full);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.fileCardRemove:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.progressOverlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: var(--javdan-font-size-sm);
+    font-weight: var(--javdan-font-weight-semibold);
+}
+
+.statusIcon {
+    position: absolute;
+    bottom: var(--javdan-spacing-xs);
+    inset-inline-start: var(--javdan-spacing-xs);
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--javdan-radius-full);
+    background-color: var(--javdan-color-background);
+    box-shadow: var(--javdan-shadow-sm);
+}
+
+.statusIconSuccess {
+    color: var(--javdan-color-success);
+}
+
+.statusIconError {
     color: var(--javdan-color-danger);
 }
 
-.thumbnail {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--javdan-radius-sm);
-    object-fit: cover;
-    flex-shrink: 0;
-}
-
-.fileInfo {
-    display: flex;
-    align-items: center;
-    gap: var(--javdan-spacing-sm);
-    overflow: hidden;
-    flex: 1;
+.previewLarge {
+    max-width: 100%;
+    max-height: 70vh;
+    display: block;
+    margin: 0 auto;
+    border-radius: var(--javdan-radius-md);
 }

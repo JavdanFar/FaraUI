@@ -107,4 +107,9 @@ export { Slider } from "./components/Slider";
 export type { SliderProps } from "./components/Slider";
 
 export { FileUpload } from "./components/FileUpload";
-export type { FileUploadProps } from "./components/FileUpload";
+export type {
+  FileUploadProps,
+  UploadedFile,
+  RejectedFile,
+  FileStatus,
+} from "./components/FileUpload";

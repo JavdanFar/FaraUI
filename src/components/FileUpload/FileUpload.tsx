@@ -1,65 +1,131 @@
-import { useEffect, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./FileUpload.module.css";
+import type { RejectedFile, UploadedFile } from "./types";
+import { formatFileSize, isImageFileName, validateFiles } from "./utils";
+import { Modal } from "../Modal";
 
 export interface FileUploadProps {
-  onFilesSelected: (files: File[]) => void;
+  // Called with newly (locally) selected files, already wrapped as
+  // UploadedFile objects with a fresh object URL for preview.
+  onFilesSelected: (files: UploadedFile[]) => void;
+  // The full current list — mix of already-uploaded (server) files and
+  // freshly-selected local files, however the parent wants to compose them.
+  files?: UploadedFile[];
+  onRemoveFile?: (id: string) => void;
+
   accept?: string;
   multiple?: boolean;
   disabled?: boolean;
   label?: string;
+  hint?: string;
   className?: string;
-  selectedFiles?: File[];
-  onRemoveFile?: (index: number) => void;
-  showPreview?: boolean;
+
+  // Max size per file, in bytes. Enforced regardless of selection method
+  // (dialog or drag & drop).
+  maxSize?: number;
+  // Max total number of files allowed in `files`.
+  maxFiles?: number;
+  // Optional custom validation, return an error message to reject the file.
+  validate?: (file: File) => string | null;
+  // Called with any files that failed validation (wrong type, too large,
+  // too many, or failed custom validation).
+  onRejected?: (rejected: RejectedFile[]) => void;
+
+  // Clicking an image thumbnail opens it full-size in a modal.
+  enablePreviewModal?: boolean;
 }
 
 export function FileUpload({
   onFilesSelected,
+  files,
+  onRemoveFile,
   accept,
   multiple = false,
   disabled = false,
   label = "فایل را بکشید و رها کنید یا کلیک کنید",
+  hint,
   className,
-  selectedFiles,
-  onRemoveFile,
-  showPreview = false,
+  maxSize,
+  maxFiles,
+  validate,
+  onRejected,
+  enablePreviewModal = true,
 }: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
+  const [previewItem, setPreviewItem] = useState<UploadedFile | null>(null);
+  const [rejections, setRejections] = useState<RejectedFile[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputId = useId();
 
-  function handleFiles(fileList: FileList | null) {
+  const currentCount = files?.length ?? 0;
+  const isFull =
+    (!multiple && currentCount > 0) || (maxFiles !== undefined && currentCount >= maxFiles);
+  const isDisabled = disabled || isFull;
+
+  function processFiles(fileList: FileList | null) {
     if (!fileList) return;
-    onFilesSelected(Array.from(fileList));
+
+    const rawFiles = multiple ? Array.from(fileList) : Array.from(fileList).slice(0, 1);
+
+    const { accepted, rejected } = validateFiles(rawFiles, {
+      accept,
+      maxSize,
+      maxFiles,
+      currentCount,
+      validate,
+    });
+
+    setRejections(rejected);
+    if (rejected.length > 0) onRejected?.(rejected);
+
+    if (accepted.length === 0) return;
+
+    const wrapped: UploadedFile[] = accepted.map((file) => ({
+      id: crypto.randomUUID(),
+      name: file.name,
+      url: URL.createObjectURL(file),
+      size: file.size,
+      file,
+      status: "idle",
+    }));
+
+    onFilesSelected(wrapped);
+
+    // Allow selecting the same file again after removing it
+    if (inputRef.current) inputRef.current.value = "";
   }
 
   function handleDrop(e: React.DragEvent) {
     e.preventDefault();
     setIsDragActive(false);
-    if (disabled) return;
-    handleFiles(e.dataTransfer.files);
+    if (isDisabled) return;
+    processFiles(e.dataTransfer.files);
   }
 
   return (
     <div className={className}>
+      <label htmlFor={inputId} className={styles.hiddenInput} aria-hidden="true" />
       <div
         role="button"
-        tabIndex={disabled ? -1 : 0}
+        tabIndex={isDisabled ? -1 : 0}
+        aria-disabled={isDisabled}
         className={clsx(
           styles.dropzone,
           isDragActive && styles.dropzoneActive,
-          disabled && styles.dropzoneDisabled,
+          rejections.length > 0 && styles.dropzoneError,
+          isDisabled && styles.dropzoneDisabled,
         )}
-        onClick={() => !disabled && inputRef.current?.click()}
+        onClick={() => !isDisabled && inputRef.current?.click()}
         onKeyDown={(e) => {
-          if ((e.key === "Enter" || e.key === " ") && !disabled) {
+          if ((e.key === "Enter" || e.key === " ") && !isDisabled) {
             e.preventDefault();
             inputRef.current?.click();
           }
         }}
         onDragOver={(e) => {
           e.preventDefault();
-          if (!disabled) setIsDragActive(true);
+          if (!isDisabled) setIsDragActive(true);
         }}
         onDragLeave={() => setIsDragActive(false)}
         onDrop={handleDrop}
@@ -81,71 +147,153 @@ export function FileUpload({
         </svg>
 
         <span>{label}</span>
+        {hint && <span className={styles.hint}>{hint}</span>}
 
         <input
+          id={inputId}
           ref={inputRef}
           type="file"
           className={styles.hiddenInput}
           accept={accept}
           multiple={multiple}
-          disabled={disabled}
-          onChange={(e) => handleFiles(e.target.files)}
+          disabled={isDisabled}
+          onChange={(e) => processFiles(e.target.files)}
         />
       </div>
 
-      {selectedFiles && selectedFiles.length > 0 && (
-        <div className={styles.fileList}>
-          {selectedFiles.map((file, index) => (
-            <FileListItem
-              key={`${file.name}-${index}`}
-              file={file}
-              showPreview={showPreview}
-              onRemove={onRemoveFile ? () => onRemoveFile(index) : undefined}
-            />
+      {rejections.length > 0 && (
+        <div className={styles.rejections}>
+          {rejections.map((r, i) => (
+            <div key={i} className={styles.rejectionItem}>
+              {r.message}
+            </div>
           ))}
         </div>
       )}
-    </div>
-  );
-}
 
-interface FileListItemProps {
-  file: File;
-  showPreview: boolean;
-  onRemove?: () => void;
-}
+      {files && files.length > 0 && (
+        <div className={styles.fileGrid}>
+          {files.map((item) => {
+            const isImage = item.file
+              ? item.file.type.startsWith("image/")
+              : isImageFileName(item.name);
+            const canPreviewInModal = enablePreviewModal && isImage;
+            const isClickable = canPreviewInModal || !isImage;
+            const isUploading = item.status === "uploading";
 
-function FileListItem({ file, showPreview, onRemove }: FileListItemProps) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const isImage = file.type.startsWith("image/");
+            function handleCardClick() {
+              if (canPreviewInModal) {
+                setPreviewItem(item);
+              } else if (!isImage) {
+                window.open(item.url, "_blank", "noopener,noreferrer");
+              }
+            }
 
-  useEffect(() => {
-    if (!showPreview || !isImage) return;
+            return (
+              <div
+                key={item.id}
+                className={clsx(
+                  styles.fileCard,
+                  isClickable && styles.fileCardClickable,
+                  item.status === "error" && styles.fileCardError,
+                )}
+                onClick={isClickable ? handleCardClick : undefined}
+              >
+                {isImage ? (
+                  <img src={item.url} alt={item.name} className={styles.previewImage} />
+                ) : (
+                  <div className={styles.previewPlaceholder}>
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                      <polyline points="14 2 14 8 20 8" />
+                    </svg>
+                  </div>
+                )}
 
-    const url = URL.createObjectURL(file);
-    setPreviewUrl(url);
+                {isUploading && (
+                  <div className={styles.progressOverlay}>
+                    {item.progress !== undefined ? `${Math.round(item.progress)}%` : "..."}
+                  </div>
+                )}
 
-    return () => URL.revokeObjectURL(url);
-  }, [file, showPreview, isImage]);
+                {item.status === "success" && (
+                  <span className={clsx(styles.statusIcon, styles.statusIconSuccess)}>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  </span>
+                )}
 
-  return (
-    <div className={styles.fileItem}>
-      <div className={styles.fileInfo}>
-        {showPreview && isImage && previewUrl && (
-          <img src={previewUrl} alt={file.name} className={styles.thumbnail} />
-        )}
-        <span className={styles.fileName}>{file.name}</span>
-      </div>
+                {item.status === "error" && (
+                  <span className={clsx(styles.statusIcon, styles.statusIconError)}>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </span>
+                )}
 
-      {onRemove && (
-        <button
-          type="button"
-          className={styles.fileRemove}
-          onClick={onRemove}
-          aria-label={`حذف ${file.name}`}
+                <div className={styles.fileCardFooter}>
+                  <div className={styles.fileCardName}>{item.name}</div>
+                  {item.status === "error" && item.errorMessage ? (
+                    <div className={styles.fileCardErrorText}>{item.errorMessage}</div>
+                  ) : (
+                    item.size !== undefined && (
+                      <div className={styles.fileCardSize}>{formatFileSize(item.size)}</div>
+                    )
+                  )}
+                </div>
+
+                {onRemoveFile && (
+                  <button
+                    type="button"
+                    className={styles.fileCardRemove}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveFile(item.id);
+                    }}
+                    aria-label={`حذف ${item.name}`}
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {enablePreviewModal && (
+        <Modal
+          open={previewItem !== null}
+          onClose={() => setPreviewItem(null)}
+          title={previewItem?.name}
         >
-          ✕
-        </button>
+          {previewItem && (
+            <img src={previewItem.url} alt={previewItem.name} className={styles.previewLarge} />
+          )}
+        </Modal>
       )}
     </div>
   );
