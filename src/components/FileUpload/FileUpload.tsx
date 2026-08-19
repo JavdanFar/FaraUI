@@ -6,11 +6,7 @@ import { formatFileSize, isImageFileName, validateFiles } from "./utils";
 import { Modal } from "../Modal";
 
 export interface FileUploadProps {
-  // Called with newly (locally) selected files, already wrapped as
-  // UploadedFile objects with a fresh object URL for preview.
   onFilesSelected: (files: UploadedFile[]) => void;
-  // The full current list — mix of already-uploaded (server) files and
-  // freshly-selected local files, however the parent wants to compose them.
   files?: UploadedFile[];
   onRemoveFile?: (id: string) => void;
 
@@ -21,19 +17,14 @@ export interface FileUploadProps {
   hint?: string;
   className?: string;
 
-  // Max size per file, in bytes. Enforced regardless of selection method
-  // (dialog or drag & drop).
   maxSize?: number;
-  // Max total number of files allowed in `files`.
   maxFiles?: number;
-  // Optional custom validation, return an error message to reject the file.
   validate?: (file: File) => string | null;
-  // Called with any files that failed validation (wrong type, too large,
-  // too many, or failed custom validation).
   onRejected?: (rejected: RejectedFile[]) => void;
 
-  // Clicking an image thumbnail opens it full-size in a modal.
   enablePreviewModal?: boolean;
+
+  variant?: "default" | "preview";
 }
 
 export function FileUpload({
@@ -51,6 +42,7 @@ export function FileUpload({
   validate,
   onRejected,
   enablePreviewModal = true,
+  variant = "default",
 }: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [previewItem, setPreviewItem] = useState<UploadedFile | null>(null);
@@ -58,10 +50,19 @@ export function FileUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const inputId = useId();
 
+  const isPreviewVariant = variant === "preview";
   const currentCount = files?.length ?? 0;
   const isFull =
-    (!multiple && currentCount > 0) || (maxFiles !== undefined && currentCount >= maxFiles);
+    !isPreviewVariant &&
+    ((!multiple && currentCount > 0) || (maxFiles !== undefined && currentCount >= maxFiles));
   const isDisabled = disabled || isFull;
+
+  const previewFile = isPreviewVariant ? files?.[0] : undefined;
+  const previewFileIsImage =
+    previewFile &&
+    (previewFile.file
+      ? previewFile.file.type.startsWith("image/")
+      : isImageFileName(previewFile.name));
 
   function processFiles(fileList: FileList | null) {
     if (!fileList) return;
@@ -92,7 +93,6 @@ export function FileUpload({
 
     onFilesSelected(wrapped);
 
-    // Allow selecting the same file again after removing it
     if (inputRef.current) inputRef.current.value = "";
   }
 
@@ -105,13 +105,13 @@ export function FileUpload({
 
   return (
     <div className={className}>
-      <label htmlFor={inputId} className={styles.hiddenInput} aria-hidden="true" />
       <div
         role="button"
         tabIndex={isDisabled ? -1 : 0}
         aria-disabled={isDisabled}
         className={clsx(
           styles.dropzone,
+          isPreviewVariant && styles.dropzonePreview,
           isDragActive && styles.dropzoneActive,
           rejections.length > 0 && styles.dropzoneError,
           isDisabled && styles.dropzoneDisabled,
@@ -130,24 +130,57 @@ export function FileUpload({
         onDragLeave={() => setIsDragActive(false)}
         onDrop={handleDrop}
       >
-        <svg
-          className={styles.icon}
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-          <polyline points="17 8 12 3 7 8" />
-          <line x1="12" y1="3" x2="12" y2="15" />
-        </svg>
+        {isPreviewVariant && previewFile && previewFileIsImage ? (
+          <>
+            <img
+              src={previewFile.url}
+              alt={previewFile.name}
+              className={styles.previewDropzoneImage}
+              onClick={(e) => {
+                if (enablePreviewModal) {
+                  e.stopPropagation(); // don't trigger the file picker
+                  setPreviewItem(previewFile);
+                }
+              }}
+            />
+            <div className={styles.previewDropzoneOverlay}>تغییر عکس</div>
 
-        <span>{label}</span>
-        {hint && <span className={styles.hint}>{hint}</span>}
+            {onRemoveFile && (
+              <button
+                type="button"
+                className={styles.previewDropzoneRemove}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemoveFile(previewFile.id);
+                }}
+                aria-label="حذف عکس"
+              >
+                ✕
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            <svg
+              className={styles.icon}
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+
+            <span>{label}</span>
+            {hint && <span className={styles.hint}>{hint}</span>}
+          </>
+        )}
 
         <input
           id={inputId}
@@ -171,7 +204,8 @@ export function FileUpload({
         </div>
       )}
 
-      {files && files.length > 0 && (
+      {/* File grid is skipped entirely in preview mode — the dropzone IS the preview */}
+      {!isPreviewVariant && files && files.length > 0 && (
         <div className={styles.fileGrid}>
           {files.map((item) => {
             const isImage = item.file
@@ -179,7 +213,6 @@ export function FileUpload({
               : isImageFileName(item.name);
             const canPreviewInModal = enablePreviewModal && isImage;
             const isClickable = canPreviewInModal || !isImage;
-            const isUploading = item.status === "uploading";
 
             function handleCardClick() {
               if (canPreviewInModal) {
@@ -217,7 +250,7 @@ export function FileUpload({
                   </div>
                 )}
 
-                {isUploading && (
+                {item.status === "uploading" && (
                   <div className={styles.progressOverlay}>
                     {item.progress !== undefined ? `${Math.round(item.progress)}%` : "..."}
                   </div>
