@@ -116,9 +116,13 @@ export function FileUpload({
           rejections.length > 0 && styles.dropzoneError,
           isDisabled && styles.dropzoneDisabled,
         )}
-        onClick={() => !isDisabled && inputRef.current?.click()}
+        onClick={() => {
+          const hasPreviewImage = isPreviewVariant && previewFile && previewFileIsImage;
+          if (!isDisabled && !hasPreviewImage) inputRef.current?.click();
+        }}
         onKeyDown={(e) => {
-          if ((e.key === "Enter" || e.key === " ") && !isDisabled) {
+          const hasPreviewImage = isPreviewVariant && previewFile && previewFileIsImage;
+          if ((e.key === "Enter" || e.key === " ") && !isDisabled && !hasPreviewImage) {
             e.preventDefault();
             inputRef.current?.click();
           }
@@ -136,14 +140,7 @@ export function FileUpload({
               src={previewFile.url}
               alt={previewFile.name}
               className={styles.previewDropzoneImage}
-              onClick={(e) => {
-                if (enablePreviewModal) {
-                  e.stopPropagation(); // don't trigger the file picker
-                  setPreviewItem(previewFile);
-                }
-              }}
             />
-            <div className={styles.previewDropzoneOverlay}>تغییر عکس</div>
 
             {onRemoveFile && (
               <button

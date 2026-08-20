@@ -209,23 +209,6 @@
     display: block;
 }
 
-.previewDropzoneOverlay {
-    position: absolute;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity var(--javdan-transition-fast);
-    color: white;
-    font-size: var(--javdan-font-size-xs);
-}
-
-.dropzonePreview:hover .previewDropzoneOverlay {
-    opacity: 1;
-}
-
 .previewDropzoneRemove {
     position: absolute;
     top: var(--javdan-spacing-xs);
