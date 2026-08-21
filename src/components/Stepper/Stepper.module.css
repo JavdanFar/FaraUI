@@ -1,0 +1,99 @@
+.stepper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.step:last-child {
+    flex: 0;
+}
+
+.circleColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--javdan-radius-full);
+    border: var(--javdan-border-width-medium) solid var(--javdan-color-border);
+    background-color: var(--javdan-color-background);
+    color: var(--javdan-color-text-secondary);
+    font-size: var(--javdan-font-size-sm);
+    font-weight: var(--javdan-font-weight-semibold);
+    cursor: default;
+    transition: border-color var(--javdan-transition-fast), background-color var(--javdan-transition-fast), color var(--javdan-transition-fast);
+}
+
+.circleClickable {
+    cursor: pointer;
+}
+
+.circleActive {
+    border-color: var(--javdan-color-primary);
+    color: var(--javdan-color-primary);
+}
+
+.circleCompleted {
+    border-color: var(--javdan-color-primary);
+    background-color: var(--javdan-color-primary);
+    color: var(--javdan-color-text-inverse);
+}
+
+.textColumn {
+    margin-inline-start: var(--javdan-spacing-sm);
+    min-width: 0;
+}
+
+.label {
+    font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-text-secondary);
+    white-space: nowrap;
+}
+
+.labelActive {
+    color: var(--javdan-color-text);
+    font-weight: var(--javdan-font-weight-medium);
+}
+
+.description {
+    font-size: var(--javdan-font-size-xs);
+    color: var(--javdan-color-text-tertiary);
+    margin-top: var(--javdan-spacing-2xs);
+    white-space: nowrap;
+}
+
+.connector {
+    flex: 1;
+    height: var(--javdan-border-width-medium);
+    background-color: var(--javdan-color-border);
+    margin: 15px var(--javdan-spacing-sm) 0;
+    transition: background-color var(--javdan-transition-fast);
+}
+
+.connectorCompleted {
+    background-color: var(--javdan-color-primary);
+}
+
+.content {
+    margin-top: var(--javdan-spacing-lg);
+}
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--javdan-spacing-lg);
+}

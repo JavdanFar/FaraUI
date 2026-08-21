@@ -113,3 +113,6 @@ export type {
   RejectedFile,
   FileStatus,
 } from "./components/FileUpload";
+
+export { Stepper, useStepper } from "./components/Stepper";
+export type { StepperProps, StepperStep, UseStepperOptions } from "./components/Stepper";
