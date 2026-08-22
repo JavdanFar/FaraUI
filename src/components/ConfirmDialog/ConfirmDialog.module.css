@@ -1,0 +1,14 @@
+.actions {
+    display: flex;
+    gap: var(--javdan-spacing-sm);
+    margin-top: var(--javdan-spacing-lg);
+    justify-content: flex-end;
+}
+
+.confirmDanger {
+    background-color: var(--javdan-color-danger);
+}
+
+.confirmDanger:hover:not(:disabled) {
+    background-color: var(--javdan-color-danger-hover);
+}

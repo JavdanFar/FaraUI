@@ -119,3 +119,6 @@ export type { StepperProps, StepperStep, UseStepperOptions } from "./components/
 
 export { Timeline } from "./components/Timeline";
 export type { TimelineProps, TimelineItem } from "./components/Timeline";
+
+export { ConfirmDialog } from "./components/ConfirmDialog";
+export type { ConfirmDialogProps } from "./components/ConfirmDialog";
