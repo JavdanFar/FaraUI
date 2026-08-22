@@ -116,3 +116,6 @@ export type {
 
 export { Stepper, useStepper } from "./components/Stepper";
 export type { StepperProps, StepperStep, UseStepperOptions } from "./components/Stepper";
+
+export { Timeline } from "./components/Timeline";
+export type { TimelineProps, TimelineItem } from "./components/Timeline";
