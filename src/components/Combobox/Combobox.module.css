@@ -1,0 +1,75 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    font-family: var(--javdan-font-family);
+}
+
+.trigger {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--javdan-spacing-2xs);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 40px;
+    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    background-color: var(--javdan-color-background);
+    cursor: text;
+    transition: border-color var(--javdan-transition-fast);
+}
+
+.trigger:focus-within {
+    border-color: var(--javdan-color-primary);
+    box-shadow: var(--javdan-shadow-focus);
+}
+
+.triggerDisabled {
+    opacity: var(--javdan-opacity-disabled);
+    cursor: not-allowed;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 60px;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: var(--javdan-font-size-md);
+    color: var(--javdan-color-text);
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + var(--javdan-spacing-2xs));
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    max-height: 220px;
+    overflow-y: auto;
+    background-color: var(--javdan-color-background);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    box-shadow: var(--javdan-shadow-md);
+    z-index: var(--javdan-z-dropdown);
+    padding: var(--javdan-spacing-xs);
+}
+
+.option {
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    border-radius: var(--javdan-radius-sm);
+    cursor: pointer;
+    font-size: var(--javdan-font-size-md);
+    color: var(--javdan-color-text);
+}
+
+.option:hover {
+    background-color: var(--javdan-color-secondary);
+}
+
+.empty {
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    color: var(--javdan-color-text-tertiary);
+    font-size: var(--javdan-font-size-sm);
+}
