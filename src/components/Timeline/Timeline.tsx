@@ -11,25 +11,41 @@ export interface TimelineItem {
 
 export interface TimelineProps {
   items: TimelineItem[];
+  orientation?: "vertical" | "horizontal";
   className?: string;
 }
 
-export function Timeline({ items, className }: TimelineProps) {
+export function Timeline({ items, orientation = "vertical", className }: TimelineProps) {
+  const isHorizontal = orientation === "horizontal";
+
   return (
-    <div className={clsx(styles.timeline, className)} role="list">
+    <div
+      className={clsx(styles.timeline, isHorizontal && styles.timelineHorizontal, className)}
+      role="list"
+    >
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
 
         return (
-          <div key={index} className={styles.item} role="listitem">
-            <div className={styles.markerColumn}>
+          <div
+            key={index}
+            className={clsx(styles.item, isHorizontal && styles.itemHorizontal)}
+            role="listitem"
+          >
+            <div className={clsx(styles.markerColumn, isHorizontal && styles.markerRow)}>
               <span
-                className={clsx(styles.dot, item.variant === "secondary" && styles.dotSecondary)}
+                className={clsx(
+                  styles.dot,
+                  isHorizontal && styles.dotHorizontal,
+                  item.variant === "secondary" && styles.dotSecondary,
+                )}
               />
-              {!isLast && <div className={styles.line} />}
+              {!isLast && (
+                <div className={clsx(styles.line, isHorizontal && styles.lineHorizontal)} />
+              )}
             </div>
 
-            <div className={styles.content}>
+            <div className={clsx(styles.content, isHorizontal && styles.contentHorizontal)}>
               <div className={styles.title}>{item.title}</div>
               {item.timestamp && <div className={styles.timestamp}>{item.timestamp}</div>}
               {item.description && <div className={styles.description}>{item.description}</div>}

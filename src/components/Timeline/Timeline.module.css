@@ -3,9 +3,19 @@
     flex-direction: column;
 }
 
+.timelineHorizontal {
+    flex-direction: row;
+}
+
 .item {
     display: flex;
     gap: var(--javdan-spacing-md);
+}
+
+.itemHorizontal {
+    flex-direction: column;
+    gap: var(--javdan-spacing-sm);
+    flex: 1;
 }
 
 .markerColumn {
@@ -15,6 +25,11 @@
     flex-shrink: 0;
 }
 
+.markerRow {
+    flex-direction: row;
+    align-items: center;
+}
+
 .dot {
     width: 12px;
     height: 12px;
@@ -22,6 +37,10 @@
     background-color: var(--javdan-color-primary);
     flex-shrink: 0;
     margin-top: 4px;
+}
+
+.dotHorizontal {
+    margin-top: 0;
 }
 
 .dotSecondary {
@@ -35,9 +54,21 @@
     margin-top: var(--javdan-spacing-xs);
 }
 
+.lineHorizontal {
+    width: auto;
+    height: var(--javdan-border-width-medium);
+    flex: 1;
+    margin-top: 0;
+    margin-inline-start: var(--javdan-spacing-xs);
+}
+
 .content {
     padding-bottom: var(--javdan-spacing-lg);
     flex: 1;
+}
+
+.contentHorizontal {
+    padding-bottom: 0;
 }
 
 .title {
