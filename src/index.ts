@@ -125,3 +125,6 @@ export type { ConfirmDialogProps } from "./components/ConfirmDialog";
 
 export { Combobox } from "./components/Combobox";
 export type { ComboboxProps, ComboboxOption } from "./components/Combobox";
+
+export { OtpInput } from "./components/OtpInput";
+export type { OtpInputProps } from "./components/OtpInput";
