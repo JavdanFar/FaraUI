@@ -1,11 +1,11 @@
 .root {
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
     overflow: hidden;
 }
 
 .item {
-    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border);
 }
 
 .item:last-child {
@@ -17,32 +17,32 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--javdan-spacing-sm);
-    padding: var(--javdan-spacing-md);
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-md);
     border: none;
     background: none;
     cursor: pointer;
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    font-weight: var(--javdan-font-weight-medium);
-    color: var(--javdan-color-text);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    font-weight: var(--fara-font-weight-medium);
+    color: var(--fara-color-text);
     text-align: start;
-    transition: background-color var(--javdan-transition-fast);
+    transition: background-color var(--fara-transition-fast);
 }
 
 .trigger:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .trigger:focus-visible {
     outline: none;
-    box-shadow: var(--javdan-shadow-focus);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .icon {
     flex-shrink: 0;
-    transition: transform var(--javdan-transition-fast);
-    color: var(--javdan-color-text-tertiary);
+    transition: transform var(--fara-transition-fast);
+    color: var(--fara-color-text-tertiary);
 }
 
 .iconOpen {
@@ -52,7 +52,7 @@
 .panel {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows var(--javdan-transition-normal);
+    transition: grid-template-rows var(--fara-transition-normal);
 }
 
 .panelOpen {
@@ -64,7 +64,7 @@
 }
 
 .panelContent {
-    padding: 0 var(--javdan-spacing-md) var(--javdan-spacing-md);
-    color: var(--javdan-color-text-secondary);
-    font-size: var(--javdan-font-size-md);
+    padding: 0 var(--fara-spacing-md) var(--fara-spacing-md);
+    color: var(--fara-color-text-secondary);
+    font-size: var(--fara-font-size-md);
 }

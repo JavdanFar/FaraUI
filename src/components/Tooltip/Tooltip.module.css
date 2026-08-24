@@ -5,20 +5,20 @@
 
 .tooltip {
     position: absolute;
-    bottom: calc(100% + var(--javdan-spacing-xs));
+    bottom: calc(100% + var(--fara-spacing-xs));
     left: 50%;
     transform: translateX(-50%);
-    background-color: var(--javdan-color-text);
-    color: var(--javdan-color-text-inverse);
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-sm);
-    padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
-    border-radius: var(--javdan-radius-sm);
+    background-color: var(--fara-color-text);
+    color: var(--fara-color-text-inverse);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-sm);
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
+    border-radius: var(--fara-radius-sm);
     white-space: nowrap;
-    z-index: var(--javdan-z-tooltip);
+    z-index: var(--fara-z-tooltip);
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--javdan-transition-fast);
+    transition: opacity var(--fara-transition-fast);
 }
 
 .tooltip::after {
@@ -28,7 +28,7 @@
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-top-color: var(--javdan-color-text);
+    border-top-color: var(--fara-color-text);
 }
 
 .visible {

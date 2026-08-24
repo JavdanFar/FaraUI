@@ -3,11 +3,11 @@
     height: 100%;
     width: 280px;
     flex-shrink: 0;
-    background-color: var(--javdan-color-background);
-    border-inline-end: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    background-color: var(--fara-color-background);
+    border-inline-end: var(--fara-border-width-thin) solid var(--fara-color-border);
     display: flex;
     flex-direction: column;
-    transition: width var(--javdan-transition-normal);
+    transition: width var(--fara-transition-normal);
 }
 
 .collapsed {
@@ -18,9 +18,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: var(--javdan-spacing-sm);
-    padding: var(--javdan-spacing-md);
-    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-md);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border);
 }
 
 .headerContent {
@@ -29,7 +29,7 @@
     overflow: hidden;
     white-space: nowrap;
     opacity: 1;
-    transition: opacity var(--javdan-transition-fast);
+    transition: opacity var(--fara-transition-fast);
 }
 
 .headerContentHidden {
@@ -47,13 +47,13 @@
     border: none;
     background: none;
     cursor: pointer;
-    color: var(--javdan-color-text-secondary);
-    border-radius: var(--javdan-radius-sm);
-    transition: background-color var(--javdan-transition-fast), transform var(--javdan-transition-normal);
+    color: var(--fara-color-text-secondary);
+    border-radius: var(--fara-radius-sm);
+    transition: background-color var(--fara-transition-fast), transform var(--fara-transition-normal);
 }
 
 .toggleButton:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .toggleButtonCollapsed {
@@ -64,5 +64,5 @@
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: var(--javdan-spacing-md);
+    padding: var(--fara-spacing-md);
 }

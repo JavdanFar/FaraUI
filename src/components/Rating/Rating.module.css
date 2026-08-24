@@ -1,6 +1,6 @@
 .wrapper {
     display: inline-flex;
-    gap: var(--javdan-spacing-2xs);
+    gap: var(--fara-spacing-2xs);
 }
 
 .star {
@@ -8,8 +8,8 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    color: var(--javdan-color-border);
-    transition: color var(--javdan-transition-fast), transform var(--javdan-transition-fast);
+    color: var(--fara-color-border);
+    transition: color var(--fara-transition-fast), transform var(--fara-transition-fast);
 }
 
 .star:disabled {

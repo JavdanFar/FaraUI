@@ -1,30 +1,30 @@
 .badge {
     display: inline-flex;
     align-items: center;
-    border-radius: var(--javdan-radius-sm);
-    font-size: var(--javdan-font-size-sm);
-    font-family: var(--javdan-font-family);
-    padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
-    font-weight: var(--javdan-font-weight-medium);
-    line-height: var(--javdan-line-height-tight);
+    border-radius: var(--fara-radius-sm);
+    font-size: var(--fara-font-size-sm);
+    font-family: var(--fara-font-family);
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
+    font-weight: var(--fara-font-weight-medium);
+    line-height: var(--fara-line-height-tight);
 }
 
 .primary {
-    background-color: var(--javdan-color-primary);
-    color: var(--javdan-color-text-inverse);
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
 }
 
 .secondary {
-    background-color: var(--javdan-color-secondary);
-    color: var(--javdan-color-text);
+    background-color: var(--fara-color-secondary);
+    color: var(--fara-color-text);
 }
 
 .success {
-    background-color: var(--javdan-color-success-bg);
-    color: var(--javdan-color-success-text);
+    background-color: var(--fara-color-success-bg);
+    color: var(--fara-color-success-text);
 }
 
 .danger {
-    background-color: var(--javdan-color-danger-bg);
-    color: var(--javdan-color-danger-text);
+    background-color: var(--fara-color-danger-bg);
+    color: var(--fara-color-danger-text);
 }

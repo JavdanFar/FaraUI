@@ -1,33 +1,33 @@
 .wrapper {
     display: inline-flex;
     align-items: center;
-    gap: var(--javdan-spacing-sm);
+    gap: var(--fara-spacing-sm);
     cursor: pointer;
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
 }
 
 .wrapper:has(.radio:disabled) {
     cursor: not-allowed;
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
 }
 
 .radio {
-    width: var(--javdan-icon-size-sm);
-    height: var(--javdan-icon-size-sm);
+    width: var(--fara-icon-size-sm);
+    height: var(--fara-icon-size-sm);
     cursor: pointer;
-    accent-color: var(--javdan-color-primary);
+    accent-color: var(--fara-color-primary);
     margin: 0;
 }
 
 .radio:focus-visible {
     outline: none;
-    box-shadow: var(--javdan-shadow-focus);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .group {
     display: flex;
     flex-direction: column;
-    gap: var(--javdan-spacing-sm);
+    gap: var(--fara-spacing-sm);
 }

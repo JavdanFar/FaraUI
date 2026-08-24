@@ -1,60 +1,60 @@
 .wrapper {
     position: relative;
     width: 100%;
-    font-family: var(--javdan-font-family);
+    font-family: var(--fara-font-family);
 }
 
 .input {
     width: 100%;
     box-sizing: border-box;
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
     font-family: inherit;
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     cursor: pointer;
     outline: none;
-    transition: border-color var(--javdan-transition-fast);
+    transition: border-color var(--fara-transition-fast);
 }
 
 .input::placeholder {
-    color: var(--javdan-color-text-tertiary);
+    color: var(--fara-color-text-tertiary);
 }
 
 .input:focus {
-    border-color: var(--javdan-color-primary);
-    box-shadow: var(--javdan-shadow-focus);
+    border-color: var(--fara-color-primary);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .input:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
-    background-color: var(--javdan-color-background-disabled);
+    background-color: var(--fara-color-background-disabled);
 }
 
 .panel {
     position: absolute;
-    top: calc(100% + var(--javdan-spacing-xs));
+    top: calc(100% + var(--fara-spacing-xs));
     inset-inline-start: 0;
     width: 280px;
-    background-color: var(--javdan-color-background);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    box-shadow: var(--javdan-shadow-md);
-    z-index: var(--javdan-z-dropdown);
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    box-shadow: var(--fara-shadow-md);
+    z-index: var(--fara-z-dropdown);
 }
 
 .panelPadding {
-    padding: var(--javdan-spacing-md);
+    padding: var(--fara-spacing-md);
 }
 
 .header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--javdan-spacing-sm);
+    margin-bottom: var(--fara-spacing-sm);
 }
 
 .navButton {
@@ -67,18 +67,18 @@
     border: none;
     background: none;
     cursor: pointer;
-    color: var(--javdan-color-text-secondary);
-    border-radius: var(--javdan-radius-sm);
+    color: var(--fara-color-text-secondary);
+    border-radius: var(--fara-radius-sm);
 }
 
 .navButton:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .monthYearGroup {
     display: flex;
     align-items: center;
-    gap: var(--javdan-spacing-xs);
+    gap: var(--fara-spacing-xs);
 }
 
 .monthYearButton {
@@ -86,15 +86,15 @@
     border: none;
     cursor: pointer;
     font-family: inherit;
-    font-size: var(--javdan-font-size-md);
-    font-weight: var(--javdan-font-weight-medium);
-    color: var(--javdan-color-text);
-    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-xs);
-    border-radius: var(--javdan-radius-sm);
+    font-size: var(--fara-font-size-md);
+    font-weight: var(--fara-font-weight-medium);
+    color: var(--fara-color-text);
+    padding: var(--fara-spacing-2xs) var(--fara-spacing-xs);
+    border-radius: var(--fara-radius-sm);
 }
 
 .monthYearButton:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .daysGrid {
@@ -105,9 +105,9 @@
 
 .weekday {
     text-align: center;
-    font-size: var(--javdan-font-size-xs);
-    color: var(--javdan-color-text-tertiary);
-    padding: var(--javdan-spacing-2xs) 0;
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    padding: var(--fara-spacing-2xs) 0;
 }
 
 .dayCell {
@@ -117,24 +117,24 @@
     aspect-ratio: 1;
     border: none;
     background: none;
-    border-radius: var(--javdan-radius-sm);
+    border-radius: var(--fara-radius-sm);
     cursor: pointer;
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
 }
 
 .dayCell:hover:not(:disabled) {
-    background-color: var(--javdan-color-secondary);
+    background-color: var(--fara-color-secondary);
 }
 
 .dayCellToday {
-    font-weight: var(--javdan-font-weight-bold);
-    color: var(--javdan-color-primary);
+    font-weight: var(--fara-font-weight-bold);
+    color: var(--fara-color-primary);
 }
 
 .dayCellSelected {
-    background-color: var(--javdan-color-primary);
-    color: var(--javdan-color-text-inverse);
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
 }
 
 .dayCellEmpty {
@@ -144,56 +144,56 @@
 .footer {
     display: flex;
     justify-content: center;
-    margin-top: var(--javdan-spacing-sm);
-    padding-top: var(--javdan-spacing-sm);
-    border-top: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
+    margin-top: var(--fara-spacing-sm);
+    padding-top: var(--fara-spacing-sm);
+    border-top: var(--fara-border-width-thin) solid var(--fara-color-border-light);
 }
 
 .footerButton {
     background: none;
     border: none;
-    color: var(--javdan-color-primary);
-    font-size: var(--javdan-font-size-sm);
+    color: var(--fara-color-primary);
+    font-size: var(--fara-font-size-sm);
     cursor: pointer;
-    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
+    padding: var(--fara-spacing-2xs) var(--fara-spacing-sm);
 }
 
 .footerButton:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .monthsGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--javdan-spacing-xs);
+    gap: var(--fara-spacing-xs);
     direction: rtl;
 }
 
 .monthCell {
-    padding: var(--javdan-spacing-sm);
+    padding: var(--fara-spacing-sm);
     border: none;
     background: none;
-    border-radius: var(--javdan-radius-sm);
+    border-radius: var(--fara-radius-sm);
     cursor: pointer;
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
     text-align: center;
 }
 
 .monthCell:hover {
-    background-color: var(--javdan-color-secondary);
+    background-color: var(--fara-color-secondary);
 }
 
 .monthCellActive {
-    background-color: var(--javdan-color-primary);
-    color: var(--javdan-color-text-inverse);
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
 }
 
 .yearsGridWrapper {
     max-height: 240px;
     overflow-y: scroll;
     scrollbar-width: thin;
-    scrollbar-color: var(--javdan-color-border) var(--javdan-color-background-secondary);
+    scrollbar-color: var(--fara-color-border) var(--fara-color-background-secondary);
 }
 
 .yearsGridWrapper::-webkit-scrollbar {
@@ -206,8 +206,8 @@
 }
 
 .yearsGridWrapper::-webkit-scrollbar-thumb {
-    background-color: var(--javdan-color-border);
-    border-radius: var(--javdan-radius-full);
+    background-color: var(--fara-color-border);
+    border-radius: var(--fara-radius-full);
 }
 
 .yearsGridWrapper::-webkit-scrollbar-button {
@@ -219,28 +219,28 @@
 .yearsGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--javdan-spacing-xs);
+    gap: var(--fara-spacing-xs);
     direction: ltr;
 }
 
 .yearCell {
-    padding: var(--javdan-spacing-sm);
+    padding: var(--fara-spacing-sm);
     border: none;
     background: none;
-    border-radius: var(--javdan-radius-sm);
+    border-radius: var(--fara-radius-sm);
     cursor: pointer;
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
     text-align: center;
 }
 
 .yearCell:hover {
-    background-color: var(--javdan-color-secondary);
+    background-color: var(--fara-color-secondary);
 }
 
 .yearCellActive {
-    background-color: var(--javdan-color-primary);
-    color: var(--javdan-color-text-inverse);
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
 }
 
 .scrollWrapper {
@@ -252,8 +252,8 @@
     position: absolute;
     inset-inline-start: 0;
     inset-inline-end: 0;
-    height: var(--javdan-border-width-thin);
-    background-color: var(--javdan-color-border);
+    height: var(--fara-border-width-thin);
+    background-color: var(--fara-color-border);
     pointer-events: none;
     z-index: 1;
 }
@@ -269,7 +269,7 @@
 .scrollContainer {
     position: relative;
     display: flex;
-    gap: var(--javdan-spacing-xs);
+    gap: var(--fara-spacing-xs);
     height: 200px;
 }
 
@@ -298,20 +298,20 @@
     justify-content: center;
     height: 40px;
     cursor: pointer;
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text-tertiary);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text-tertiary);
 }
 
 .scrollItemActive {
-    color: var(--javdan-color-text);
-    font-weight: var(--javdan-font-weight-semibold);
-    font-size: var(--javdan-font-size-lg);
+    color: var(--fara-color-text);
+    font-weight: var(--fara-font-weight-semibold);
+    font-size: var(--fara-font-size-lg);
 }
 
 .scrollConfirm {
-    margin-top: var(--javdan-spacing-sm);
-    padding: var(--javdan-spacing-sm) 0;
-    border-top: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
+    margin-top: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-sm) 0;
+    border-top: var(--fara-border-width-thin) solid var(--fara-color-border-light);
     display: flex;
     justify-content: center;
 }

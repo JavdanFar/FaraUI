@@ -1,25 +1,25 @@
 .spinner {
     display: inline-block;
-    border: var(--javdan-border-width-medium) solid var(--javdan-color-secondary);
-    border-top-color: var(--javdan-color-primary);
-    border-radius: var(--javdan-radius-full);
+    border: var(--fara-border-width-medium) solid var(--fara-color-secondary);
+    border-top-color: var(--fara-color-primary);
+    border-radius: var(--fara-radius-full);
     animation: spin 0.9s linear infinite;
 }
 
 .sm {
-    width: var(--javdan-icon-size-sm);
-    height: var(--javdan-icon-size-sm);
+    width: var(--fara-icon-size-sm);
+    height: var(--fara-icon-size-sm);
 }
 
 .md {
-    width: var(--javdan-icon-size-md);
-    height: var(--javdan-icon-size-md);
+    width: var(--fara-icon-size-md);
+    height: var(--fara-icon-size-md);
 }
 
 .lg {
-    width: var(--javdan-icon-size-xl);
-    height: var(--javdan-icon-size-xl);
-    border-width: var(--javdan-border-width-thick);
+    width: var(--fara-icon-size-xl);
+    height: var(--fara-icon-size-xl);
+    border-width: var(--fara-border-width-thick);
 }
 
 @keyframes spin {

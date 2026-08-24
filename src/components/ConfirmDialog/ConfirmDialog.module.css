@@ -1,14 +1,14 @@
 .actions {
     display: flex;
-    gap: var(--javdan-spacing-sm);
-    margin-top: var(--javdan-spacing-lg);
+    gap: var(--fara-spacing-sm);
+    margin-top: var(--fara-spacing-lg);
     justify-content: flex-end;
 }
 
 .confirmDanger {
-    background-color: var(--javdan-color-danger);
+    background-color: var(--fara-color-danger);
 }
 
 .confirmDanger:hover:not(:disabled) {
-    background-color: var(--javdan-color-danger-hover);
+    background-color: var(--fara-color-danger-hover);
 }

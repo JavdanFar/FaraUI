@@ -9,12 +9,12 @@
 
 .item {
     display: flex;
-    gap: var(--javdan-spacing-md);
+    gap: var(--fara-spacing-md);
 }
 
 .itemHorizontal {
     flex-direction: column;
-    gap: var(--javdan-spacing-sm);
+    gap: var(--fara-spacing-sm);
     flex: 1;
 }
 
@@ -33,8 +33,8 @@
 .dot {
     width: 12px;
     height: 12px;
-    border-radius: var(--javdan-radius-full);
-    background-color: var(--javdan-color-primary);
+    border-radius: var(--fara-radius-full);
+    background-color: var(--fara-color-primary);
     flex-shrink: 0;
     margin-top: 4px;
 }
@@ -44,26 +44,26 @@
 }
 
 .dotSecondary {
-    background-color: var(--javdan-color-border);
+    background-color: var(--fara-color-border);
 }
 
 .line {
-    width: var(--javdan-border-width-medium);
+    width: var(--fara-border-width-medium);
     flex: 1;
-    background-color: var(--javdan-color-border-light);
-    margin-top: var(--javdan-spacing-xs);
+    background-color: var(--fara-color-border-light);
+    margin-top: var(--fara-spacing-xs);
 }
 
 .lineHorizontal {
     width: auto;
-    height: var(--javdan-border-width-medium);
+    height: var(--fara-border-width-medium);
     flex: 1;
     margin-top: 0;
-    margin-inline-start: var(--javdan-spacing-xs);
+    margin-inline-start: var(--fara-spacing-xs);
 }
 
 .content {
-    padding-bottom: var(--javdan-spacing-lg);
+    padding-bottom: var(--fara-spacing-lg);
     flex: 1;
 }
 
@@ -72,19 +72,19 @@
 }
 
 .title {
-    font-size: var(--javdan-font-size-md);
-    font-weight: var(--javdan-font-weight-medium);
-    color: var(--javdan-color-text);
+    font-size: var(--fara-font-size-md);
+    font-weight: var(--fara-font-weight-medium);
+    color: var(--fara-color-text);
 }
 
 .timestamp {
-    font-size: var(--javdan-font-size-xs);
-    color: var(--javdan-color-text-tertiary);
-    margin-top: var(--javdan-spacing-2xs);
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    margin-top: var(--fara-spacing-2xs);
 }
 
 .description {
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text-secondary);
-    margin-top: var(--javdan-spacing-xs);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
+    margin-top: var(--fara-spacing-xs);
 }

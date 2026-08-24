@@ -1,50 +1,50 @@
 .overlay {
     position: fixed;
     inset: 0;
-    background-color: var(--javdan-color-background-overlay);
+    background-color: var(--fara-color-background-overlay);
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: var(--javdan-z-modal);
-    padding: var(--javdan-spacing-md);
+    z-index: var(--fara-z-modal);
+    padding: var(--fara-spacing-md);
 }
 
 .modal {
-    background-color: var(--javdan-color-background);
-    border-radius: var(--javdan-radius-lg);
-    padding: var(--javdan-spacing-lg);
+    background-color: var(--fara-color-background);
+    border-radius: var(--fara-radius-lg);
+    padding: var(--fara-spacing-lg);
     max-width: 480px;
     width: 100%;
     max-height: 85vh;
     overflow-y: auto;
-    box-shadow: var(--javdan-shadow-lg);
+    box-shadow: var(--fara-shadow-lg);
 }
 
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--javdan-spacing-md);
+    margin-bottom: var(--fara-spacing-md);
 }
 
 .closeButton {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: var(--javdan-font-size-xl);
-    line-height: var(--javdan-line-height-tight);
-    color: var(--javdan-color-text);
-    padding: var(--javdan-spacing-xs);
-    border-radius: var(--javdan-radius-lg);
-    transition: color var(--javdan-transition-fast), background-color var(--javdan-transition-fast);
+    font-size: var(--fara-font-size-xl);
+    line-height: var(--fara-line-height-tight);
+    color: var(--fara-color-text);
+    padding: var(--fara-spacing-xs);
+    border-radius: var(--fara-radius-lg);
+    transition: color var(--fara-transition-fast), background-color var(--fara-transition-fast);
 }
 
 .closeButton:hover {
-    color: var(--javdan-color-danger-hover);
-    background-color: var(--javdan-color-background-secondary);
+    color: var(--fara-color-danger-hover);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .closeButton:focus-visible {
     outline: none;
-    box-shadow: var(--javdan-shadow-focus);
+    box-shadow: var(--fara-shadow-focus);
 }

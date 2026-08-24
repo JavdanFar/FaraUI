@@ -1,42 +1,42 @@
 .list {
     display: flex;
-    gap: var(--javdan-spacing-xs);
-    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    gap: var(--fara-spacing-xs);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border);
 }
 
 .tab {
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
     border: none;
     background: none;
     cursor: pointer;
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text-secondary);
-    border-bottom: var(--javdan-border-width-medium) solid transparent;
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text-secondary);
+    border-bottom: var(--fara-border-width-medium) solid transparent;
     margin-bottom: -1px;
-    transition: color var(--javdan-transition-fast), border-color var(--javdan-transition-fast);
+    transition: color var(--fara-transition-fast), border-color var(--fara-transition-fast);
 }
 
 .tab:hover:not(.tabActive):not(:disabled) {
-    color: var(--javdan-color-text);
+    color: var(--fara-color-text);
 }
 
 .tab:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
 }
 
 .tabActive {
-    color: var(--javdan-color-primary);
-    border-bottom-color: var(--javdan-color-primary);
+    color: var(--fara-color-primary);
+    border-bottom-color: var(--fara-color-primary);
 }
 
 .tab:focus-visible {
     outline: none;
-    box-shadow: var(--javdan-shadow-focus);
-    border-radius: var(--javdan-radius-sm);
+    box-shadow: var(--fara-shadow-focus);
+    border-radius: var(--fara-radius-sm);
 }
 
 .panel {
-    padding-top: var(--javdan-spacing-md);
+    padding-top: var(--fara-spacing-md);
 }

@@ -8,18 +8,18 @@
     top: 0;
     inset-inline-end: 0;
     transform: translate(50%, -50%);
-    min-width: var(--javdan-icon-size-sm);
-    height: var(--javdan-icon-size-sm);
-    padding: 0 var(--javdan-spacing-xs);
-    border-radius: var(--javdan-radius-full);
-    background-color: var(--javdan-color-primary);
-    color: var(--javdan-color-text-inverse);
-    font-size: var(--javdan-font-size-xs);
-    font-weight: var(--javdan-font-weight-semibold);
+    min-width: var(--fara-icon-size-sm);
+    height: var(--fara-icon-size-sm);
+    padding: 0 var(--fara-spacing-xs);
+    border-radius: var(--fara-radius-full);
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
+    font-size: var(--fara-font-size-xs);
+    font-weight: var(--fara-font-weight-semibold);
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: var(--javdan-line-height-tight);
+    line-height: var(--fara-line-height-tight);
 }
 
 :dir(rtl) .dot {
@@ -27,5 +27,5 @@
 }
 
 .danger {
-    background-color: var(--javdan-color-danger);
+    background-color: var(--fara-color-danger);
 }

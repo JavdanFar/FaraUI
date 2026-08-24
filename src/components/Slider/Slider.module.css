@@ -1,23 +1,23 @@
 .wrapper {
     display: flex;
     flex-direction: column;
-    gap: var(--javdan-spacing-xs);
+    gap: var(--fara-spacing-xs);
     width: 100%;
 }
 
 .labelRow {
     display: flex;
     justify-content: space-between;
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text-secondary);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
 }
 
 .track {
     position: relative;
     width: 100%;
     height: 6px;
-    background-color: var(--javdan-color-secondary);
-    border-radius: var(--javdan-radius-full);
+    background-color: var(--fara-color-secondary);
+    border-radius: var(--fara-radius-full);
 }
 
 .fill {
@@ -25,8 +25,8 @@
     top: 0;
     bottom: 0;
     inset-inline-start: 0;
-    background-color: var(--javdan-color-primary);
-    border-radius: var(--javdan-radius-full);
+    background-color: var(--fara-color-primary);
+    border-radius: var(--fara-radius-full);
 }
 
 .input {
@@ -46,10 +46,10 @@
     transform: translate(-50%, -50%);
     width: 16px;
     height: 16px;
-    background-color: var(--javdan-color-background);
-    border: var(--javdan-border-width-medium) solid var(--javdan-color-primary);
-    border-radius: var(--javdan-radius-full);
-    box-shadow: var(--javdan-shadow-sm);
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-medium) solid var(--fara-color-primary);
+    border-radius: var(--fara-radius-full);
+    box-shadow: var(--fara-shadow-sm);
     pointer-events: none;
 }
 
@@ -58,6 +58,6 @@
 }
 
 .disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
 }

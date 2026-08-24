@@ -1,36 +1,36 @@
 .textarea {
     width: 100%;
     box-sizing: border-box;
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     outline: none;
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
     resize: vertical;
     min-height: 80px;
-    transition: border-color var(--javdan-transition-fast);
+    transition: border-color var(--fara-transition-fast);
 }
 
 .textarea::placeholder {
-    color: var(--javdan-color-text-tertiary);
+    color: var(--fara-color-text-tertiary);
 }
 
 .textarea:focus {
-    border-color: var(--javdan-color-primary);
-    box-shadow: var(--javdan-shadow-focus);
+    border-color: var(--fara-color-primary);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .textarea:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
-    background-color: var(--javdan-color-background-disabled);
+    background-color: var(--fara-color-background-disabled);
 }
 
 .error {
-    border-color: var(--javdan-color-danger);
+    border-color: var(--fara-color-danger);
 }
 
 .noResize {

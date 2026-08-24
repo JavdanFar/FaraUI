@@ -5,15 +5,15 @@
 
 .menu {
     position: absolute;
-    top: calc(100% + var(--javdan-spacing-2xs));
+    top: calc(100% + var(--fara-spacing-2xs));
     inset-inline-end: 0;
     min-width: 180px;
-    background-color: var(--javdan-color-background);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    box-shadow: var(--javdan-shadow-md);
-    z-index: var(--javdan-z-dropdown);
-    padding: var(--javdan-spacing-xs);
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    box-shadow: var(--fara-shadow-md);
+    z-index: var(--fara-z-dropdown);
+    padding: var(--fara-spacing-xs);
 }
 
 .item {
@@ -21,29 +21,29 @@
     width: 100%;
     box-sizing: border-box;
     text-align: start;
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
     border: none;
     background: none;
-    border-radius: var(--javdan-radius-sm);
+    border-radius: var(--fara-radius-sm);
     cursor: pointer;
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
 }
 
 .item:hover:not(:disabled) {
-    background-color: var(--javdan-color-secondary);
+    background-color: var(--fara-color-secondary);
 }
 
 .item:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
 }
 
 .itemDanger {
-    color: var(--javdan-color-danger);
+    color: var(--fara-color-danger);
 }
 
 .itemDanger:hover:not(:disabled) {
-    background-color: var(--javdan-color-danger-bg);
+    background-color: var(--fara-color-danger-bg);
 }

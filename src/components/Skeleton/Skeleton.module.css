@@ -1,11 +1,11 @@
 .skeleton {
     background: linear-gradient(90deg,
-            var(--javdan-color-background-tertiary) 25%,
-            var(--javdan-color-secondary) 50%,
-            var(--javdan-color-background-tertiary) 75%);
+            var(--fara-color-background-tertiary) 25%,
+            var(--fara-color-secondary) 50%,
+            var(--fara-color-background-tertiary) 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s ease-in-out infinite;
-    border-radius: var(--javdan-radius-sm);
+    border-radius: var(--fara-radius-sm);
 }
 
 .text {
@@ -14,11 +14,11 @@
 }
 
 .circle {
-    border-radius: var(--javdan-radius-full);
+    border-radius: var(--fara-radius-full);
 }
 
 .rectangle {
-    border-radius: var(--javdan-radius-sm);
+    border-radius: var(--fara-radius-sm);
 }
 
 @keyframes shimmer {

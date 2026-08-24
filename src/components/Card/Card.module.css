@@ -1,7 +1,7 @@
 .card {
-    background-color: var(--javdan-color-background);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-lg);
-    padding: var(--javdan-spacing-lg);
-    box-shadow: var(--javdan-shadow-sm);
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-lg);
+    padding: var(--fara-spacing-lg);
+    box-shadow: var(--fara-shadow-sm);
 }

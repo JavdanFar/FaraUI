@@ -1,49 +1,49 @@
 .text {
     margin: 0;
-    font-family: var(--javdan-font-family);
-    color: var(--javdan-color-text);
-    line-height: var(--javdan-line-height-normal);
+    font-family: var(--fara-font-family);
+    color: var(--fara-color-text);
+    line-height: var(--fara-line-height-normal);
 }
 
 .heading {
     margin: 0;
-    font-family: var(--javdan-font-family);
-    font-weight: var(--javdan-font-weight-bold);
-    color: var(--javdan-color-text);
-    line-height: var(--javdan-line-height-tight);
-    letter-spacing: var(--javdan-letter-spacing-tight);
+    font-family: var(--fara-font-family);
+    font-weight: var(--fara-font-weight-bold);
+    color: var(--fara-color-text);
+    line-height: var(--fara-line-height-tight);
+    letter-spacing: var(--fara-letter-spacing-tight);
 }
 
 /* Text sizes */
 .textSm {
-    font-size: var(--javdan-font-size-sm);
+    font-size: var(--fara-font-size-sm);
 }
 
 .textMd {
-    font-size: var(--javdan-font-size-md);
+    font-size: var(--fara-font-size-md);
 }
 
 .textLg {
-    font-size: var(--javdan-font-size-lg);
+    font-size: var(--fara-font-size-lg);
 }
 
 /* Heading sizes */
 .h1 {
-    font-size: var(--javdan-font-size-3xl);
+    font-size: var(--fara-font-size-3xl);
 }
 
 .h2 {
-    font-size: var(--javdan-font-size-2xl);
+    font-size: var(--fara-font-size-2xl);
 }
 
 .h3 {
-    font-size: var(--javdan-font-size-xl);
+    font-size: var(--fara-font-size-xl);
 }
 
 .h4 {
-    font-size: var(--javdan-font-size-lg);
+    font-size: var(--fara-font-size-lg);
 }
 
 .muted {
-    color: var(--javdan-color-text-secondary);
+    color: var(--fara-color-text-secondary);
 }

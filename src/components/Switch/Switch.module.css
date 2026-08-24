@@ -1,16 +1,16 @@
 .wrapper {
     display: inline-flex;
     align-items: center;
-    gap: var(--javdan-spacing-sm);
+    gap: var(--fara-spacing-sm);
     cursor: pointer;
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
 }
 
 .wrapper:has(.input:disabled) {
     cursor: not-allowed;
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
 }
 
 .input {
@@ -24,18 +24,18 @@
     position: relative;
     width: 40px;
     height: 22px;
-    background-color: var(--javdan-color-border);
-    border-radius: var(--javdan-radius-full);
-    transition: background-color var(--javdan-transition-fast);
+    background-color: var(--fara-color-border);
+    border-radius: var(--fara-radius-full);
+    transition: background-color var(--fara-transition-fast);
     flex-shrink: 0;
 }
 
 .input:checked+.track {
-    background-color: var(--javdan-color-primary);
+    background-color: var(--fara-color-primary);
 }
 
 .input:focus-visible+.track {
-    box-shadow: var(--javdan-shadow-focus);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .thumb {
@@ -44,9 +44,9 @@
     inset-inline-start: 2px;
     width: 18px;
     height: 18px;
-    background-color: var(--javdan-color-background);
-    border-radius: var(--javdan-radius-full);
-    transition: inset-inline-start var(--javdan-transition-fast);
+    background-color: var(--fara-color-background);
+    border-radius: var(--fara-radius-full);
+    transition: inset-inline-start var(--fara-transition-fast);
 }
 
 .input:checked+.track .thumb {

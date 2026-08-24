@@ -1,68 +1,68 @@
 .wrapper {
     position: relative;
     width: 100%;
-    font-family: var(--javdan-font-family);
+    font-family: var(--fara-font-family);
 }
 
 .trigger {
     width: 100%;
     box-sizing: border-box;
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     cursor: text;
     outline: none;
-    transition: border-color var(--javdan-transition-fast);
+    transition: border-color var(--fara-transition-fast);
 }
 
 .trigger:focus {
-    border-color: var(--javdan-color-primary);
-    box-shadow: var(--javdan-shadow-focus);
+    border-color: var(--fara-color-primary);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .trigger:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
-    background-color: var(--javdan-color-background-disabled);
+    background-color: var(--fara-color-background-disabled);
 }
 
 .dropdown {
     position: absolute;
-    top: calc(100% + var(--javdan-spacing-2xs));
+    top: calc(100% + var(--fara-spacing-2xs));
     left: 0;
     right: 0;
     max-height: 220px;
     overflow-y: auto;
-    background-color: var(--javdan-color-background);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    box-shadow: var(--javdan-shadow-md);
-    z-index: var(--javdan-z-dropdown);
-    padding: var(--javdan-spacing-xs);
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    box-shadow: var(--fara-shadow-md);
+    z-index: var(--fara-z-dropdown);
+    padding: var(--fara-spacing-xs);
 }
 
 .option {
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    border-radius: var(--javdan-radius-sm);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    border-radius: var(--fara-radius-sm);
     cursor: pointer;
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
 }
 
 .option:hover {
-    background-color: var(--javdan-color-secondary);
+    background-color: var(--fara-color-secondary);
 }
 
 .optionSelected {
-    background-color: var(--javdan-color-primary);
-    color: var(--javdan-color-text-inverse);
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
 }
 
 .empty {
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    color: var(--javdan-color-text-tertiary);
-    font-size: var(--javdan-font-size-sm);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    color: var(--fara-color-text-tertiary);
+    font-size: var(--fara-font-size-sm);
 }

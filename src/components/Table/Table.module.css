@@ -5,21 +5,21 @@
 .globalSearch {
     width: 100%;
     box-sizing: border-box;
-    margin-bottom: var(--javdan-spacing-md);
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    margin-bottom: var(--fara-spacing-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     outline: none;
-    transition: border-color var(--javdan-transition-fast);
+    transition: border-color var(--fara-transition-fast);
 }
 
 .globalSearch:focus {
-    border-color: var(--javdan-color-primary);
-    box-shadow: var(--javdan-shadow-focus);
+    border-color: var(--fara-color-primary);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .tableScroll {
@@ -31,24 +31,24 @@
 .table {
     width: 100%;
     border-collapse: collapse;
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
 }
 
 .thead {
-    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border);
     position: sticky;
     top: 0;
-    background-color: var(--javdan-color-background);
+    background-color: var(--fara-color-background);
     z-index: 1;
 }
 
 .th {
     text-align: start;
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    color: var(--javdan-color-text-secondary);
-    font-weight: var(--javdan-font-weight-semibold);
-    font-size: var(--javdan-font-size-sm);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    color: var(--fara-color-text-secondary);
+    font-weight: var(--fara-font-weight-semibold);
+    font-size: var(--fara-font-size-sm);
     white-space: nowrap;
 }
 
@@ -58,23 +58,23 @@
 }
 
 .thSortable:hover {
-    color: var(--javdan-color-text);
+    color: var(--fara-color-text);
 }
 
 .thContent {
     display: inline-flex;
     align-items: center;
-    gap: var(--javdan-spacing-2xs);
+    gap: var(--fara-spacing-2xs);
 }
 
 .sortIcon {
-    font-size: var(--javdan-font-size-xs);
-    opacity: var(--javdan-opacity-disabled);
+    font-size: var(--fara-font-size-xs);
+    opacity: var(--fara-opacity-disabled);
 }
 
 .sortIconActive {
     opacity: 1;
-    color: var(--javdan-color-primary);
+    color: var(--fara-color-primary);
 }
 
 .filterWrapper {
@@ -91,69 +91,69 @@
     border: none;
     background: none;
     cursor: pointer;
-    color: var(--javdan-color-text-tertiary);
-    border-radius: var(--javdan-radius-sm);
-    transition: color var(--javdan-transition-fast), background-color var(--javdan-transition-fast);
+    color: var(--fara-color-text-tertiary);
+    border-radius: var(--fara-radius-sm);
+    transition: color var(--fara-transition-fast), background-color var(--fara-transition-fast);
 }
 
 .filterButton:hover {
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background-secondary);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .filterButtonActive {
-    color: var(--javdan-color-primary);
+    color: var(--fara-color-primary);
 }
 
 .filterPopover {
     position: absolute;
-    top: calc(100% + var(--javdan-spacing-2xs));
+    top: calc(100% + var(--fara-spacing-2xs));
     inset-inline-start: 0;
     min-width: 160px;
-    background-color: var(--javdan-color-background);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    box-shadow: var(--javdan-shadow-md);
-    padding: var(--javdan-spacing-xs);
-    z-index: var(--javdan-z-dropdown);
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    box-shadow: var(--fara-shadow-md);
+    padding: var(--fara-spacing-xs);
+    z-index: var(--fara-z-dropdown);
 }
 
 .filterPopoverInput {
     width: 100%;
     box-sizing: border-box;
-    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-sm);
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    padding: var(--fara-spacing-2xs) var(--fara-spacing-sm);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-sm);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     outline: none;
 }
 
 .filterPopoverInput:focus {
-    border-color: var(--javdan-color-primary);
+    border-color: var(--fara-color-primary);
 }
 
 .tr {
-    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
-    transition: background-color var(--javdan-transition-fast);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+    transition: background-color var(--fara-transition-fast);
 }
 
 .tbody .tr:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .td {
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    color: var(--javdan-color-text);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    color: var(--fara-color-text);
 }
 
 .empty {
     text-align: center;
-    padding: var(--javdan-spacing-xl);
-    color: var(--javdan-color-text-tertiary);
-    font-size: var(--javdan-font-size-sm);
+    padding: var(--fara-spacing-xl);
+    color: var(--fara-color-text-tertiary);
+    font-size: var(--fara-font-size-sm);
 }
 
 .pagination {
@@ -161,31 +161,31 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: var(--javdan-spacing-sm);
-    margin-top: var(--javdan-spacing-md);
-    padding-top: var(--javdan-spacing-md);
-    border-top: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
+    gap: var(--fara-spacing-sm);
+    margin-top: var(--fara-spacing-md);
+    padding-top: var(--fara-spacing-md);
+    border-top: var(--fara-border-width-thin) solid var(--fara-color-border-light);
 }
 
 .paginationInfo {
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text-secondary);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
 }
 
 .paginationControls {
     display: flex;
     align-items: center;
-    gap: var(--javdan-spacing-sm);
+    gap: var(--fara-spacing-sm);
 }
 
 .pageSizeSelect {
-    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-sm);
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    padding: var(--fara-spacing-2xs) var(--fara-spacing-sm);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-sm);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     cursor: pointer;
 }
 
@@ -195,46 +195,46 @@
     justify-content: center;
     width: 28px;
     height: 28px;
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-sm);
-    background-color: var(--javdan-color-background);
-    color: var(--javdan-color-text);
-    font-size: var(--javdan-font-size-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-sm);
+    background-color: var(--fara-color-background);
+    color: var(--fara-color-text);
+    font-size: var(--fara-font-size-md);
     cursor: pointer;
-    transition: background-color var(--javdan-transition-fast);
+    transition: background-color var(--fara-transition-fast);
 }
 
 .paginationButton:hover:not(:disabled) {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .paginationButton:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
 }
 
 .paginationCurrent {
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text-secondary);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
     min-width: 48px;
     text-align: center;
 }
 
 .checkboxCell {
     width: 40px;
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
 }
 
 .checkbox {
     width: 16px;
     height: 16px;
     cursor: pointer;
-    accent-color: var(--javdan-color-primary);
+    accent-color: var(--fara-color-primary);
     margin: 0;
 }
 
 .trSelected {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .tableContainer {

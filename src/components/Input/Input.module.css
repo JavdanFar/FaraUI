@@ -1,50 +1,50 @@
 .input {
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
-    font-family: var(--javdan-font-family);
-    color: var(--javdan-color-text);
-    background-color: var(--javdan-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    font-family: var(--fara-font-family);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
     outline: none;
-    transition: border-color var(--javdan-transition-fast);
+    transition: border-color var(--fara-transition-fast);
     width: 100%;
     box-sizing: border-box;
 }
 
 .input::placeholder {
-    color: var(--javdan-color-text-tertiary);
+    color: var(--fara-color-text-tertiary);
 }
 
 .input:focus {
-    border-color: var(--javdan-color-primary);
-    box-shadow: var(--javdan-shadow-focus);
+    border-color: var(--fara-color-primary);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .input:disabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
-    background-color: var(--javdan-color-background-disabled);
+    background-color: var(--fara-color-background-disabled);
 }
 
 .error {
-    border-color: var(--javdan-color-danger);
+    border-color: var(--fara-color-danger);
 }
 
 .error:focus {
-    border-color: var(--javdan-color-danger);
+    border-color: var(--fara-color-danger);
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
 }
 
 .sm {
-    padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
-    font-size: var(--javdan-font-size-sm);
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
+    font-size: var(--fara-font-size-sm);
 }
 
 .md {
-    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
-    font-size: var(--javdan-font-size-md);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    font-size: var(--fara-font-size-md);
 }
 
 .lg {
-    padding: var(--javdan-spacing-md) var(--javdan-spacing-lg);
-    font-size: var(--javdan-font-size-lg);
+    padding: var(--fara-spacing-md) var(--fara-spacing-lg);
+    font-size: var(--fara-font-size-lg);
 }

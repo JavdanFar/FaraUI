@@ -1,32 +1,32 @@
 .track {
     width: 100%;
     height: 8px;
-    background-color: var(--javdan-color-secondary);
-    border-radius: var(--javdan-radius-full);
+    background-color: var(--fara-color-secondary);
+    border-radius: var(--fara-radius-full);
     overflow: hidden;
 }
 
 .fill {
     height: 100%;
-    background-color: var(--javdan-color-primary);
-    border-radius: var(--javdan-radius-full);
-    transition: width var(--javdan-transition-normal);
+    background-color: var(--fara-color-primary);
+    border-radius: var(--fara-radius-full);
+    transition: width var(--fara-transition-normal);
 }
 
 .success {
-    background-color: var(--javdan-color-success);
+    background-color: var(--fara-color-success);
 }
 
 .danger {
-    background-color: var(--javdan-color-danger);
+    background-color: var(--fara-color-danger);
 }
 
 .labelRow {
     display: flex;
     justify-content: space-between;
-    margin-bottom: var(--javdan-spacing-xs);
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-text-secondary);
+    margin-bottom: var(--fara-spacing-xs);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
 }
 
 .indeterminate {

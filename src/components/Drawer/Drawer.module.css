@@ -1,10 +1,10 @@
 .overlay {
     position: fixed;
     inset: 0;
-    background-color: var(--javdan-color-background-overlay);
-    z-index: var(--javdan-z-modal);
+    background-color: var(--fara-color-background-overlay);
+    z-index: var(--fara-z-modal);
     opacity: 0;
-    transition: opacity var(--javdan-transition-normal);
+    transition: opacity var(--fara-transition-normal);
 }
 
 .overlayVisible {
@@ -17,12 +17,12 @@
     bottom: 0;
     width: 320px;
     max-width: 85vw;
-    background-color: var(--javdan-color-background);
-    box-shadow: var(--javdan-shadow-lg);
-    z-index: var(--javdan-z-modal);
+    background-color: var(--fara-color-background);
+    box-shadow: var(--fara-shadow-lg);
+    z-index: var(--fara-z-modal);
     display: flex;
     flex-direction: column;
-    transition: transform var(--javdan-transition-normal);
+    transition: transform var(--fara-transition-normal);
 }
 
 .panelStart {
@@ -51,28 +51,28 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--javdan-spacing-md);
-    border-bottom: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    padding: var(--fara-spacing-md);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border);
 }
 
 .closeButton {
     background: none;
     border: none;
     cursor: pointer;
-    font-size: var(--javdan-font-size-xl);
-    line-height: var(--javdan-line-height-tight);
-    color: var(--javdan-color-text);
-    padding: var(--javdan-spacing-xs);
-    border-radius: var(--javdan-radius-sm);
-    transition: background-color var(--javdan-transition-fast);
+    font-size: var(--fara-font-size-xl);
+    line-height: var(--fara-line-height-tight);
+    color: var(--fara-color-text);
+    padding: var(--fara-spacing-xs);
+    border-radius: var(--fara-radius-sm);
+    transition: background-color var(--fara-transition-fast);
 }
 
 .closeButton:hover {
-    background-color: var(--javdan-color-background-secondary);
+    background-color: var(--fara-color-background-secondary);
 }
 
 .body {
-    padding: var(--javdan-spacing-md);
+    padding: var(--fara-spacing-md);
     overflow-y: auto;
     flex: 1;
 }

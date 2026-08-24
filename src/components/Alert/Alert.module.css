@@ -1,35 +1,35 @@
 .alert {
     display: flex;
     align-items: flex-start;
-    gap: var(--javdan-spacing-sm);
-    padding: var(--javdan-spacing-md);
-    border-radius: var(--javdan-radius-md);
-    font-size: var(--javdan-font-size-md);
-    border: var(--javdan-border-width-thin) solid transparent;
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-md);
+    border-radius: var(--fara-radius-md);
+    font-size: var(--fara-font-size-md);
+    border: var(--fara-border-width-thin) solid transparent;
 }
 
 .info {
-    background-color: var(--javdan-color-info-bg);
-    border-color: var(--javdan-color-info-border);
-    color: var(--javdan-color-info-text);
+    background-color: var(--fara-color-info-bg);
+    border-color: var(--fara-color-info-border);
+    color: var(--fara-color-info-text);
 }
 
 .success {
-    background-color: var(--javdan-color-success-bg);
-    border-color: var(--javdan-color-success-border);
-    color: var(--javdan-color-success-text);
+    background-color: var(--fara-color-success-bg);
+    border-color: var(--fara-color-success-border);
+    color: var(--fara-color-success-text);
 }
 
 .warning {
-    background-color: var(--javdan-color-warning-bg);
-    border-color: var(--javdan-color-warning-border);
-    color: var(--javdan-color-warning-text);
+    background-color: var(--fara-color-warning-bg);
+    border-color: var(--fara-color-warning-border);
+    color: var(--fara-color-warning-text);
 }
 
 .danger {
-    background-color: var(--javdan-color-danger-bg);
-    border-color: var(--javdan-color-danger-border);
-    color: var(--javdan-color-danger-text);
+    background-color: var(--fara-color-danger-bg);
+    border-color: var(--fara-color-danger-border);
+    color: var(--fara-color-danger-text);
 }
 
 .content {

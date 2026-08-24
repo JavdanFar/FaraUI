@@ -2,174 +2,174 @@
     /* ============================================
      Brand colors
      ============================================ */
-    --javdan-color-primary: #3b82f6;
-    --javdan-color-primary-hover: #2563eb;
-    --javdan-color-primary-active: #1d4ed8;
-    --javdan-color-primary-disabled: #93c5fd;
+    --fara-color-primary: #3b82f6;
+    --fara-color-primary-hover: #2563eb;
+    --fara-color-primary-active: #1d4ed8;
+    --fara-color-primary-disabled: #93c5fd;
 
-    --javdan-color-secondary: #e5e7eb;
-    --javdan-color-secondary-hover: #d1d5db;
-    --javdan-color-secondary-active: #9ca3af;
+    --fara-color-secondary: #e5e7eb;
+    --fara-color-secondary-hover: #d1d5db;
+    --fara-color-secondary-active: #9ca3af;
 
     /* ============================================
      Status colors
      ============================================ */
-    --javdan-color-success: #16a34a;
-    --javdan-color-success-hover: #15803d;
-    --javdan-color-success-bg: #f0fdf4;
-    --javdan-color-success-border: #bbf7d0;
-    --javdan-color-success-text: #166534;
+    --fara-color-success: #16a34a;
+    --fara-color-success-hover: #15803d;
+    --fara-color-success-bg: #f0fdf4;
+    --fara-color-success-border: #bbf7d0;
+    --fara-color-success-text: #166534;
 
-    --javdan-color-danger: #ef4444;
-    --javdan-color-danger-hover: #dc2626;
-    --javdan-color-danger-bg: #fef2f2;
-    --javdan-color-danger-border: #fecaca;
-    --javdan-color-danger-text: #991b1b;
+    --fara-color-danger: #ef4444;
+    --fara-color-danger-hover: #dc2626;
+    --fara-color-danger-bg: #fef2f2;
+    --fara-color-danger-border: #fecaca;
+    --fara-color-danger-text: #991b1b;
 
-    --javdan-color-warning: #f59e0b;
-    --javdan-color-warning-hover: #d97706;
-    --javdan-color-warning-bg: #fffbeb;
-    --javdan-color-warning-border: #fde68a;
-    --javdan-color-warning-text: #92400e;
+    --fara-color-warning: #f59e0b;
+    --fara-color-warning-hover: #d97706;
+    --fara-color-warning-bg: #fffbeb;
+    --fara-color-warning-border: #fde68a;
+    --fara-color-warning-text: #92400e;
 
-    --javdan-color-info: #3b82f6;
-    --javdan-color-info-hover: #2563eb;
-    --javdan-color-info-bg: #eff6ff;
-    --javdan-color-info-border: #bfdbfe;
-    --javdan-color-info-text: #1e40af;
+    --fara-color-info: #3b82f6;
+    --fara-color-info-hover: #2563eb;
+    --fara-color-info-bg: #eff6ff;
+    --fara-color-info-border: #bfdbfe;
+    --fara-color-info-text: #1e40af;
 
     /* ============================================
      Text colors
      ============================================ */
-    --javdan-color-text: #111827;
-    --javdan-color-text-secondary: #6b7280;
-    --javdan-color-text-tertiary: #9ca3af;
-    --javdan-color-text-inverse: #ffffff;
-    --javdan-color-text-disabled: #9ca3af;
-    --javdan-color-text-link: #3b82f6;
+    --fara-color-text: #111827;
+    --fara-color-text-secondary: #6b7280;
+    --fara-color-text-tertiary: #9ca3af;
+    --fara-color-text-inverse: #ffffff;
+    --fara-color-text-disabled: #9ca3af;
+    --fara-color-text-link: #3b82f6;
 
     /* ============================================
      Background colors
      ============================================ */
-    --javdan-color-background: #ffffff;
-    --javdan-color-background-secondary: #f9fafb;
-    --javdan-color-background-tertiary: #f3f4f6;
-    --javdan-color-background-overlay: rgba(0, 0, 0, 0.5);
-    --javdan-color-background-disabled: #f3f4f6;
+    --fara-color-background: #ffffff;
+    --fara-color-background-secondary: #f9fafb;
+    --fara-color-background-tertiary: #f3f4f6;
+    --fara-color-background-overlay: rgba(0, 0, 0, 0.5);
+    --fara-color-background-disabled: #f3f4f6;
 
     /* ============================================
      Border colors
      ============================================ */
-    --javdan-color-border: #d1d5db;
-    --javdan-color-border-hover: #9ca3af;
-    --javdan-color-border-focus: var(--javdan-color-primary);
-    --javdan-color-border-light: #e5e7eb;
+    --fara-color-border: #d1d5db;
+    --fara-color-border-hover: #9ca3af;
+    --fara-color-border-focus: var(--fara-color-primary);
+    --fara-color-border-light: #e5e7eb;
 
     /* ============================================
      Spacing — based on a 4px scale
      ============================================ */
-    --javdan-spacing-2xs: 2px;
-    --javdan-spacing-xs: 4px;
-    --javdan-spacing-sm: 8px;
-    --javdan-spacing-md: 16px;
-    --javdan-spacing-lg: 24px;
-    --javdan-spacing-xl: 32px;
-    --javdan-spacing-2xl: 48px;
-    --javdan-spacing-3xl: 64px;
+    --fara-spacing-2xs: 2px;
+    --fara-spacing-xs: 4px;
+    --fara-spacing-sm: 8px;
+    --fara-spacing-md: 16px;
+    --fara-spacing-lg: 24px;
+    --fara-spacing-xl: 32px;
+    --fara-spacing-2xl: 48px;
+    --fara-spacing-3xl: 64px;
 
     /* ============================================
      Border radius
      ============================================ */
-    --javdan-radius-none: 0px;
-    --javdan-radius-sm: 4px;
-    --javdan-radius-md: 8px;
-    --javdan-radius-lg: 12px;
-    --javdan-radius-xl: 16px;
-    --javdan-radius-full: 999px;
+    --fara-radius-none: 0px;
+    --fara-radius-sm: 4px;
+    --fara-radius-md: 8px;
+    --fara-radius-lg: 12px;
+    --fara-radius-xl: 16px;
+    --fara-radius-full: 999px;
 
     /* ============================================
      Typography
      ============================================ */
-    --javdan-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    --fara-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
         sans-serif;
-    --javdan-font-family-mono: 'SF Mono', Menlo, Consolas, monospace;
+    --fara-font-family-mono: 'SF Mono', Menlo, Consolas, monospace;
 
-    --javdan-font-size-xs: 11px;
-    --javdan-font-size-sm: 12px;
-    --javdan-font-size-md: 14px;
-    --javdan-font-size-lg: 16px;
-    --javdan-font-size-xl: 20px;
-    --javdan-font-size-2xl: 24px;
-    --javdan-font-size-3xl: 32px;
+    --fara-font-size-xs: 11px;
+    --fara-font-size-sm: 12px;
+    --fara-font-size-md: 14px;
+    --fara-font-size-lg: 16px;
+    --fara-font-size-xl: 20px;
+    --fara-font-size-2xl: 24px;
+    --fara-font-size-3xl: 32px;
 
-    --javdan-font-weight-normal: 400;
-    --javdan-font-weight-medium: 500;
-    --javdan-font-weight-semibold: 600;
-    --javdan-font-weight-bold: 700;
+    --fara-font-weight-normal: 400;
+    --fara-font-weight-medium: 500;
+    --fara-font-weight-semibold: 600;
+    --fara-font-weight-bold: 700;
 
-    --javdan-line-height-tight: 1.2;
-    --javdan-line-height-normal: 1.5;
-    --javdan-line-height-relaxed: 1.75;
+    --fara-line-height-tight: 1.2;
+    --fara-line-height-normal: 1.5;
+    --fara-line-height-relaxed: 1.75;
 
-    --javdan-letter-spacing-tight: -0.02em;
-    --javdan-letter-spacing-normal: 0;
-    --javdan-letter-spacing-wide: 0.02em;
+    --fara-letter-spacing-tight: -0.02em;
+    --fara-letter-spacing-normal: 0;
+    --fara-letter-spacing-wide: 0.02em;
 
     /* ============================================
      Shadows
      ============================================ */
-    --javdan-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --javdan-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --javdan-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.2);
-    --javdan-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
-    --javdan-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    --fara-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --fara-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --fara-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.2);
+    --fara-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
+    --fara-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.35);
 
     /* ============================================
      Border width
      ============================================ */
-    --javdan-border-width-thin: 1px;
-    --javdan-border-width-medium: 2px;
-    --javdan-border-width-thick: 3px;
+    --fara-border-width-thin: 1px;
+    --fara-border-width-medium: 2px;
+    --fara-border-width-thick: 3px;
 
     /* ============================================
      Transitions
      ============================================ */
-    --javdan-transition-fast: 150ms ease;
-    --javdan-transition-normal: 250ms ease;
-    --javdan-transition-slow: 400ms ease;
-    --javdan-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --fara-transition-fast: 150ms ease;
+    --fara-transition-normal: 250ms ease;
+    --fara-transition-slow: 400ms ease;
+    --fara-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
     /* ============================================
      Z-index layers
      ============================================ */
-    --javdan-z-dropdown: 10;
-    --javdan-z-sticky: 20;
-    --javdan-z-overlay: 50;
-    --javdan-z-modal: 100;
-    --javdan-z-popover: 150;
-    --javdan-z-toast: 200;
-    --javdan-z-tooltip: 250;
+    --fara-z-dropdown: 10;
+    --fara-z-sticky: 20;
+    --fara-z-overlay: 50;
+    --fara-z-modal: 100;
+    --fara-z-popover: 150;
+    --fara-z-toast: 200;
+    --fara-z-tooltip: 250;
 
     /* ============================================
    Icon sizes
    ============================================ */
-    --javdan-icon-size-sm: 16px;
-    --javdan-icon-size-md: 20px;
-    --javdan-icon-size-lg: 24px;
-    --javdan-icon-size-xl: 36px;
+    --fara-icon-size-sm: 16px;
+    --fara-icon-size-md: 20px;
+    --fara-icon-size-lg: 24px;
+    --fara-icon-size-xl: 36px;
 
     /* ============================================
      Breakpoints (documentation only —
      CSS variables don't work inside @media queries)
      ============================================ */
-    --javdan-breakpoint-sm: 640px;
-    --javdan-breakpoint-md: 768px;
-    --javdan-breakpoint-lg: 1024px;
-    --javdan-breakpoint-xl: 1280px;
+    --fara-breakpoint-sm: 640px;
+    --fara-breakpoint-md: 768px;
+    --fara-breakpoint-lg: 1024px;
+    --fara-breakpoint-xl: 1280px;
 
     /* ============================================
      Opacity
      ============================================ */
-    --javdan-opacity-disabled: 0.5;
-    --javdan-opacity-hover: 0.8;
+    --fara-opacity-disabled: 0.5;
+    --fara-opacity-hover: 0.8;
 }

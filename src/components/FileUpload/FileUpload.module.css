@@ -3,50 +3,50 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: var(--javdan-spacing-sm);
-    padding: var(--javdan-spacing-xl);
-    border: var(--javdan-border-width-medium) dashed var(--javdan-color-border);
-    border-radius: var(--javdan-radius-lg);
-    background-color: var(--javdan-color-background-secondary);
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-xl);
+    border: var(--fara-border-width-medium) dashed var(--fara-color-border);
+    border-radius: var(--fara-radius-lg);
+    background-color: var(--fara-color-background-secondary);
     cursor: pointer;
     text-align: center;
-    color: var(--javdan-color-text-secondary);
-    font-family: var(--javdan-font-family);
-    font-size: var(--javdan-font-size-md);
-    transition: border-color var(--javdan-transition-fast), background-color var(--javdan-transition-fast);
+    color: var(--fara-color-text-secondary);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    transition: border-color var(--fara-transition-fast), background-color var(--fara-transition-fast);
 }
 
 .dropzone:hover {
-    border-color: var(--javdan-color-primary);
+    border-color: var(--fara-color-primary);
 }
 
 .dropzone:focus-visible {
     outline: none;
-    box-shadow: var(--javdan-shadow-focus);
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .dropzoneActive {
-    border-color: var(--javdan-color-primary);
-    background-color: var(--javdan-color-info-bg);
+    border-color: var(--fara-color-primary);
+    background-color: var(--fara-color-info-bg);
 }
 
 .dropzoneError {
-    border-color: var(--javdan-color-danger);
-    background-color: var(--javdan-color-danger-bg);
+    border-color: var(--fara-color-danger);
+    background-color: var(--fara-color-danger-bg);
 }
 
 .dropzoneDisabled {
-    opacity: var(--javdan-opacity-disabled);
+    opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
 }
 
 .icon {
-    color: var(--javdan-color-text-tertiary);
+    color: var(--fara-color-text-tertiary);
 }
 
 .hint {
-    font-size: var(--javdan-font-size-xs);
-    color: var(--javdan-color-text-tertiary);
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
 }
 
 .hiddenInput {
@@ -56,28 +56,28 @@
 .rejections {
     display: flex;
     flex-direction: column;
-    gap: var(--javdan-spacing-2xs);
-    margin-top: var(--javdan-spacing-sm);
+    gap: var(--fara-spacing-2xs);
+    margin-top: var(--fara-spacing-sm);
 }
 
 .rejectionItem {
-    font-size: var(--javdan-font-size-sm);
-    color: var(--javdan-color-danger);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-danger);
 }
 
 .fileGrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: var(--javdan-spacing-sm);
-    margin-top: var(--javdan-spacing-md);
+    gap: var(--fara-spacing-sm);
+    margin-top: var(--fara-spacing-md);
 }
 
 .fileCard {
     position: relative;
-    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
-    border-radius: var(--javdan-radius-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
     overflow: hidden;
-    background-color: var(--javdan-color-background);
+    background-color: var(--fara-color-background);
 }
 
 .fileCardClickable {
@@ -85,7 +85,7 @@
 }
 
 .fileCardError {
-    border-color: var(--javdan-color-danger);
+    border-color: var(--fara-color-danger);
 }
 
 .previewImage {
@@ -101,30 +101,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--javdan-color-background-secondary);
-    color: var(--javdan-color-text-tertiary);
+    background-color: var(--fara-color-background-secondary);
+    color: var(--fara-color-text-tertiary);
 }
 
 .fileCardFooter {
-    padding: var(--javdan-spacing-xs) var(--javdan-spacing-sm);
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
 }
 
 .fileCardName {
-    font-size: var(--javdan-font-size-xs);
-    color: var(--javdan-color-text-secondary);
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .fileCardSize {
-    font-size: var(--javdan-font-size-xs);
-    color: var(--javdan-color-text-tertiary);
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
 }
 
 .fileCardErrorText {
-    font-size: var(--javdan-font-size-xs);
-    color: var(--javdan-color-danger);
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-danger);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -132,15 +132,15 @@
 
 .fileCardRemove {
     position: absolute;
-    top: var(--javdan-spacing-xs);
-    inset-inline-end: var(--javdan-spacing-xs);
+    top: var(--fara-spacing-xs);
+    inset-inline-end: var(--fara-spacing-xs);
     width: 22px;
     height: 22px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: var(--javdan-radius-full);
+    border-radius: var(--fara-radius-full);
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
     cursor: pointer;
@@ -159,30 +159,30 @@
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: var(--javdan-font-size-sm);
-    font-weight: var(--javdan-font-weight-semibold);
+    font-size: var(--fara-font-size-sm);
+    font-weight: var(--fara-font-weight-semibold);
 }
 
 .statusIcon {
     position: absolute;
-    bottom: var(--javdan-spacing-xs);
-    inset-inline-start: var(--javdan-spacing-xs);
+    bottom: var(--fara-spacing-xs);
+    inset-inline-start: var(--fara-spacing-xs);
     width: 20px;
     height: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--javdan-radius-full);
-    background-color: var(--javdan-color-background);
-    box-shadow: var(--javdan-shadow-sm);
+    border-radius: var(--fara-radius-full);
+    background-color: var(--fara-color-background);
+    box-shadow: var(--fara-shadow-sm);
 }
 
 .statusIconSuccess {
-    color: var(--javdan-color-success);
+    color: var(--fara-color-success);
 }
 
 .statusIconError {
-    color: var(--javdan-color-danger);
+    color: var(--fara-color-danger);
 }
 
 .previewLarge {
@@ -190,7 +190,7 @@
     max-height: 70vh;
     display: block;
     margin: 0 auto;
-    border-radius: var(--javdan-radius-md);
+    border-radius: var(--fara-radius-md);
 }
 
 .dropzonePreview {
@@ -211,15 +211,15 @@
 
 .previewDropzoneRemove {
     position: absolute;
-    top: var(--javdan-spacing-xs);
-    inset-inline-end: var(--javdan-spacing-xs);
+    top: var(--fara-spacing-xs);
+    inset-inline-end: var(--fara-spacing-xs);
     width: 22px;
     height: 22px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: var(--javdan-radius-full);
+    border-radius: var(--fara-radius-full);
     background-color: rgba(0, 0, 0, 0.6);
     color: white;
     cursor: pointer;
