@@ -1,0 +1,317 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    font-family: var(--javdan-font-family);
+}
+
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--javdan-spacing-sm) var(--javdan-spacing-md);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    font-family: inherit;
+    font-size: var(--javdan-font-size-md);
+    color: var(--javdan-color-text);
+    background-color: var(--javdan-color-background);
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--javdan-transition-fast);
+}
+
+.input::placeholder {
+    color: var(--javdan-color-text-tertiary);
+}
+
+.input:focus {
+    border-color: var(--javdan-color-primary);
+    box-shadow: var(--javdan-shadow-focus);
+}
+
+.input:disabled {
+    opacity: var(--javdan-opacity-disabled);
+    cursor: not-allowed;
+    background-color: var(--javdan-color-background-disabled);
+}
+
+.panel {
+    position: absolute;
+    top: calc(100% + var(--javdan-spacing-xs));
+    inset-inline-start: 0;
+    width: 280px;
+    background-color: var(--javdan-color-background);
+    border: var(--javdan-border-width-thin) solid var(--javdan-color-border);
+    border-radius: var(--javdan-radius-md);
+    box-shadow: var(--javdan-shadow-md);
+    z-index: var(--javdan-z-dropdown);
+}
+
+.panelPadding {
+    padding: var(--javdan-spacing-md);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--javdan-spacing-sm);
+}
+
+.navButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--javdan-color-text-secondary);
+    border-radius: var(--javdan-radius-sm);
+}
+
+.navButton:hover {
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.monthYearGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--javdan-spacing-xs);
+}
+
+.monthYearButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: var(--javdan-font-size-md);
+    font-weight: var(--javdan-font-weight-medium);
+    color: var(--javdan-color-text);
+    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-xs);
+    border-radius: var(--javdan-radius-sm);
+}
+
+.monthYearButton:hover {
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.weekday {
+    text-align: center;
+    font-size: var(--javdan-font-size-xs);
+    color: var(--javdan-color-text-tertiary);
+    padding: var(--javdan-spacing-2xs) 0;
+}
+
+.dayCell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border: none;
+    background: none;
+    border-radius: var(--javdan-radius-sm);
+    cursor: pointer;
+    font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-text);
+}
+
+.dayCell:hover:not(:disabled) {
+    background-color: var(--javdan-color-secondary);
+}
+
+.dayCellToday {
+    font-weight: var(--javdan-font-weight-bold);
+    color: var(--javdan-color-primary);
+}
+
+.dayCellSelected {
+    background-color: var(--javdan-color-primary);
+    color: var(--javdan-color-text-inverse);
+}
+
+.dayCellEmpty {
+    visibility: hidden;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin-top: var(--javdan-spacing-sm);
+    padding-top: var(--javdan-spacing-sm);
+    border-top: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
+}
+
+.footerButton {
+    background: none;
+    border: none;
+    color: var(--javdan-color-primary);
+    font-size: var(--javdan-font-size-sm);
+    cursor: pointer;
+    padding: var(--javdan-spacing-2xs) var(--javdan-spacing-sm);
+}
+
+.footerButton:hover {
+    background-color: var(--javdan-color-background-secondary);
+}
+
+.monthsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--javdan-spacing-xs);
+    direction: rtl;
+}
+
+.monthCell {
+    padding: var(--javdan-spacing-sm);
+    border: none;
+    background: none;
+    border-radius: var(--javdan-radius-sm);
+    cursor: pointer;
+    font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-text);
+    text-align: center;
+}
+
+.monthCell:hover {
+    background-color: var(--javdan-color-secondary);
+}
+
+.monthCellActive {
+    background-color: var(--javdan-color-primary);
+    color: var(--javdan-color-text-inverse);
+}
+
+.yearsGridWrapper {
+    max-height: 240px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--javdan-color-border) var(--javdan-color-background-secondary);
+}
+
+.yearsGridWrapper::-webkit-scrollbar {
+    width: 6px;
+    display: none;
+}
+
+.yearsGridWrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.yearsGridWrapper::-webkit-scrollbar-thumb {
+    background-color: var(--javdan-color-border);
+    border-radius: var(--javdan-radius-full);
+}
+
+.yearsGridWrapper::-webkit-scrollbar-button {
+    display: none;
+    height: 0;
+    width: 0;
+}
+
+.yearsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--javdan-spacing-xs);
+    direction: ltr;
+}
+
+.yearCell {
+    padding: var(--javdan-spacing-sm);
+    border: none;
+    background: none;
+    border-radius: var(--javdan-radius-sm);
+    cursor: pointer;
+    font-size: var(--javdan-font-size-sm);
+    color: var(--javdan-color-text);
+    text-align: center;
+}
+
+.yearCell:hover {
+    background-color: var(--javdan-color-secondary);
+}
+
+.yearCellActive {
+    background-color: var(--javdan-color-primary);
+    color: var(--javdan-color-text-inverse);
+}
+
+.scrollWrapper {
+    position: relative;
+}
+
+.scrollGuideTop,
+.scrollGuideBottom {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    height: var(--javdan-border-width-thin);
+    background-color: var(--javdan-color-border);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.scrollGuideTop {
+    top: calc(50% - 20px);
+}
+
+.scrollGuideBottom {
+    top: calc(50% + 20px);
+}
+
+.scrollContainer {
+    position: relative;
+    display: flex;
+    gap: var(--javdan-spacing-xs);
+    height: 200px;
+}
+
+.scrollColumn {
+    flex: 1;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+
+.scrollColumn::-webkit-scrollbar {
+    display: none;
+}
+
+.scrollPadding {
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.scrollItem {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    cursor: pointer;
+    font-size: var(--javdan-font-size-md);
+    color: var(--javdan-color-text-tertiary);
+}
+
+.scrollItemActive {
+    color: var(--javdan-color-text);
+    font-weight: var(--javdan-font-weight-semibold);
+    font-size: var(--javdan-font-size-lg);
+}
+
+.scrollConfirm {
+    margin-top: var(--javdan-spacing-sm);
+    padding: var(--javdan-spacing-sm) 0;
+    border-top: var(--javdan-border-width-thin) solid var(--javdan-color-border-light);
+    display: flex;
+    justify-content: center;
+}

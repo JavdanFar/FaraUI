@@ -128,3 +128,6 @@ export type { ComboboxProps, ComboboxOption } from "./components/Combobox";
 
 export { OtpInput } from "./components/OtpInput";
 export type { OtpInputProps } from "./components/OtpInput";
+
+export { DatePicker } from "./components/DatePicker";
+export type { DatePickerProps, JalaliDate } from "./components/DatePicker";
