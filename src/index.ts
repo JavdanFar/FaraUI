@@ -131,3 +131,6 @@ export type { OtpInputProps } from "./components/OtpInput";
 
 export { DatePicker } from "./components/DatePicker";
 export type { DatePickerProps, JalaliDate } from "./components/DatePicker";
+
+export { TimePicker } from "./components/TimePicker";
+export type { TimePickerProps, TimeValue } from "./components/TimePicker";
