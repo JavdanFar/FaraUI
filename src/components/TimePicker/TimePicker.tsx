@@ -16,6 +16,7 @@ export interface TimePickerProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  inputClassName?: string;
 }
 
 const ITEM_HEIGHT = 40;
@@ -56,6 +57,7 @@ export function TimePicker({
   placeholder = "انتخاب زمان",
   disabled = false,
   className,
+  inputClassName,
 }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -172,7 +174,7 @@ export function TimePicker({
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
       <input
         readOnly
-        className={styles.input}
+        className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
         value={formatTimeValue(draft, format, showSeconds)}

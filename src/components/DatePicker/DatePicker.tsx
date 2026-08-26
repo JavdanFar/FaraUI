@@ -19,6 +19,7 @@ export interface DatePickerProps {
   disabled?: boolean;
   showTodayButton?: boolean;
   className?: string;
+  inputClassName?: string;
   mode?: "calendar" | "scroll";
 }
 
@@ -37,6 +38,7 @@ export function DatePicker({
   disabled = false,
   showTodayButton = true,
   className,
+  inputClassName,
   mode = "calendar",
 }: DatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -204,7 +206,7 @@ export function DatePicker({
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
       <input
         readOnly
-        className={styles.input}
+        className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
         value={value ? formatJalali(value) : ""}
