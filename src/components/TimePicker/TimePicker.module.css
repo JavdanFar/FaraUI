@@ -44,7 +44,6 @@
     border-radius: var(--fara-radius-md);
     box-shadow: var(--fara-shadow-md);
     z-index: var(--fara-z-dropdown);
-    padding: var(--fara-spacing-md);
 }
 
 .scrollWrapper {
@@ -127,6 +126,8 @@
 
 .confirmRow {
     margin-top: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-sm) 0;
+    border-top: var(--fara-border-width-thin) solid var(--fara-color-border);
     display: flex;
     justify-content: center;
     direction: rtl;
