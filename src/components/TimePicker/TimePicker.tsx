@@ -49,6 +49,15 @@ function to24Hour(hour12: number, period: "AM" | "PM"): number {
   return hour12 === 12 ? 12 : hour12 + 12;
 }
 
+export function getCurrentTime(): TimeValue {
+  const now = new Date();
+  return {
+    hour: now.getHours(),
+    minute: now.getMinutes(),
+    second: now.getSeconds(),
+  };
+}
+
 export function TimePicker({
   value,
   onChange,
@@ -62,11 +71,7 @@ export function TimePicker({
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const defaultValue: TimeValue = {
-    hour: new Date().getHours(),
-    minute: new Date().getMinutes(),
-    second: new Date().getSeconds(),
-  };
+  const defaultValue: TimeValue = getCurrentTime();
   const [draft, setDraft] = useState<TimeValue>(value ?? defaultValue);
 
   const hourColumnRef = useRef<HTMLDivElement>(null);
@@ -177,7 +182,7 @@ export function TimePicker({
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
-        value={formatTimeValue(draft, format, showSeconds)}
+        value={value ? formatTimeValue(value, format, showSeconds) : ""}
         onClick={openPicker}
       />
 
