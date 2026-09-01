@@ -137,6 +137,17 @@ export function isSameJalaliDate(a: JalaliDate | null, b: JalaliDate | null): bo
   return a.year === b.year && a.month === b.month && a.day === b.day;
 }
 
+export function jalaliToGregorian(date: JalaliDate): Date {
+  const jdn = j2d(date.year, date.month, date.day);
+  const { gy, gm, gd } = d2g(jdn);
+  return new Date(Date.UTC(gy, gm - 1, gd));
+}
+
+export function gregorianToJalali(date: Date): JalaliDate {
+  const jdn = g2d(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+  return d2j(jdn);
+}
+
 export function formatJalali(date: JalaliDate): string {
   return `${date.year}/${String(date.month).padStart(2, "0")}/${String(date.day).padStart(2, "0")}`;
 }

@@ -6,6 +6,8 @@ export {
   getTodayJalali,
   isSameJalaliDate,
   isJalaliLeapYear,
+  jalaliToGregorian,
+  gregorianToJalali,
   formatJalali,
   PERSIAN_MONTHS,
   PERSIAN_WEEKDAYS,

@@ -6,15 +6,19 @@ import {
   getJalaliWeekday,
   getTodayJalali,
   isSameJalaliDate,
+  jalaliToGregorian,
+  gregorianToJalali,
   formatJalali,
   PERSIAN_MONTHS,
   PERSIAN_WEEKDAYS,
   type JalaliDate,
 } from "./jalali";
 
+const FRIDAY_WEEKDAY_INDEX = 6;
+
 export interface DatePickerProps {
-  value: JalaliDate | null;
-  onChange: (date: JalaliDate) => void;
+  value: Date | null;
+  onChange: (date: Date) => void;
   placeholder?: string;
   disabled?: boolean;
   showTodayButton?: boolean;
@@ -46,11 +50,12 @@ export function DatePicker({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const yearsGridRef = useRef<HTMLDivElement>(null);
   const today = getTodayJalali();
+  const jalaliValue = value ? gregorianToJalali(value) : null;
 
-  const [viewYear, setViewYear] = useState(value?.year ?? today.year);
-  const [viewMonth, setViewMonth] = useState(value?.month ?? today.month);
+  const [viewYear, setViewYear] = useState(jalaliValue?.year ?? today.year);
+  const [viewMonth, setViewMonth] = useState(jalaliValue?.month ?? today.month);
 
-  const [draft, setDraft] = useState<JalaliDate>(value ?? today);
+  const [draft, setDraft] = useState<JalaliDate>(jalaliValue ?? today);
 
   const dayColumnRef = useRef<HTMLDivElement>(null);
   const monthColumnRef = useRef<HTMLDivElement>(null);
@@ -84,9 +89,9 @@ export function DatePicker({
 
   function openPicker() {
     if (disabled) return;
-    setViewYear(value?.year ?? today.year);
-    setViewMonth(value?.month ?? today.month);
-    setDraft(value ?? today);
+    setViewYear(jalaliValue?.year ?? today.year);
+    setViewMonth(jalaliValue?.month ?? today.month);
+    setDraft(jalaliValue ?? today);
     setView("days");
     setIsOpen(true);
   }
@@ -112,7 +117,7 @@ export function DatePicker({
   }
 
   function handleDayClick(day: number) {
-    onChange({ year: viewYear, month: viewMonth, day });
+    onChange(jalaliToGregorian({ year: viewYear, month: viewMonth, day }));
     setIsOpen(false);
     setView("days");
   }
@@ -131,7 +136,7 @@ export function DatePicker({
   }
 
   function handleTodayClick() {
-    onChange(today);
+    onChange(jalaliToGregorian(today));
     setViewYear(today.year);
     setViewMonth(today.month);
     setIsOpen(false);
@@ -198,7 +203,7 @@ export function DatePicker({
 
   function handleConfirmScroll() {
     const maxDay = getJalaliMonthLength(draft.year, draft.month);
-    onChange({ ...draft, day: Math.min(draft.day, maxDay) });
+    onChange(jalaliToGregorian({ ...draft, day: Math.min(draft.day, maxDay) }));
     setIsOpen(false);
   }
 
@@ -209,7 +214,7 @@ export function DatePicker({
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
-        value={value ? formatJalali(value) : ""}
+        value={jalaliValue ? formatJalali(jalaliValue) : ""}
         onClick={openPicker}
       />
 
@@ -256,8 +261,14 @@ export function DatePicker({
                 </div>
 
                 <div className={styles.daysGrid}>
-                  {PERSIAN_WEEKDAYS.map((day) => (
-                    <div key={day} className={styles.weekday}>
+                  {PERSIAN_WEEKDAYS.map((day, index) => (
+                    <div
+                      key={day}
+                      className={clsx(
+                        styles.weekday,
+                        index === FRIDAY_WEEKDAY_INDEX && styles.weekdayFriday,
+                      )}
+                    >
                       {day}
                     </div>
                   ))}
@@ -271,18 +282,23 @@ export function DatePicker({
 
                   {dayCells.map((day) => {
                     const cellDate: JalaliDate = { year: viewYear, month: viewMonth, day };
-                    const isSelected = isSameJalaliDate(value, cellDate);
+                    const isSelected = isSameJalaliDate(jalaliValue, cellDate);
                     const isToday = isSameJalaliDate(today, cellDate);
+                    const isFriday = getJalaliWeekday(cellDate) === FRIDAY_WEEKDAY_INDEX;
+
+                    const variantClass = isSelected
+                      ? styles.dayCellSelected
+                      : isFriday
+                        ? styles.dayCellFriday
+                        : isToday
+                          ? styles.dayCellToday
+                          : undefined;
 
                     return (
                       <button
                         key={day}
                         type="button"
-                        className={clsx(
-                          styles.dayCell,
-                          isToday && !isSelected && styles.dayCellToday,
-                          isSelected && styles.dayCellSelected,
-                        )}
+                        className={clsx(styles.dayCell, variantClass)}
                         onClick={() => handleDayClick(day)}
                       >
                         {day}

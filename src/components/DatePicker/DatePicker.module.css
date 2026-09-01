@@ -127,6 +127,15 @@
     background-color: var(--fara-color-secondary);
 }
 
+.weekdayFriday {
+    color: var(--fara-color-danger);
+}
+
+.dayCellFriday {
+    color: var(--fara-color-danger);
+    font-weight: var(--fara-font-weight-medium);
+}
+
 .dayCellToday {
     font-weight: var(--fara-font-weight-bold);
     color: var(--fara-color-primary);
