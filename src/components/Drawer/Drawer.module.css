@@ -43,7 +43,7 @@
     transform: translateX(-100%);
 }
 
-.panelVisible {
+.panel.panelVisible {
     transform: translateX(0);
 }
 
