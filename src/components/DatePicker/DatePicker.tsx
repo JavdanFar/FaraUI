@@ -22,6 +22,7 @@ export interface DatePickerProps {
   placeholder?: string;
   disabled?: boolean;
   showTodayButton?: boolean;
+  showTime?: boolean;
   className?: string;
   inputClassName?: string;
   mode?: "calendar" | "scroll";
@@ -41,6 +42,7 @@ export function DatePicker({
   placeholder = "انتخاب تاریخ",
   disabled = false,
   showTodayButton = true,
+  showTime = false,
   className,
   inputClassName,
   mode = "calendar",
@@ -56,10 +58,16 @@ export function DatePicker({
   const [viewMonth, setViewMonth] = useState(jalaliValue?.month ?? today.month);
 
   const [draft, setDraft] = useState<JalaliDate>(jalaliValue ?? today);
+  const [draftTime, setDraftTime] = useState(() => ({
+    hour: value?.getUTCHours() ?? 0,
+    minute: value?.getUTCMinutes() ?? 0,
+  }));
 
   const dayColumnRef = useRef<HTMLDivElement>(null);
   const monthColumnRef = useRef<HTMLDivElement>(null);
   const yearColumnRef = useRef<HTMLDivElement>(null);
+  const hourListRef = useRef<HTMLUListElement>(null);
+  const minuteListRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -92,6 +100,7 @@ export function DatePicker({
     setViewYear(jalaliValue?.year ?? today.year);
     setViewMonth(jalaliValue?.month ?? today.month);
     setDraft(jalaliValue ?? today);
+    setDraftTime({ hour: value?.getUTCHours() ?? 0, minute: value?.getUTCMinutes() ?? 0 });
     setView("days");
     setIsOpen(true);
   }
@@ -117,7 +126,12 @@ export function DatePicker({
   }
 
   function handleDayClick(day: number) {
-    onChange(jalaliToGregorian({ year: viewYear, month: viewMonth, day }));
+    const picked: JalaliDate = { year: viewYear, month: viewMonth, day };
+    if (showTime) {
+      setDraft(picked);
+      return;
+    }
+    onChange(jalaliToGregorian(picked));
     setIsOpen(false);
     setView("days");
   }
@@ -127,18 +141,29 @@ export function DatePicker({
     setView("days");
   }
 
-  // Selecting a year goes straight to the day view — the month was already
-  // set (either from the previous view or the currently open month), so
-  // there's no need to make the user pick it again.
   function handleYearSelect(year: number) {
     setViewYear(year);
     setView("days");
   }
 
   function handleTodayClick() {
+    if (showTime) {
+      setDraft(today);
+      setViewYear(today.year);
+      setViewMonth(today.month);
+      return;
+    }
     onChange(jalaliToGregorian(today));
     setViewYear(today.year);
     setViewMonth(today.month);
+    setIsOpen(false);
+    setView("days");
+  }
+
+  function handleConfirmCalendarTime() {
+    const result = jalaliToGregorian(draft);
+    result.setUTCHours(draftTime.hour, draftTime.minute, 0, 0);
+    onChange(result);
     setIsOpen(false);
     setView("days");
   }
@@ -153,6 +178,16 @@ export function DatePicker({
     const activeButton = yearsGridRef.current.querySelector(`[data-year="${viewYear}"]`);
     activeButton?.scrollIntoView({ block: "center" });
   }, [view, viewYear]);
+
+  useEffect(() => {
+    if (!showTime || mode !== "calendar" || !isOpen) return;
+    hourListRef.current
+      ?.querySelector(`[data-value="${draftTime.hour}"]`)
+      ?.scrollIntoView({ block: "center" });
+    minuteListRef.current
+      ?.querySelector(`[data-value="${draftTime.minute}"]`)
+      ?.scrollIntoView({ block: "center" });
+  }, [showTime, mode, isOpen]);
 
   // ---- Scroll mode ----
 
@@ -171,7 +206,6 @@ export function DatePicker({
     yearColumnRef.current
       ?.querySelector(`[data-value="${draft.year}"]`)
       ?.scrollIntoView({ block: "center" });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, isOpen]);
 
   function handleColumnScroll(
@@ -188,8 +222,6 @@ export function DatePicker({
     };
   }
 
-  // Clicking any item (not just scrolling to it) selects it and smoothly
-  // centers it — useful when scrolling far is inconvenient
   function handleItemClick(
     columnRef: React.RefObject<HTMLDivElement | null>,
     value: number,
@@ -214,108 +246,176 @@ export function DatePicker({
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
-        value={jalaliValue ? formatJalali(jalaliValue) : ""}
+        value={
+          jalaliValue
+            ? showTime
+              ? `${formatJalali(jalaliValue)} - ${String(value!.getUTCHours()).padStart(2, "0")}:${String(value!.getUTCMinutes()).padStart(2, "0")}`
+              : formatJalali(jalaliValue)
+            : ""
+        }
         onClick={openPicker}
       />
 
       {isOpen && mode === "calendar" && (
-        <div className={styles.panel}>
+        <div className={clsx(styles.panel, showTime && styles.panelWithTime)}>
           {view === "days" && (
             <>
               <div className={styles.panelPadding}>
-                <div className={styles.header}>
-                  <button
-                    type="button"
-                    className={styles.navButton}
-                    onClick={goToNextMonth}
-                    aria-label="ماه بعد"
-                  >
-                    بعدی
-                  </button>
+                <div className={showTime ? styles.calendarWithTimeRow : undefined}>
+                  <div className={showTime ? styles.calendarColumn : undefined}>
+                    <div className={styles.header}>
+                      <button
+                        type="button"
+                        className={styles.navButton}
+                        onClick={goToNextMonth}
+                        aria-label="ماه بعد"
+                      >
+                        بعدی
+                      </button>
 
-                  <div className={styles.monthYearGroup}>
-                    <button
-                      type="button"
-                      className={styles.monthYearButton}
-                      onClick={() => setView("months")}
-                    >
-                      {PERSIAN_MONTHS[viewMonth - 1]}
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.monthYearButton}
-                      onClick={() => setView("years")}
-                    >
-                      {viewYear}
-                    </button>
+                      <div className={styles.monthYearGroup}>
+                        <button
+                          type="button"
+                          className={styles.monthYearButton}
+                          onClick={() => setView("months")}
+                        >
+                          {PERSIAN_MONTHS[viewMonth - 1]}
+                        </button>
+                        <button
+                          type="button"
+                          className={styles.monthYearButton}
+                          onClick={() => setView("years")}
+                        >
+                          {viewYear}
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.navButton}
+                        onClick={goToPreviousMonth}
+                        aria-label="ماه قبل"
+                      >
+                        قبلی
+                      </button>
+                    </div>
+
+                    <div className={styles.daysGrid}>
+                      {PERSIAN_WEEKDAYS.map((day, index) => (
+                        <div
+                          key={day}
+                          className={clsx(
+                            styles.weekday,
+                            index === FRIDAY_WEEKDAY_INDEX && styles.weekdayFriday,
+                          )}
+                        >
+                          {day}
+                        </div>
+                      ))}
+
+                      {emptyCells.map((_, i) => (
+                        <span
+                          key={`empty-${i}`}
+                          className={clsx(styles.dayCell, styles.dayCellEmpty)}
+                        />
+                      ))}
+
+                      {dayCells.map((day) => {
+                        const cellDate: JalaliDate = { year: viewYear, month: viewMonth, day };
+                        const isSelected = isSameJalaliDate(
+                          showTime ? draft : jalaliValue,
+                          cellDate,
+                        );
+                        const isToday = isSameJalaliDate(today, cellDate);
+                        const isFriday = getJalaliWeekday(cellDate) === FRIDAY_WEEKDAY_INDEX;
+
+                        const variantClass = isSelected
+                          ? styles.dayCellSelected
+                          : isFriday
+                            ? styles.dayCellFriday
+                            : isToday
+                              ? styles.dayCellToday
+                              : undefined;
+
+                        return (
+                          <button
+                            key={day}
+                            type="button"
+                            className={clsx(styles.dayCell, variantClass)}
+                            onClick={() => handleDayClick(day)}
+                          >
+                            {day}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
 
-                  <button
-                    type="button"
-                    className={styles.navButton}
-                    onClick={goToPreviousMonth}
-                    aria-label="ماه قبل"
-                  >
-                    قبلی
-                  </button>
-                </div>
+                  {showTime && (
+                    <div className={styles.timeColumn}>
+                      <div className={styles.timeSelectRow}>
+                        <div>
+                          <p className={styles.timeLabel}>ساعت</p>
+                          <ul className={styles.timeList} aria-label="ساعت" ref={hourListRef}>
+                            {Array.from({ length: 24 }, (_, h) => (
+                              <li
+                                key={h}
+                                data-value={h}
+                                className={clsx(
+                                  styles.timeListItem,
+                                  h === draftTime.hour && styles.timeListItemActive,
+                                )}
+                                onClick={() => setDraftTime((t) => ({ ...t, hour: h }))}
+                              >
+                                {String(h).padStart(2, "0")}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                <div className={styles.daysGrid}>
-                  {PERSIAN_WEEKDAYS.map((day, index) => (
-                    <div
-                      key={day}
-                      className={clsx(
-                        styles.weekday,
-                        index === FRIDAY_WEEKDAY_INDEX && styles.weekdayFriday,
-                      )}
-                    >
-                      {day}
+                        <div>
+                          <p className={styles.timeLabel}>دقیقه</p>
+                          <ul className={styles.timeList} aria-label="دقیقه" ref={minuteListRef}>
+                            {Array.from({ length: 60 }, (_, m) => (
+                              <li
+                                key={m}
+                                data-value={m}
+                                className={clsx(
+                                  styles.timeListItem,
+                                  m === draftTime.minute && styles.timeListItemActive,
+                                )}
+                                onClick={() => setDraftTime((t) => ({ ...t, minute: m }))}
+                              >
+                                {String(m).padStart(2, "0")}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
                     </div>
-                  ))}
-
-                  {emptyCells.map((_, i) => (
-                    <span
-                      key={`empty-${i}`}
-                      className={clsx(styles.dayCell, styles.dayCellEmpty)}
-                    />
-                  ))}
-
-                  {dayCells.map((day) => {
-                    const cellDate: JalaliDate = { year: viewYear, month: viewMonth, day };
-                    const isSelected = isSameJalaliDate(jalaliValue, cellDate);
-                    const isToday = isSameJalaliDate(today, cellDate);
-                    const isFriday = getJalaliWeekday(cellDate) === FRIDAY_WEEKDAY_INDEX;
-
-                    const variantClass = isSelected
-                      ? styles.dayCellSelected
-                      : isFriday
-                        ? styles.dayCellFriday
-                        : isToday
-                          ? styles.dayCellToday
-                          : undefined;
-
-                    return (
-                      <button
-                        key={day}
-                        type="button"
-                        className={clsx(styles.dayCell, variantClass)}
-                        onClick={() => handleDayClick(day)}
-                      >
-                        {day}
-                      </button>
-                    );
-                  })}
+                  )}
                 </div>
 
-                {showTodayButton && (
+                {(showTodayButton || showTime) && (
                   <div className={styles.footer}>
-                    <button
-                      type="button"
-                      className={styles.footerButton}
-                      onClick={handleTodayClick}
-                    >
-                      امروز
-                    </button>
+                    {showTodayButton && (
+                      <button
+                        type="button"
+                        className={styles.footerButton}
+                        onClick={handleTodayClick}
+                      >
+                        امروز
+                      </button>
+                    )}
+                    {showTime && (
+                      <button
+                        type="button"
+                        className={styles.footerButton}
+                        onClick={handleConfirmCalendarTime}
+                      >
+                        تایید
+                      </button>
+                    )}
                   </div>
                 )}
               </div>

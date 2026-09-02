@@ -17,6 +17,7 @@
     cursor: pointer;
     outline: none;
     transition: border-color var(--fara-transition-fast);
+    direction: ltr;
 }
 
 .input::placeholder {
@@ -150,10 +151,80 @@
     visibility: hidden;
 }
 
+.panelWithTime {
+    width: 380px;
+}
+
+.calendarWithTimeRow {
+    display: flex;
+    gap: var(--fara-spacing-md);
+    direction: ltr;
+}
+
+.calendarColumn {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeColumn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--fara-spacing-sm);
+    padding-inline-start: var(--fara-spacing-md);
+    border-inline-start: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+}
+
+.timeSelectRow {
+    display: flex;
+    align-items: center;
+    gap: var(--fara-spacing-2xs);
+}
+
+.timeLabel {
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    text-align: center;
+    margin: var(--fara-spacing-sm);
+}
+
+.timeList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 44px;
+    height: 220px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--fara-color-border) var(--fara-color-background-secondary);
+    scrollbar-arrow-color: transparent;
+    scroll-behavior: smooth;
+}
+
+.timeListItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+    font-size: var(--fara-font-size-sm);
+    cursor: pointer;
+    border-radius: var(--fara-radius-sm);
+}
+
+.timeListItem:hover:not(.timeListItemActive) {
+    background-color: var(--fara-color-background-secondary);
+}
+
+.timeListItemActive {
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
+    font-weight: var(--fara-font-weight-medium);
+
+}
+
 .footer {
     display: flex;
     justify-content: center;
-    margin-top: var(--fara-spacing-sm);
     padding-top: var(--fara-spacing-sm);
     border-top: var(--fara-border-width-thin) solid var(--fara-color-border-light);
 }
