@@ -287,6 +287,12 @@
     color: var(--fara-color-text-inverse);
 }
 
+.monthCell:disabled {
+    opacity: var(--fara-opacity-disabled);
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
 .yearsGridWrapper {
     max-height: 240px;
     overflow-y: scroll;
