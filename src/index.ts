@@ -132,7 +132,7 @@ export { OtpInput } from "./components/OtpInput";
 export type { OtpInputProps } from "./components/OtpInput";
 
 export { DatePicker } from "./components/DatePicker";
-export type { DatePickerProps, JalaliDate } from "./components/DatePicker";
+export type { DatePickerProps, DatePickerValue, JalaliDate } from "./components/DatePicker";
 export { formatJalali, gregorianToJalali, jalaliToGregorian } from "./components/DatePicker";
 
 export { TimePicker, getCurrentTime } from "./components/TimePicker";

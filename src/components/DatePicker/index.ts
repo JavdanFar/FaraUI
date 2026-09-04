@@ -1,5 +1,5 @@
 export { DatePicker } from "./DatePicker";
-export type { DatePickerProps } from "./DatePicker";
+export type { DatePickerProps, DatePickerValue } from "./DatePicker";
 export {
   getJalaliMonthLength,
   getJalaliWeekday,

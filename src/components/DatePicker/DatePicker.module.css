@@ -51,6 +51,21 @@
     padding: var(--fara-spacing-md);
 }
 
+.scrollHeader {
+    display: flex;
+    justify-content: center;
+    gap: var(--fara-spacing-xs);
+    background-color: var(--fara-color-background-secondary);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+}
+
+.columnLabel {
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text-tertiary);
+    text-align: center;
+    margin: var(--fara-spacing-sm);
+}
+
 .header {
     display: flex;
     align-items: center;
@@ -74,6 +89,18 @@
 
 .navButton:hover {
     background-color: var(--fara-color-background-secondary);
+}
+
+.navButton:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: none;
+}
+
+.dayCell:disabled {
+    color: var(--fara-color-text-disabled);
+    cursor: not-allowed;
+    background-color: transparent;
 }
 
 .monthYearGroup {
@@ -124,7 +151,7 @@
     color: var(--fara-color-text);
 }
 
-.dayCell:hover:not(:disabled) {
+.dayCell:hover:not(.dayCellSelected):not(:disabled) {
     background-color: var(--fara-color-secondary);
 }
 
@@ -158,7 +185,6 @@
 .calendarWithTimeRow {
     display: flex;
     gap: var(--fara-spacing-md);
-    direction: ltr;
 }
 
 .calendarColumn {
@@ -171,21 +197,14 @@
     flex-direction: column;
     align-items: center;
     gap: var(--fara-spacing-sm);
-    padding-inline-start: var(--fara-spacing-md);
-    border-inline-start: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+    direction: ltr;
+    border-left: var(--fara-border-width-thin) solid var(--fara-color-border-light);
 }
 
 .timeSelectRow {
     display: flex;
     align-items: center;
     gap: var(--fara-spacing-2xs);
-}
-
-.timeLabel {
-    font-size: var(--fara-font-size-xs);
-    color: var(--fara-color-text-tertiary);
-    text-align: center;
-    margin: var(--fara-spacing-sm);
 }
 
 .timeList {
@@ -219,7 +238,6 @@
     background-color: var(--fara-color-primary);
     color: var(--fara-color-text-inverse);
     font-weight: var(--fara-font-weight-medium);
-
 }
 
 .footer {
@@ -347,6 +365,7 @@
 }
 
 .scrollContainer {
+    direction: ltr;
     position: relative;
     display: flex;
     gap: var(--fara-spacing-xs);

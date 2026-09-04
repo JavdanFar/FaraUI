@@ -52,7 +52,7 @@ function jalCal(jy: number): JalCalResult {
     throw new Error(`Invalid Jalali year ${jy}`);
   }
 
-  let jm = 0;
+  let jm;
   let jump = 0;
   for (let i = 1; i < bl; i += 1) {
     jm = breaks[i];
@@ -140,11 +140,11 @@ export function isSameJalaliDate(a: JalaliDate | null, b: JalaliDate | null): bo
 export function jalaliToGregorian(date: JalaliDate): Date {
   const jdn = j2d(date.year, date.month, date.day);
   const { gy, gm, gd } = d2g(jdn);
-  return new Date(Date.UTC(gy, gm - 1, gd));
+  return new Date(gy, gm - 1, gd);
 }
 
 export function gregorianToJalali(date: Date): JalaliDate {
-  const jdn = g2d(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
+  const jdn = g2d(date.getFullYear(), date.getMonth() + 1, date.getDate());
   return d2j(jdn);
 }
 

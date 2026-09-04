@@ -16,9 +16,18 @@ import {
 
 const FRIDAY_WEEKDAY_INDEX = 6;
 
+export interface DatePickerValue {
+  gregorian: Date;
+  jalali: JalaliDate;
+}
+
 export interface DatePickerProps {
-  value: Date | null;
-  onChange: (date: Date) => void;
+  value?: DatePickerValue | null;
+  defaultValue?: DatePickerValue | null;
+  onChange?: (value: DatePickerValue) => void;
+  minDate?: Date | JalaliDate;
+  maxDate?: Date | JalaliDate;
+  disabledDates?: (date: Date) => boolean;
   placeholder?: string;
   disabled?: boolean;
   showTodayButton?: boolean;
@@ -29,6 +38,7 @@ export interface DatePickerProps {
 }
 
 type CalendarView = "days" | "months" | "years";
+type YearMonth = { year: number; month: number };
 
 const MIN_YEAR = 1300;
 const MAX_YEAR = 1500;
@@ -36,9 +46,38 @@ const ITEM_HEIGHT = 40;
 
 const YEAR_OPTIONS = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) => MIN_YEAR + i);
 
+function isJalaliDateInput(input: Date | JalaliDate): input is JalaliDate {
+  return !(input instanceof Date);
+}
+
+function toJalali(input: Date | JalaliDate): JalaliDate {
+  return isJalaliDateInput(input) ? input : gregorianToJalali(input);
+}
+
+function compareJalali(a: JalaliDate, b: JalaliDate): number {
+  if (a.year !== b.year) return a.year - b.year;
+  if (a.month !== b.month) return a.month - b.month;
+  return a.day - b.day;
+}
+
+function compareYearMonth(a: YearMonth, b: YearMonth): number {
+  if (a.year !== b.year) return a.year - b.year;
+  return a.month - b.month;
+}
+
+function buildValue(date: JalaliDate, time: { hour: number; minute: number }): DatePickerValue {
+  const gregorian = jalaliToGregorian(date);
+  gregorian.setHours(time.hour, time.minute, 0, 0);
+  return { gregorian, jalali: date };
+}
+
 export function DatePicker({
   value,
+  defaultValue = null,
   onChange,
+  minDate,
+  maxDate,
+  disabledDates,
   placeholder = "انتخاب تاریخ",
   disabled = false,
   showTodayButton = true,
@@ -47,25 +86,52 @@ export function DatePicker({
   inputClassName,
   mode = "calendar",
 }: DatePickerProps) {
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState<DatePickerValue | null>(defaultValue);
+  const currentValue = isControlled ? (value ?? null) : internalValue;
+
+  function commit(next: DatePickerValue) {
+    if (!isControlled) setInternalValue(next);
+    onChange?.(next);
+  }
+
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<CalendarView>("days");
   const wrapperRef = useRef<HTMLDivElement>(null);
   const yearsGridRef = useRef<HTMLDivElement>(null);
   const today = getTodayJalali();
-  const jalaliValue = value ? gregorianToJalali(value) : null;
+  const jalaliValue = currentValue?.jalali ?? null;
+
+  const minJalali = minDate ? toJalali(minDate) : null;
+  const maxJalali = maxDate ? toJalali(maxDate) : null;
+  const minYearMonth: YearMonth = minJalali
+    ? { year: minJalali.year, month: minJalali.month }
+    : { year: MIN_YEAR, month: 1 };
+  const maxYearMonth: YearMonth = maxJalali
+    ? { year: maxJalali.year, month: maxJalali.month }
+    : { year: MAX_YEAR, month: 12 };
+
+  function isDateDisabled(cellDate: JalaliDate): boolean {
+    if (minJalali && compareJalali(cellDate, minJalali) < 0) return true;
+    if (maxJalali && compareJalali(cellDate, maxJalali) > 0) return true;
+    if (disabledDates && disabledDates(jalaliToGregorian(cellDate))) return true;
+    return false;
+  }
 
   const [viewYear, setViewYear] = useState(jalaliValue?.year ?? today.year);
   const [viewMonth, setViewMonth] = useState(jalaliValue?.month ?? today.month);
 
   const [draft, setDraft] = useState<JalaliDate>(jalaliValue ?? today);
   const [draftTime, setDraftTime] = useState(() => ({
-    hour: value?.getUTCHours() ?? 0,
-    minute: value?.getUTCMinutes() ?? 0,
+    hour: currentValue?.gregorian.getHours() ?? 0,
+    minute: currentValue?.gregorian.getMinutes() ?? 0,
   }));
 
   const dayColumnRef = useRef<HTMLDivElement>(null);
   const monthColumnRef = useRef<HTMLDivElement>(null);
   const yearColumnRef = useRef<HTMLDivElement>(null);
+  const hourColumnRef = useRef<HTMLDivElement>(null);
+  const minuteColumnRef = useRef<HTMLDivElement>(null);
   const hourListRef = useRef<HTMLUListElement>(null);
   const minuteListRef = useRef<HTMLUListElement>(null);
 
@@ -100,14 +166,21 @@ export function DatePicker({
     setViewYear(jalaliValue?.year ?? today.year);
     setViewMonth(jalaliValue?.month ?? today.month);
     setDraft(jalaliValue ?? today);
-    setDraftTime({ hour: value?.getUTCHours() ?? 0, minute: value?.getUTCMinutes() ?? 0 });
+    setDraftTime({
+      hour: currentValue?.gregorian.getHours() ?? 0,
+      minute: currentValue?.gregorian.getMinutes() ?? 0,
+    });
     setView("days");
     setIsOpen(true);
   }
 
   // ---- Calendar mode ----
 
+  const canGoPrev = compareYearMonth({ year: viewYear, month: viewMonth }, minYearMonth) > 0;
+  const canGoNext = compareYearMonth({ year: viewYear, month: viewMonth }, maxYearMonth) < 0;
+
   function goToPreviousMonth() {
+    if (!canGoPrev) return;
     if (viewMonth === 1) {
       setViewMonth(12);
       setViewYear((y) => y - 1);
@@ -117,6 +190,7 @@ export function DatePicker({
   }
 
   function goToNextMonth() {
+    if (!canGoNext) return;
     if (viewMonth === 12) {
       setViewMonth(1);
       setViewYear((y) => y + 1);
@@ -127,11 +201,12 @@ export function DatePicker({
 
   function handleDayClick(day: number) {
     const picked: JalaliDate = { year: viewYear, month: viewMonth, day };
+    if (isDateDisabled(picked)) return;
     if (showTime) {
       setDraft(picked);
       return;
     }
-    onChange(jalaliToGregorian(picked));
+    commit(buildValue(picked, { hour: 0, minute: 0 }));
     setIsOpen(false);
     setView("days");
   }
@@ -141,19 +216,23 @@ export function DatePicker({
     setView("days");
   }
 
+  // Selecting a year goes straight to the day view — the month was already
+  // set (either from the previous view or the currently open month), so
+  // there's no need to make the user pick it again.
   function handleYearSelect(year: number) {
     setViewYear(year);
     setView("days");
   }
 
   function handleTodayClick() {
+    if (isDateDisabled(today)) return;
     if (showTime) {
       setDraft(today);
       setViewYear(today.year);
       setViewMonth(today.month);
       return;
     }
-    onChange(jalaliToGregorian(today));
+    commit(buildValue(today, { hour: 0, minute: 0 }));
     setViewYear(today.year);
     setViewMonth(today.month);
     setIsOpen(false);
@@ -161,9 +240,7 @@ export function DatePicker({
   }
 
   function handleConfirmCalendarTime() {
-    const result = jalaliToGregorian(draft);
-    result.setUTCHours(draftTime.hour, draftTime.minute, 0, 0);
-    onChange(result);
+    commit(buildValue(draft, draftTime));
     setIsOpen(false);
     setView("days");
   }
@@ -187,12 +264,39 @@ export function DatePicker({
     minuteListRef.current
       ?.querySelector(`[data-value="${draftTime.minute}"]`)
       ?.scrollIntoView({ block: "center" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showTime, mode, isOpen]);
 
   // ---- Scroll mode ----
 
+  const yearOptions = YEAR_OPTIONS.filter(
+    (year) => year >= minYearMonth.year && year <= maxYearMonth.year,
+  );
+
+  const monthOptionIndices = Array.from({ length: 12 }, (_, i) => i + 1).filter((month) => {
+    if (draft.year === minYearMonth.year && month < minYearMonth.month) return false;
+    if (draft.year === maxYearMonth.year && month > maxYearMonth.month) return false;
+    return true;
+  });
+
   const draftMonthLength = getJalaliMonthLength(draft.year, draft.month);
-  const dayOptions = Array.from({ length: draftMonthLength }, (_, i) => i + 1);
+  const dayOptions = Array.from({ length: draftMonthLength }, (_, i) => i + 1).filter((day) => {
+    if (
+      minJalali &&
+      draft.year === minJalali.year &&
+      draft.month === minJalali.month &&
+      day < minJalali.day
+    )
+      return false;
+    if (
+      maxJalali &&
+      draft.year === maxJalali.year &&
+      draft.month === maxJalali.month &&
+      day > maxJalali.day
+    )
+      return false;
+    return true;
+  });
 
   useEffect(() => {
     if (mode !== "scroll" || !isOpen) return;
@@ -206,16 +310,20 @@ export function DatePicker({
     yearColumnRef.current
       ?.querySelector(`[data-value="${draft.year}"]`)
       ?.scrollIntoView({ block: "center" });
+    if (showTime) {
+      hourColumnRef.current
+        ?.querySelector(`[data-value="${draftTime.hour}"]`)
+        ?.scrollIntoView({ block: "center" });
+      minuteColumnRef.current
+        ?.querySelector(`[data-value="${draftTime.minute}"]`)
+        ?.scrollIntoView({ block: "center" });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, isOpen]);
 
-  function handleColumnScroll(
-    columnRef: React.RefObject<HTMLDivElement | null>,
-    optionsLength: number,
-    applyIndex: (index: number) => void,
-  ) {
-    return () => {
-      const el = columnRef.current;
-      if (!el) return;
+  function handleColumnScroll(optionsLength: number, applyIndex: (index: number) => void) {
+    return (event: React.UIEvent<HTMLDivElement>) => {
+      const el = event.currentTarget;
       const rawIndex = Math.round(el.scrollTop / ITEM_HEIGHT);
       const clampedIndex = Math.max(0, Math.min(optionsLength - 1, rawIndex));
       applyIndex(clampedIndex);
@@ -235,7 +343,8 @@ export function DatePicker({
 
   function handleConfirmScroll() {
     const maxDay = getJalaliMonthLength(draft.year, draft.month);
-    onChange(jalaliToGregorian({ ...draft, day: Math.min(draft.day, maxDay) }));
+    const picked = { ...draft, day: Math.min(draft.day, maxDay) };
+    commit(buildValue(picked, showTime ? draftTime : { hour: 0, minute: 0 }));
     setIsOpen(false);
   }
 
@@ -249,7 +358,7 @@ export function DatePicker({
         value={
           jalaliValue
             ? showTime
-              ? `${formatJalali(jalaliValue)} - ${String(value!.getUTCHours()).padStart(2, "0")}:${String(value!.getUTCMinutes()).padStart(2, "0")}`
+              ? `${formatJalali(jalaliValue)} - ${String(currentValue!.gregorian.getHours()).padStart(2, "0")}:${String(currentValue!.gregorian.getMinutes()).padStart(2, "0")}`
               : formatJalali(jalaliValue)
             : ""
         }
@@ -262,12 +371,56 @@ export function DatePicker({
             <>
               <div className={styles.panelPadding}>
                 <div className={showTime ? styles.calendarWithTimeRow : undefined}>
+                  {showTime && (
+                    <div className={styles.timeColumn}>
+                      <div className={styles.timeSelectRow}>
+                        <div>
+                          <p className={styles.columnLabel}>ساعت</p>
+                          <ul className={styles.timeList} aria-label="ساعت" ref={hourListRef}>
+                            {Array.from({ length: 24 }, (_, h) => (
+                              <li
+                                key={h}
+                                data-value={h}
+                                className={clsx(
+                                  styles.timeListItem,
+                                  h === draftTime.hour && styles.timeListItemActive,
+                                )}
+                                onClick={() => setDraftTime((t) => ({ ...t, hour: h }))}
+                              >
+                                {String(h).padStart(2, "0")}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div>
+                          <p className={styles.columnLabel}>دقیقه</p>
+                          <ul className={styles.timeList} aria-label="دقیقه" ref={minuteListRef}>
+                            {Array.from({ length: 60 }, (_, m) => (
+                              <li
+                                key={m}
+                                data-value={m}
+                                className={clsx(
+                                  styles.timeListItem,
+                                  m === draftTime.minute && styles.timeListItemActive,
+                                )}
+                                onClick={() => setDraftTime((t) => ({ ...t, minute: m }))}
+                              >
+                                {String(m).padStart(2, "0")}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <div className={showTime ? styles.calendarColumn : undefined}>
                     <div className={styles.header}>
                       <button
                         type="button"
                         className={styles.navButton}
                         onClick={goToNextMonth}
+                        disabled={!canGoNext}
                         aria-label="ماه بعد"
                       >
                         بعدی
@@ -294,6 +447,7 @@ export function DatePicker({
                         type="button"
                         className={styles.navButton}
                         onClick={goToPreviousMonth}
+                        disabled={!canGoPrev}
                         aria-label="ماه قبل"
                       >
                         قبلی
@@ -328,6 +482,7 @@ export function DatePicker({
                         );
                         const isToday = isSameJalaliDate(today, cellDate);
                         const isFriday = getJalaliWeekday(cellDate) === FRIDAY_WEEKDAY_INDEX;
+                        const cellDisabled = isDateDisabled(cellDate);
 
                         const variantClass = isSelected
                           ? styles.dayCellSelected
@@ -342,6 +497,7 @@ export function DatePicker({
                             key={day}
                             type="button"
                             className={clsx(styles.dayCell, variantClass)}
+                            disabled={cellDisabled}
                             onClick={() => handleDayClick(day)}
                           >
                             {day}
@@ -350,50 +506,6 @@ export function DatePicker({
                       })}
                     </div>
                   </div>
-
-                  {showTime && (
-                    <div className={styles.timeColumn}>
-                      <div className={styles.timeSelectRow}>
-                        <div>
-                          <p className={styles.timeLabel}>ساعت</p>
-                          <ul className={styles.timeList} aria-label="ساعت" ref={hourListRef}>
-                            {Array.from({ length: 24 }, (_, h) => (
-                              <li
-                                key={h}
-                                data-value={h}
-                                className={clsx(
-                                  styles.timeListItem,
-                                  h === draftTime.hour && styles.timeListItemActive,
-                                )}
-                                onClick={() => setDraftTime((t) => ({ ...t, hour: h }))}
-                              >
-                                {String(h).padStart(2, "0")}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <p className={styles.timeLabel}>دقیقه</p>
-                          <ul className={styles.timeList} aria-label="دقیقه" ref={minuteListRef}>
-                            {Array.from({ length: 60 }, (_, m) => (
-                              <li
-                                key={m}
-                                data-value={m}
-                                className={clsx(
-                                  styles.timeListItem,
-                                  m === draftTime.minute && styles.timeListItemActive,
-                                )}
-                                onClick={() => setDraftTime((t) => ({ ...t, minute: m }))}
-                              >
-                                {String(m).padStart(2, "0")}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {(showTodayButton || showTime) && (
@@ -466,15 +578,77 @@ export function DatePicker({
 
       {isOpen && mode === "scroll" && (
         <div className={styles.panel}>
+          <div className={styles.scrollHeader}>
+            <span className={styles.columnLabel}>سال</span>
+            <span className={styles.columnLabel}>ماه</span>
+            <span className={styles.columnLabel}>روز</span>
+            <span className={styles.columnLabel}>ساعت</span>
+            <span className={styles.columnLabel}>دقیقه</span>
+          </div>
+
           <div className={styles.scrollWrapper}>
             <div className={styles.scrollGuideTop} />
             <div className={styles.scrollGuideBottom} />
 
             <div className={styles.scrollContainer}>
               <div
+                ref={yearColumnRef}
+                className={styles.scrollColumn}
+                onScroll={handleColumnScroll(yearOptions.length, (index) =>
+                  setDraft((d) => ({ ...d, year: yearOptions[index] })),
+                )}
+              >
+                <div className={styles.scrollPadding} />
+                {yearOptions.map((year) => (
+                  <div
+                    key={year}
+                    data-value={year}
+                    className={clsx(
+                      styles.scrollItem,
+                      year === draft.year && styles.scrollItemActive,
+                    )}
+                    onClick={() =>
+                      handleItemClick(yearColumnRef, year, () => setDraft((d) => ({ ...d, year })))
+                    }
+                  >
+                    {year}
+                  </div>
+                ))}
+                <div className={styles.scrollPadding} />
+              </div>
+
+              <div
+                ref={monthColumnRef}
+                className={styles.scrollColumn}
+                onScroll={handleColumnScroll(monthOptionIndices.length, (index) =>
+                  setDraft((d) => ({ ...d, month: monthOptionIndices[index] })),
+                )}
+              >
+                <div className={styles.scrollPadding} />
+                {monthOptionIndices.map((month) => (
+                  <div
+                    key={month}
+                    data-value={month}
+                    className={clsx(
+                      styles.scrollItem,
+                      month === draft.month && styles.scrollItemActive,
+                    )}
+                    onClick={() =>
+                      handleItemClick(monthColumnRef, month, () =>
+                        setDraft((d) => ({ ...d, month })),
+                      )
+                    }
+                  >
+                    {PERSIAN_MONTHS[month - 1]}
+                  </div>
+                ))}
+                <div className={styles.scrollPadding} />
+              </div>
+
+              <div
                 ref={dayColumnRef}
                 className={styles.scrollColumn}
-                onScroll={handleColumnScroll(dayColumnRef, dayOptions.length, (index) =>
+                onScroll={handleColumnScroll(dayOptions.length, (index) =>
                   setDraft((d) => ({ ...d, day: dayOptions[index] })),
                 )}
               >
@@ -497,59 +671,65 @@ export function DatePicker({
                 <div className={styles.scrollPadding} />
               </div>
 
-              <div
-                ref={monthColumnRef}
-                className={styles.scrollColumn}
-                onScroll={handleColumnScroll(monthColumnRef, PERSIAN_MONTHS.length, (index) =>
-                  setDraft((d) => ({ ...d, month: index + 1 })),
-                )}
-              >
-                <div className={styles.scrollPadding} />
-                {PERSIAN_MONTHS.map((month, index) => (
+              {showTime && (
+                <>
                   <div
-                    key={month}
-                    data-value={index + 1}
-                    className={clsx(
-                      styles.scrollItem,
-                      index + 1 === draft.month && styles.scrollItemActive,
+                    ref={hourColumnRef}
+                    className={styles.scrollColumn}
+                    onScroll={handleColumnScroll(24, (index) =>
+                      setDraftTime((t) => ({ ...t, hour: index })),
                     )}
-                    onClick={() =>
-                      handleItemClick(monthColumnRef, index + 1, () =>
-                        setDraft((d) => ({ ...d, month: index + 1 })),
-                      )
-                    }
                   >
-                    {month}
+                    <div className={styles.scrollPadding} />
+                    {Array.from({ length: 24 }, (_, h) => (
+                      <div
+                        key={h}
+                        data-value={h}
+                        className={clsx(
+                          styles.scrollItem,
+                          h === draftTime.hour && styles.scrollItemActive,
+                        )}
+                        onClick={() =>
+                          handleItemClick(hourColumnRef, h, () =>
+                            setDraftTime((t) => ({ ...t, hour: h })),
+                          )
+                        }
+                      >
+                        {String(h).padStart(2, "0")}
+                      </div>
+                    ))}
+                    <div className={styles.scrollPadding} />
                   </div>
-                ))}
-                <div className={styles.scrollPadding} />
-              </div>
 
-              <div
-                ref={yearColumnRef}
-                className={styles.scrollColumn}
-                onScroll={handleColumnScroll(yearColumnRef, YEAR_OPTIONS.length, (index) =>
-                  setDraft((d) => ({ ...d, year: YEAR_OPTIONS[index] })),
-                )}
-              >
-                <div className={styles.scrollPadding} />
-                {YEAR_OPTIONS.map((year) => (
                   <div
-                    key={year}
-                    data-value={year}
-                    className={clsx(
-                      styles.scrollItem,
-                      year === draft.year && styles.scrollItemActive,
+                    ref={minuteColumnRef}
+                    className={styles.scrollColumn}
+                    onScroll={handleColumnScroll(60, (index) =>
+                      setDraftTime((t) => ({ ...t, minute: index })),
                     )}
-                    onClick={() =>
-                      handleItemClick(yearColumnRef, year, () => setDraft((d) => ({ ...d, year })))
-                    }
                   >
-                    {year}
+                    <div className={styles.scrollPadding} />
+                    {Array.from({ length: 60 }, (_, m) => (
+                      <div
+                        key={m}
+                        data-value={m}
+                        className={clsx(
+                          styles.scrollItem,
+                          m === draftTime.minute && styles.scrollItemActive,
+                        )}
+                        onClick={() =>
+                          handleItemClick(minuteColumnRef, m, () =>
+                            setDraftTime((t) => ({ ...t, minute: m })),
+                          )
+                        }
+                      >
+                        {String(m).padStart(2, "0")}
+                      </div>
+                    ))}
+                    <div className={styles.scrollPadding} />
                   </div>
-                ))}
-                <div className={styles.scrollPadding} />
-              </div>
+                </>
+              )}
             </div>
           </div>
 
