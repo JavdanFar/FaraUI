@@ -66,6 +66,7 @@
     color: var(--fara-color-text-tertiary);
     text-align: center;
     margin: var(--fara-spacing-sm);
+    margin-top: var(--fara-spacing-xs);
 }
 
 .header {
@@ -201,6 +202,7 @@
     gap: var(--fara-spacing-sm);
     direction: ltr;
     border-left: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+    padding-left: var(--fara-spacing-sm);
 }
 
 .timeSelectRow {
