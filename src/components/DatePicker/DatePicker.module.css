@@ -52,6 +52,7 @@
 }
 
 .scrollHeader {
+    direction: ltr;
     display: flex;
     justify-content: center;
     gap: var(--fara-spacing-xs);
@@ -60,6 +61,7 @@
 }
 
 .columnLabel {
+    flex: 1;
     font-size: var(--fara-font-size-md);
     color: var(--fara-color-text-tertiary);
     text-align: center;

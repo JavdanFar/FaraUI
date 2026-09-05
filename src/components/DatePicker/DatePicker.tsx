@@ -626,8 +626,12 @@ export function DatePicker({
             <span className={styles.columnLabel}>سال</span>
             <span className={styles.columnLabel}>ماه</span>
             <span className={styles.columnLabel}>روز</span>
-            <span className={styles.columnLabel}>ساعت</span>
-            <span className={styles.columnLabel}>دقیقه</span>
+            {showTime && (
+              <>
+                <span className={styles.columnLabel}>ساعت</span>
+                <span className={styles.columnLabel}>دقیقه</span>
+              </>
+            )}
           </div>
 
           <div className={styles.scrollWrapper}>
