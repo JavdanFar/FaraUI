@@ -46,6 +46,24 @@
     z-index: var(--fara-z-dropdown);
 }
 
+.scrollHeader {
+    direction: ltr;
+    display: flex;
+    justify-content: center;
+    gap: var(--fara-spacing-xs);
+    background-color: var(--fara-color-background-secondary);
+    border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+}
+
+.columnLabel {
+    flex: 1;
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text-tertiary);
+    text-align: center;
+    margin: var(--fara-spacing-sm);
+    margin-top: var(--fara-spacing-xs);
+}
+
 .scrollWrapper {
     position: relative;
     direction: ltr;

@@ -188,6 +188,10 @@ export function TimePicker({
 
       {isOpen && (
         <div className={styles.panel}>
+          <div className={styles.scrollHeader}>
+            <span className={styles.columnLabel}>ساعت</span>
+            <span className={styles.columnLabel}>دقیقه</span>
+          </div>
           <div className={styles.scrollWrapper}>
             <div className={styles.scrollGuideTop} />
             <div className={styles.scrollGuideBottom} />
