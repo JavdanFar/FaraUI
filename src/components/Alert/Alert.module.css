@@ -1,11 +1,23 @@
 .alert {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: var(--fara-spacing-sm);
     padding: var(--fara-spacing-md);
     border-radius: var(--fara-radius-md);
     font-size: var(--fara-font-size-md);
     border: var(--fara-border-width-thin) solid transparent;
+    opacity: 0;
+    transition: opacity var(--fara-transition-normal);
+}
+
+.alert.visible {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .alert {
+        transition: none;
+    }
 }
 
 .info {
@@ -34,4 +46,21 @@
 
 .content {
     flex: 1;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: var(--fara-font-size-lg);
+    line-height: var(--fara-line-height-tight);
+    flex-shrink: 0;
+    margin-inline-start: var(--fara-spacing-sm);
+    cursor: pointer;
+    padding: 0;
+}
+
+.closeButton:hover {
+    color: var(--fara-color-danger-text);
+    font-weight: bold;
 }
