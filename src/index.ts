@@ -135,5 +135,8 @@ export { DatePicker } from "./components/DatePicker";
 export type { DatePickerProps, DatePickerValue, JalaliDate } from "./components/DatePicker";
 export { formatJalali, gregorianToJalali, jalaliToGregorian } from "./components/DatePicker";
 
+export { DateRangePicker } from "./components/DateRangePicker";
+export type { DateRangePickerProps, DateRangeValue } from "./components/DateRangePicker";
+
 export { TimePicker, getCurrentTime } from "./components/TimePicker";
 export type { TimePickerProps, TimeValue } from "./components/TimePicker";

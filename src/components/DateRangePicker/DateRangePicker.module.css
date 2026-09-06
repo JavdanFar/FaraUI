@@ -1,0 +1,163 @@
+.wrapper {
+    position: relative;
+    width: 100%;
+    font-family: var(--fara-font-family);
+}
+
+.input {
+    direction: ltr;
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    font-family: inherit;
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text);
+    background-color: var(--fara-color-background);
+    cursor: pointer;
+    outline: none;
+    transition: border-color var(--fara-transition-fast);
+}
+
+.input::placeholder {
+    color: var(--fara-color-text-tertiary);
+}
+
+.input:focus {
+    border-color: var(--fara-color-primary);
+    box-shadow: var(--fara-shadow-focus);
+}
+
+.input:disabled {
+    opacity: var(--fara-opacity-disabled);
+    cursor: not-allowed;
+    background-color: var(--fara-color-background-disabled);
+}
+
+.panel {
+    position: absolute;
+    top: calc(100% + var(--fara-spacing-xs));
+    inset-inline-start: 0;
+    background-color: var(--fara-color-background);
+    border: var(--fara-border-width-thin) solid var(--fara-color-border);
+    border-radius: var(--fara-radius-md);
+    box-shadow: var(--fara-shadow-md);
+    z-index: var(--fara-z-dropdown);
+    padding: var(--fara-spacing-md);
+    width: max-content;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fara-spacing-sm);
+    margin-bottom: var(--fara-spacing-sm);
+}
+
+.navButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 24px;
+    flex-shrink: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--fara-color-text-secondary);
+    background-color: var(--fara-color-background-secondary);
+    border-radius: var(--fara-radius-sm);
+}
+
+.navButton:hover {
+    background-color: var(--fara-color-background-tertiary);
+}
+
+.navButton:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    background: none;
+}
+
+.monthsRow {
+    display: flex;
+    gap: var(--fara-spacing-lg);
+}
+
+.monthColumn {
+    width: 240px;
+}
+
+.monthTitle {
+    text-align: center;
+    font-size: var(--fara-font-size-md);
+    font-weight: var(--fara-font-weight-medium);
+    color: var(--fara-color-text);
+    margin-bottom: var(--fara-spacing-sm);
+}
+
+.daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.weekday {
+    text-align: center;
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    padding: var(--fara-spacing-2xs) 0;
+}
+
+.weekdayFriday {
+    color: var(--fara-color-danger);
+}
+
+.dayCell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border: none;
+    background: none;
+    border-radius: var(--fara-radius-sm);
+    cursor: pointer;
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
+}
+
+.dayCell:hover:not(.dayCellRangeEdge):not(:disabled) {
+    background-color: var(--fara-color-secondary);
+}
+
+.dayCell:disabled {
+    color: var(--fara-color-text-disabled);
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+.dayCellEmpty {
+    visibility: hidden;
+}
+
+.dayCellFriday {
+    color: var(--fara-color-danger);
+    font-weight: var(--fara-font-weight-medium);
+}
+
+.dayCellToday {
+    font-weight: var(--fara-font-weight-bold);
+    color: var(--fara-color-primary);
+}
+
+.dayCellInRange {
+    background-color: var(--fara-color-primary-disabled);
+    border-radius: 0;
+}
+
+.dayCellRangeEdge {
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
+}
