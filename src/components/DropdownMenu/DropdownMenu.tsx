@@ -12,6 +12,22 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setIsVisible(true));
+      });
+    } else {
+      setIsVisible(false);
+      const timeout = setTimeout(() => setShouldRender(false), 150);
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -27,8 +43,12 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
     <div ref={wrapperRef} className={styles.wrapper}>
       <span onClick={() => setIsOpen((prev) => !prev)}>{trigger}</span>
 
-      {isOpen && (
-        <div className={styles.menu} role="menu" onClick={() => setIsOpen(false)}>
+      {shouldRender && (
+        <div
+          className={clsx(styles.menu, isVisible && styles.menuVisible)}
+          role="menu"
+          onClick={() => setIsOpen(false)}
+        >
           {children}
         </div>
       )}
