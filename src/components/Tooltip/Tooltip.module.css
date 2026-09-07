@@ -18,7 +18,8 @@
     z-index: var(--fara-z-tooltip);
     pointer-events: none;
     opacity: 0;
-    transition: opacity var(--fara-transition-fast);
+    transform: translateX(-50%) translateY(2px);
+    transition: opacity var(--fara-transition-fast), transform var(--fara-transition-fast);
 }
 
 .tooltip::after {
@@ -29,8 +30,10 @@
     transform: translateX(-50%);
     border: 5px solid transparent;
     border-top-color: var(--fara-color-text);
+    transition: border-top-color var(--fara-transition-fast);
 }
 
 .visible {
     opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
