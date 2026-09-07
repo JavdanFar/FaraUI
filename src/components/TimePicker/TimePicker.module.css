@@ -152,10 +152,18 @@
 }
 
 .confirmButton {
-    background: none;
+    background-color: var(--fara-color-primary);
     border: none;
-    color: var(--fara-color-primary);
+    border-radius: var(--fara-radius-sm);
+    color: var(--fara-color-text-inverse);
     font-size: var(--fara-font-size-sm);
+    font-family: inherit;
     cursor: pointer;
-    padding: var(--fara-spacing-2xs) var(--fara-spacing-sm);
+    padding: var(--fara-spacing-xs) var(--fara-spacing-md);
+    transition: background-color var(--fara-transition-fast), color var(--fara-transition-fast);
+}
+
+.confirmButton:hover {
+    background-color: var(--fara-color-primary-hover);
+    color: var(--fara-color-text-inverse);
 }
