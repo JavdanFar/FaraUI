@@ -69,6 +69,7 @@
     color: var(--fara-color-text-secondary);
     background-color: var(--fara-color-background-secondary);
     border-radius: var(--fara-radius-sm);
+    transition: background-color var(--fara-transition-fast);
 }
 
 .navButton:hover {
@@ -160,4 +161,45 @@
 .dayCellRangeEdge {
     background-color: var(--fara-color-primary);
     color: var(--fara-color-text-inverse);
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--fara-spacing-sm);
+    padding-top: var(--fara-spacing-sm);
+    border-top: var(--fara-border-width-thin) solid var(--fara-color-border-light);
+}
+
+.footerButton {
+    background-color: var(--fara-color-background-secondary);
+    border: none;
+    border-radius: var(--fara-radius-sm);
+    color: var(--fara-color-text-secondary);
+    font-size: var(--fara-font-size-sm);
+    font-family: inherit;
+    cursor: pointer;
+    padding: var(--fara-spacing-xs) var(--fara-spacing-md);
+    transition: background-color var(--fara-transition-fast), color var(--fara-transition-fast);
+}
+
+.footerButton:hover {
+    background-color: var(--fara-color-background-tertiary);
+    color: var(--fara-color-text);
+}
+
+.footerButtonPrimary {
+    background-color: var(--fara-color-primary);
+    color: var(--fara-color-text-inverse);
+}
+
+.footerButtonPrimary:hover {
+    background-color: var(--fara-color-primary-hover);
+    color: var(--fara-color-text-inverse);
+}
+
+.footerButton:disabled {
+    opacity: var(--fara-opacity-disabled);
+    cursor: not-allowed;
+    background-color: var(--fara-color-background-secondary);
 }

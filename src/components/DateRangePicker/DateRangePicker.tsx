@@ -13,6 +13,7 @@ import {
   PERSIAN_WEEKDAYS,
   type JalaliDate,
 } from "../DatePicker/jalali";
+import { ChevronIcon } from "../DatePicker/ChevronIcon";
 
 const FRIDAY_WEEKDAY_INDEX = 6;
 const MIN_YEAR = 1300;
@@ -194,8 +195,20 @@ export function DateRangePicker({
     setDraftStart(start);
     setDraftEnd(end);
     setHoverDate(null);
+  }
 
-    const next = buildValue(start, end, includeGregorian);
+  function handleGoToToday() {
+    setViewYear(today.year);
+    setViewMonth(today.month);
+    setDraftStart(today);
+    setDraftEnd(null);
+    setHoverDate(null);
+  }
+
+  function handleConfirm() {
+    if (!draftStart) return;
+    const end = draftEnd ?? draftStart;
+    const next = buildValue(draftStart, end, includeGregorian);
     if (!isControlled) setInternalValue(next);
     onChange?.(next);
     setIsOpen(false);
@@ -305,8 +318,9 @@ export function DateRangePicker({
               onClick={goToPreviousMonth}
               disabled={!canGoPrev}
               aria-label="ماه قبل"
+              title="ماه قبل"
             >
-              قبلی
+              <ChevronIcon direction="previous" />
             </button>
 
             <button
@@ -315,14 +329,29 @@ export function DateRangePicker({
               onClick={goToNextMonth}
               disabled={!canGoNext}
               aria-label="ماه بعد"
+              title="ماه بعد"
             >
-              بعدی
+              <ChevronIcon direction="next" />
             </button>
           </div>
 
           <div className={styles.monthsRow}>
             {renderMonth(viewYear, viewMonth)}
             {renderMonth(nextMonth.year, nextMonth.month)}
+          </div>
+
+          <div className={styles.footer}>
+            <button type="button" className={styles.footerButton} onClick={handleGoToToday}>
+              برو به امروز
+            </button>
+            <button
+              type="button"
+              className={clsx(styles.footerButton, styles.footerButtonPrimary)}
+              onClick={handleConfirm}
+              disabled={!draftStart}
+            >
+              تأیید
+            </button>
           </div>
         </div>
       )}
