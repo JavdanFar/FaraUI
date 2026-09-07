@@ -12,9 +12,30 @@
     color: var(--fara-color-text-secondary);
 }
 
+.valueText {
+    direction: ltr;
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text);
+    font-variant-numeric: tabular-nums;
+}
+
 .track {
     position: relative;
     width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    touch-action: none;
+}
+
+.track::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
     height: 6px;
     background-color: var(--fara-color-secondary);
     border-radius: var(--fara-radius-full);
@@ -22,27 +43,17 @@
 
 .fill {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    inset-inline-start: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 6px;
     background-color: var(--fara-color-primary);
     border-radius: var(--fara-radius-full);
-}
-
-.input {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
+    pointer-events: none;
 }
 
 .thumb {
     position: absolute;
     top: 50%;
-    inset-inline-start: 0;
     transform: translate(-50%, -50%);
     width: 16px;
     height: 16px;
@@ -53,8 +64,24 @@
     pointer-events: none;
 }
 
-:dir(rtl) .thumb {
-    transform: translate(50%, -50%);
+.thumbActive {
+    transform: translate(-50%, -50%) scale(1.15);
+}
+
+.input {
+    direction: ltr;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    pointer-events: none;
+}
+
+.input:focus-visible {
+    pointer-events: auto;
 }
 
 .disabled {

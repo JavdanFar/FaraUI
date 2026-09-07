@@ -106,7 +106,7 @@ export { Rating } from "./components/Rating";
 export type { RatingProps } from "./components/Rating";
 
 export { Slider } from "./components/Slider";
-export type { SliderProps } from "./components/Slider";
+export type { SliderProps, SliderRangeValue } from "./components/Slider";
 
 export { FileUpload } from "./components/FileUpload";
 export type {
