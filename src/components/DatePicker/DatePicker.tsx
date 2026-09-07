@@ -13,6 +13,7 @@ import {
   PERSIAN_WEEKDAYS,
   type JalaliDate,
 } from "./jalali";
+import { ChevronIcon } from "./ChevronIcon";
 
 const FRIDAY_WEEKDAY_INDEX = 6;
 
@@ -458,11 +459,12 @@ export function DatePicker({
                       <button
                         type="button"
                         className={styles.navButton}
-                        onClick={goToNextMonth}
-                        disabled={!canGoNext}
-                        aria-label="ماه بعد"
+                        onClick={goToPreviousMonth}
+                        disabled={!canGoPrev}
+                        aria-label="ماه قبل"
+                        title="ماه قبل"
                       >
-                        بعدی
+                        <ChevronIcon direction="previous" />
                       </button>
 
                       <div className={styles.monthYearGroup}>
@@ -485,11 +487,12 @@ export function DatePicker({
                       <button
                         type="button"
                         className={styles.navButton}
-                        onClick={goToPreviousMonth}
-                        disabled={!canGoPrev}
-                        aria-label="ماه قبل"
+                        onClick={goToNextMonth}
+                        disabled={!canGoNext}
+                        aria-label="ماه بعد"
+                        title="ماه بعد"
                       >
-                        قبلی
+                        <ChevronIcon direction="next" />
                       </button>
                     </div>
 
@@ -550,18 +553,14 @@ export function DatePicker({
                 {(showTodayButton || showTime) && (
                   <div className={styles.footer}>
                     {showTodayButton && (
-                      <button
-                        type="button"
-                        className={styles.footerButton}
-                        onClick={handleTodayClick}
-                      >
+                      <button type="button" className={styles.footerButton} onClick={handleTodayClick}>
                         امروز
                       </button>
                     )}
                     {showTime && (
                       <button
                         type="button"
-                        className={styles.footerButton}
+                        className={clsx(styles.footerButton, styles.footerButtonPrimary)}
                         onClick={handleConfirmCalendarTime}
                       >
                         تایید
@@ -782,7 +781,11 @@ export function DatePicker({
           </div>
 
           <div className={styles.scrollConfirm}>
-            <button type="button" className={styles.footerButton} onClick={handleConfirmScroll}>
+            <button
+              type="button"
+              className={clsx(styles.footerButton, styles.footerButtonPrimary)}
+              onClick={handleConfirmScroll}
+            >
               تایید
             </button>
           </div>
