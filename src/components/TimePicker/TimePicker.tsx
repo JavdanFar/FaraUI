@@ -13,6 +13,7 @@ export interface TimePickerProps {
   onChange: (value: TimeValue) => void;
   showSeconds?: boolean;
   format?: "24h" | "12h";
+  defaultTime?: "current" | "zero";
   placeholder?: string;
   disabled?: boolean;
   className?: string;
@@ -63,6 +64,7 @@ export function TimePicker({
   onChange,
   showSeconds = false,
   format = "24h",
+  defaultTime = "current",
   placeholder = "انتخاب زمان",
   disabled = false,
   className,
@@ -71,7 +73,8 @@ export function TimePicker({
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const defaultValue: TimeValue = getCurrentTime();
+  const defaultValue: TimeValue =
+    defaultTime === "zero" ? { hour: 0, minute: 0, second: 0 } : getCurrentTime();
   const [draft, setDraft] = useState<TimeValue>(value ?? defaultValue);
 
   const hourColumnRef = useRef<HTMLDivElement>(null);
@@ -191,6 +194,7 @@ export function TimePicker({
           <div className={styles.scrollHeader}>
             <span className={styles.columnLabel}>ساعت</span>
             <span className={styles.columnLabel}>دقیقه</span>
+            {showSeconds && <span className={styles.columnLabel}>ثانیه</span>}
           </div>
           <div className={styles.scrollWrapper}>
             <div className={styles.scrollGuideTop} />

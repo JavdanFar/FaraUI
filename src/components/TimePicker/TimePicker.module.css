@@ -5,6 +5,7 @@
 }
 
 .input {
+    direction: ltr;
     width: 100%;
     box-sizing: border-box;
     padding: var(--fara-spacing-sm) var(--fara-spacing-md);
@@ -114,7 +115,6 @@
 
 .scrollItem {
     scroll-snap-align: center;
-    scroll-snap-stop: always;
     display: flex;
     align-items: center;
     justify-content: center;
