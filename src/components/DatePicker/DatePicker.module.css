@@ -415,7 +415,6 @@
 
 .scrollItem {
     scroll-snap-align: center;
-    scroll-snap-stop: always;
     display: flex;
     align-items: center;
     justify-content: center;

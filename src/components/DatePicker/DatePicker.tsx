@@ -35,6 +35,7 @@ export interface DatePickerProps {
   disabled?: boolean;
   showTodayButton?: boolean;
   showTime?: boolean;
+  defaultTime?: "current" | "zero";
   className?: string;
   inputClassName?: string;
   mode?: "calendar" | "scroll";
@@ -118,6 +119,7 @@ export function DatePicker({
   disabled = false,
   showTodayButton = true,
   showTime = false,
+  defaultTime = "current",
   className,
   inputClassName,
   mode = "calendar",
@@ -206,7 +208,13 @@ export function DatePicker({
     setViewYear(jalaliValue?.year ?? today.year);
     setViewMonth(jalaliValue?.month ?? today.month);
     setDraft(jalaliValue ?? today);
-    setDraftTime(deriveClockTime(currentValue));
+    setDraftTime(
+      currentValue
+        ? deriveClockTime(currentValue)
+        : defaultTime === "zero"
+          ? { hour: 0, minute: 0 }
+          : { hour: new Date().getHours(), minute: new Date().getMinutes() },
+    );
     setView("days");
     setIsOpen(true);
   }
@@ -331,30 +339,38 @@ export function DatePicker({
     (day) => !isDateDisabled({ year: draft.year, month: draft.month, day }),
   );
 
+  const programmaticScrollRef = useRef(false);
+
   useEffect(() => {
     if (mode !== "scroll" || !isOpen) return;
 
+    programmaticScrollRef.current = true;
     dayColumnRef.current
-      ?.querySelector(`[data-value="${draftRef.current.day}"]`)
+      ?.querySelector(`[data-value="${draft.day}"]`)
       ?.scrollIntoView({ block: "center" });
     monthColumnRef.current
-      ?.querySelector(`[data-value="${draftRef.current.month}"]`)
+      ?.querySelector(`[data-value="${draft.month}"]`)
       ?.scrollIntoView({ block: "center" });
     yearColumnRef.current
-      ?.querySelector(`[data-value="${draftRef.current.year}"]`)
+      ?.querySelector(`[data-value="${draft.year}"]`)
       ?.scrollIntoView({ block: "center" });
     if (showTime) {
       hourColumnRef.current
-        ?.querySelector(`[data-value="${draftTimeRef.current.hour}"]`)
+        ?.querySelector(`[data-value="${draftTime.hour}"]`)
         ?.scrollIntoView({ block: "center" });
       minuteColumnRef.current
-        ?.querySelector(`[data-value="${draftTimeRef.current.minute}"]`)
+        ?.querySelector(`[data-value="${draftTime.minute}"]`)
         ?.scrollIntoView({ block: "center" });
     }
+    const timer = window.setTimeout(() => {
+      programmaticScrollRef.current = false;
+    }, 400);
+    return () => window.clearTimeout(timer);
   }, [mode, isOpen, showTime]);
 
   useEffect(() => {
     if (mode !== "scroll" || !isOpen) return;
+    if (programmaticScrollRef.current) return;
     dayColumnRef.current
       ?.querySelector(`[data-value="${draftRef.current.day}"]`)
       ?.scrollIntoView({ block: "center" });
@@ -362,6 +378,7 @@ export function DatePicker({
 
   function handleColumnScroll(optionsLength: number, applyIndex: (index: number) => void) {
     return (event: React.UIEvent<HTMLDivElement>) => {
+      if (programmaticScrollRef.current) return;
       const el = event.currentTarget;
       const rawIndex = Math.round(el.scrollTop / ITEM_HEIGHT);
       const clampedIndex = Math.max(0, Math.min(optionsLength - 1, rawIndex));
@@ -553,7 +570,11 @@ export function DatePicker({
                 {(showTodayButton || showTime) && (
                   <div className={styles.footer}>
                     {showTodayButton && (
-                      <button type="button" className={styles.footerButton} onClick={handleTodayClick}>
+                      <button
+                        type="button"
+                        className={styles.footerButton}
+                        onClick={handleTodayClick}
+                      >
                         امروز
                       </button>
                     )}
