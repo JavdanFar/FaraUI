@@ -7,6 +7,12 @@
     justify-content: center;
     z-index: var(--fara-z-modal);
     padding: var(--fara-spacing-md);
+    opacity: 0;
+    transition: opacity var(--fara-transition-normal);
+}
+
+.overlayVisible {
+    opacity: 1;
 }
 
 .modal {
@@ -18,6 +24,14 @@
     max-height: 85vh;
     overflow-y: auto;
     box-shadow: var(--fara-shadow-lg);
+    transform: scale(0.95) translateY(8px);
+    opacity: 0;
+    transition: transform var(--fara-transition-normal), opacity var(--fara-transition-normal);
+}
+
+.modalVisible {
+    transform: scale(1) translateY(0);
+    opacity: 1;
 }
 
 .header {
