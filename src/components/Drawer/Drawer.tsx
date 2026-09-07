@@ -38,12 +38,12 @@ export function Drawer({ open, onClose, children, title, side = "end", className
     }
 
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const originalPaddingEnd = document.body.style.paddingInlineEnd;
+    const originalPaddingRight = document.body.style.paddingRight;
     const originalOverflow = document.body.style.overflow;
 
     document.body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
-      document.body.style.paddingInlineEnd = `${scrollbarWidth}px`;
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
     }
 
     document.addEventListener("keydown", handleEscape);
@@ -51,7 +51,7 @@ export function Drawer({ open, onClose, children, title, side = "end", className
     return () => {
       document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = originalOverflow;
-      document.body.style.paddingInlineEnd = originalPaddingEnd;
+      document.body.style.paddingRight = originalPaddingRight;
     };
   }, [open, onClose]);
 
