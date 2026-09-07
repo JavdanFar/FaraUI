@@ -6,10 +6,19 @@
     --fara-color-primary-hover: #2563eb;
     --fara-color-primary-active: #1d4ed8;
     --fara-color-primary-disabled: #93c5fd;
+    --fara-color-primary-bg: #eff6ff;
+    --fara-color-primary-border: #bfdbfe;
+    --fara-color-primary-text: #1e40af;
 
     --fara-color-secondary: #e5e7eb;
     --fara-color-secondary-hover: #d1d5db;
     --fara-color-secondary-active: #9ca3af;
+    --fara-color-secondary-disabled: #f3f4f6;
+
+    /* ============================================
+     Rating
+     ============================================ */
+    --fara-color-star-active: #f59e0b;
 
     /* ============================================
      Status colors
@@ -56,6 +65,19 @@
     --fara-color-background-tertiary: #f3f4f6;
     --fara-color-background-overlay: rgba(0, 0, 0, 0.5);
     --fara-color-background-disabled: #f3f4f6;
+
+    /* ============================================
+     Scrim — dark translucent layers over content
+     (image overlays, loading covers)
+     ============================================ */
+    --fara-color-scrim-sm: rgba(0, 0, 0, 0.1);
+    --fara-color-scrim-md: rgba(0, 0, 0, 0.45);
+    --fara-color-scrim-lg: rgba(0, 0, 0, 0.6);
+    --fara-color-scrim-xl: rgba(0, 0, 0, 0.8);
+
+    /* Light translucent layer (e.g. loading cover
+     over a white surface) */
+    --fara-color-scrim-light: rgba(255, 255, 255, 0.6);
 
     /* ============================================
      Border colors
@@ -123,6 +145,7 @@
     --fara-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.2);
     --fara-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.25);
     --fara-shadow-focus: 0 0 0 3px rgba(59, 130, 246, 0.35);
+    --fara-shadow-danger-focus: 0 0 0 3px rgba(239, 68, 68, 0.15);
 
     /* ============================================
      Border width
@@ -172,4 +195,89 @@
      ============================================ */
     --fara-opacity-disabled: 0.5;
     --fara-opacity-hover: 0.8;
+}
+
+/* ============================================
+ Dark theme — activate by setting the attribute
+ data-fara-theme="dark" on <html> (or any
+ container for a locally dark section). Only
+ color, scrim and shadow tokens are redefined;
+ all other tokens are theme-independent.
+ ============================================ */
+[data-fara-theme="dark"] {
+    /* Brand colors */
+    --fara-color-primary: #3b82f6;
+    --fara-color-primary-hover: #2563eb;
+    --fara-color-primary-active: #1d4ed8;
+    --fara-color-primary-disabled: #1e3a5f;
+    --fara-color-primary-bg: #1e293b;
+    --fara-color-primary-border: #1d4ed8;
+    --fara-color-primary-text: #93c5fd;
+
+    --fara-color-secondary: #374151;
+    --fara-color-secondary-hover: #4b5563;
+    --fara-color-secondary-active: #6b7280;
+    --fara-color-secondary-disabled: #1f2937;
+
+    /* Rating */
+    --fara-color-star-active: #f59e0b;
+
+    /* Status colors */
+    --fara-color-success: #16a34a;
+    --fara-color-success-hover: #15803d;
+    --fara-color-success-bg: #052e16;
+    --fara-color-success-border: #15803d;
+    --fara-color-success-text: #4ade80;
+
+    --fara-color-danger: #ef4444;
+    --fara-color-danger-hover: #dc2626;
+    --fara-color-danger-bg: #450a0a;
+    --fara-color-danger-border: #b91c1c;
+    --fara-color-danger-text: #f87171;
+
+    --fara-color-warning: #f59e0b;
+    --fara-color-warning-hover: #d97706;
+    --fara-color-warning-bg: #422006;
+    --fara-color-warning-border: #b45309;
+    --fara-color-warning-text: #fbbf24;
+
+    --fara-color-info: #3b82f6;
+    --fara-color-info-hover: #2563eb;
+    --fara-color-info-bg: #172554;
+    --fara-color-info-border: #1d4ed8;
+    --fara-color-info-text: #93c5fd;
+
+    /* Text colors */
+    --fara-color-text: #f9fafb;
+    --fara-color-text-secondary: #9ca3af;
+    --fara-color-text-tertiary: #6b7280;
+    --fara-color-text-inverse: #111827;
+    --fara-color-text-disabled: #4b5563;
+    --fara-color-text-link: #60a5fa;
+
+    /* Background colors */
+    --fara-color-background: #111827;
+    --fara-color-background-secondary: #1f2937;
+    --fara-color-background-tertiary: #374151;
+    --fara-color-background-overlay: rgba(0, 0, 0, 0.7);
+    --fara-color-background-disabled: #1f2937;
+
+    /* Scrim — over dark surfaces, lighten instead of darken */
+    --fara-color-scrim-sm: rgba(255, 255, 255, 0.1);
+    --fara-color-scrim-md: rgba(0, 0, 0, 0.45);
+    --fara-color-scrim-lg: rgba(0, 0, 0, 0.6);
+    --fara-color-scrim-xl: rgba(0, 0, 0, 0.8);
+    --fara-color-scrim-light: rgba(17, 24, 39, 0.6);
+
+    /* Border colors */
+    --fara-color-border: #374151;
+    --fara-color-border-hover: #4b5563;
+    --fara-color-border-focus: var(--fara-color-primary);
+    --fara-color-border-light: #1f2937;
+
+    /* Shadows — deeper for dark surfaces */
+    --fara-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --fara-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --fara-shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.5);
+    --fara-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
 }
