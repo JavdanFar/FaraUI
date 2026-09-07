@@ -43,6 +43,48 @@
   background-color: var(--fara-color-secondary-active);
 }
 
+.danger {
+  background-color: var(--fara-color-danger);
+  color: var(--fara-color-text-inverse);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: var(--fara-color-danger-hover);
+}
+
+.success {
+  background-color: var(--fara-color-success);
+  color: var(--fara-color-text-inverse);
+}
+
+.success:hover:not(:disabled) {
+  background-color: var(--fara-color-success-hover);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--fara-color-primary);
+  border: var(--fara-border-width-thin) solid var(--fara-color-primary);
+}
+
+.outline:hover:not(:disabled) {
+  background-color: var(--fara-color-primary-bg);
+}
+
+.outline:active:not(:disabled) {
+  background-color: var(--fara-color-primary-border);
+}
+
+.ghost {
+  background-color: transparent;
+  color: var(--fara-color-text-secondary);
+}
+
+.ghost:hover:not(:disabled) {
+  background-color: var(--fara-color-background-secondary);
+  color: var(--fara-color-text);
+}
+
 .sm {
   padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
   font-size: var(--fara-font-size-sm);
