@@ -14,6 +14,14 @@
     z-index: var(--fara-z-popover);
     padding: var(--fara-spacing-md);
     min-width: 200px;
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+    transition: opacity var(--fara-transition-fast), transform var(--fara-transition-fast);
+}
+
+.contentVisible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 .contentEnd {

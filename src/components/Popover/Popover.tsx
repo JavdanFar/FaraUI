@@ -14,6 +14,22 @@ export function Popover({ trigger, children, align = "start", className }: Popov
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setIsVisible(true));
+      });
+    } else {
+      setIsVisible(false);
+      const timeout = setTimeout(() => setShouldRender(false), 150);
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -40,8 +56,15 @@ export function Popover({ trigger, children, align = "start", className }: Popov
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>
       <span onClick={() => setIsOpen((prev) => !prev)}>{trigger}</span>
 
-      {isOpen && (
-        <div className={clsx(styles.content, align === "end" && styles.contentEnd)} role="dialog">
+      {shouldRender && (
+        <div
+          className={clsx(
+            styles.content,
+            align === "end" && styles.contentEnd,
+            isVisible && styles.contentVisible,
+          )}
+          role="dialog"
+        >
           {children}
         </div>
       )}
