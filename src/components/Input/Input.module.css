@@ -31,7 +31,7 @@
 
 .error:focus {
     border-color: var(--fara-color-danger);
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    box-shadow: var(--fara-shadow-danger-focus);
 }
 
 .sm {

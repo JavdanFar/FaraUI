@@ -18,7 +18,7 @@
 }
 
 .starFilled {
-    color: #f59e0b;
+    color: var(--fara-color-star-active);
 }
 
 .star:not(:disabled):hover {
