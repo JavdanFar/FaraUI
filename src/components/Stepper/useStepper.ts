@@ -33,10 +33,9 @@ export function useStepper({ totalSteps, onFinish }: UseStepperOptions) {
     setActiveStep((s) => s - 1);
   }
 
-  // Jump directly to a step — only allowed for steps already completed or
-  // the current one, so users can't skip ahead into unfinished territory
   function goToStep(index: number) {
     if (isFinished) return;
+    if (index < 0 || index >= totalSteps) return;
     if (index === activeStep || completedSteps.has(index)) {
       setActiveStep(index);
     }

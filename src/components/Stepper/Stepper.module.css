@@ -4,6 +4,11 @@
     width: 100%;
 }
 
+.stepperVertical {
+    flex-direction: column;
+    align-items: stretch;
+}
+
 .step {
     display: flex;
     align-items: flex-start;
@@ -14,11 +19,35 @@
     flex: 0;
 }
 
-.circleColumn {
-    display: flex;
+.stepVertical {
     flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
+    align-items: stretch;
+    flex: 0 0 auto;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--fara-spacing-sm);
+    min-width: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    color: inherit;
+    text-align: start;
+}
+
+.headerClickable {
+    cursor: pointer;
+}
+
+.headerClickable:focus-visible {
+    outline: none;
+}
+
+.headerClickable:focus-visible .circle {
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .circle {
@@ -34,17 +63,13 @@
     color: var(--fara-color-text-secondary);
     font-size: var(--fara-font-size-sm);
     font-weight: var(--fara-font-weight-semibold);
-    cursor: default;
-    transition: border-color var(--fara-transition-fast), background-color var(--fara-transition-fast), color var(--fara-transition-fast);
-}
-
-.circleClickable {
-    cursor: pointer;
+    transition: border-color var(--fara-transition-fast), background-color var(--fara-transition-fast), color var(--fara-transition-fast), box-shadow var(--fara-transition-fast);
 }
 
 .circleActive {
     border-color: var(--fara-color-primary);
     color: var(--fara-color-primary);
+    box-shadow: 0 0 0 4px var(--fara-color-primary-bg);
 }
 
 .circleCompleted {
@@ -53,9 +78,27 @@
     color: var(--fara-color-text-inverse);
 }
 
+.checkIcon {
+    animation: stepperCheckIn var(--fara-transition-fast);
+}
+
+@keyframes stepperCheckIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .textColumn {
-    margin-inline-start: var(--fara-spacing-sm);
+    display: flex;
+    flex-direction: column;
     min-width: 0;
+    padding-top: 5px;
 }
 
 .label {
@@ -76,24 +119,70 @@
     white-space: nowrap;
 }
 
+/* Horizontal connector between two circles. The fill grows from the start
+   side (::after width) so progress appears to flow with the steps. */
 .connector {
+    position: relative;
     flex: 1;
+    min-width: var(--fara-spacing-md);
     height: var(--fara-border-width-medium);
-    background-color: var(--fara-color-border);
     margin: 15px var(--fara-spacing-sm) 0;
-    transition: background-color var(--fara-transition-fast);
+    background-color: var(--fara-color-border);
 }
 
-.connectorCompleted {
+.connectorVertical {
+    position: relative;
+    /* 16px = half the circle width, so the line sits under the circle's center */
+    margin-inline-start: calc(16px - var(--fara-border-width-medium) / 2);
+    width: var(--fara-border-width-medium);
+    min-height: var(--fara-spacing-lg);
+    background-color: var(--fara-color-border);
+}
+
+.connector::after,
+.connectorVertical::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
     background-color: var(--fara-color-primary);
+    transition: width var(--fara-transition-normal), height var(--fara-transition-normal);
+}
+
+.connector::after {
+    inset-block: 0;
+    width: 0;
+}
+
+.connectorVertical::after {
+    inset-inline: 0;
+    top: 0;
+    height: 0;
+}
+
+.connectorCompleted::after {
+    width: 100%;
+    height: 100%;
 }
 
 .content {
     margin-top: var(--fara-spacing-lg);
+    animation: stepperContentIn var(--fara-transition-normal);
 }
 
-.navigation {
-    display: flex;
-    justify-content: space-between;
-    margin-top: var(--fara-spacing-lg);
+.contentVertical {
+    /* Aligns with the text column: circle (32px) + header gap */
+    margin: var(--fara-spacing-sm) 0 0;
+    padding-inline-start: calc(32px + var(--fara-spacing-sm));
+}
+
+@keyframes stepperContentIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
