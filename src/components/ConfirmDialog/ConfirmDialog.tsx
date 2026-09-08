@@ -3,7 +3,6 @@ import clsx from "clsx";
 import styles from "./ConfirmDialog.module.css";
 import { Modal } from "../Modal";
 import { Button } from "../Button";
-import { Text } from "../Typography";
 
 export interface ConfirmDialogProps {
   open: boolean;
@@ -30,7 +29,7 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <Modal open={open} onClose={onClose} title={title}>
-      <Text>{message}</Text>
+      <p className={styles.message}>{message}</p>
 
       <div className={styles.actions}>
         <Button variant="secondary" onClick={onClose} disabled={loading}>
