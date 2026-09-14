@@ -214,14 +214,24 @@
 .timeList {
     list-style: none;
     margin: 0;
-    padding: 0;
     width: 44px;
     height: 220px;
+    padding: 94px 0;
+    box-sizing: border-box;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--fara-color-border) var(--fara-color-background-secondary);
     scrollbar-arrow-color: transparent;
     scroll-behavior: smooth;
+    cursor: grab;
+}
+
+.timeList[data-dragging="true"] {
+    cursor: grabbing;
+}
+
+.timeList[data-dragging="true"] .timeListItem {
+    cursor: grabbing;
 }
 
 .timeListItem {
@@ -232,6 +242,7 @@
     font-size: var(--fara-font-size-sm);
     cursor: pointer;
     border-radius: var(--fara-radius-sm);
+    user-select: none;
 }
 
 .timeListItem:hover:not(.timeListItemActive) {
@@ -402,6 +413,15 @@
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     scrollbar-width: none;
+    cursor: grab;
+}
+
+.scrollColumn[data-dragging="true"] {
+    cursor: grabbing;
+}
+
+.scrollColumn[data-dragging="true"] .scrollItem {
+    cursor: grabbing;
 }
 
 .scrollColumn::-webkit-scrollbar {
@@ -422,6 +442,7 @@
     cursor: pointer;
     font-size: var(--fara-font-size-md);
     color: var(--fara-color-text-tertiary);
+    user-select: none;
 }
 
 .scrollItemActive {

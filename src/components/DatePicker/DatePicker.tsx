@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./DatePicker.module.css";
+import { useSnapScroll } from "../../hooks/useSnapScroll";
 import {
   getJalaliMonthLength,
   getJalaliWeekday,
@@ -47,6 +48,7 @@ type YearMonth = { year: number; month: number };
 const MIN_YEAR = 1300;
 const MAX_YEAR = 1500;
 const ITEM_HEIGHT = 40;
+const TIME_ITEM_HEIGHT = 32;
 
 const YEAR_OPTIONS = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, i) => MIN_YEAR + i);
 
@@ -312,15 +314,36 @@ export function DatePicker({
     activeButton?.scrollIntoView({ block: "center" });
   }, [view, viewYear]);
 
+  // Centers a time value inside its list by scrolling only the list itself
+  // (unlike scrollIntoView, this never scrolls the page or the panel)
+  function centerTimeValue(
+    listRef: React.RefObject<HTMLElement | null>,
+    value: number,
+    behavior: ScrollBehavior,
+  ) {
+    const list = listRef.current;
+    const item = list?.querySelector<HTMLElement>(`[data-value="${value}"]`);
+    if (!list || !item) return;
+
+    const listRect = list.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const delta = itemRect.top + itemRect.height / 2 - (listRect.top + listRect.height / 2);
+    list.scrollTo({ top: list.scrollTop + delta, behavior });
+  }
+
+  // Snap to the current time the moment the panel opens — no animation
   useEffect(() => {
     if (!showTime || mode !== "calendar" || !isOpen) return;
-    hourListRef.current
-      ?.querySelector(`[data-value="${draftTimeRef.current.hour}"]`)
-      ?.scrollIntoView({ block: "center" });
-    minuteListRef.current
-      ?.querySelector(`[data-value="${draftTimeRef.current.minute}"]`)
-      ?.scrollIntoView({ block: "center" });
+    centerTimeValue(hourListRef, draftTimeRef.current.hour, "instant");
+    centerTimeValue(minuteListRef, draftTimeRef.current.minute, "instant");
   }, [showTime, mode, isOpen]);
+
+  // Keep the selected hour/minute centered whenever it changes
+  useEffect(() => {
+    if (!showTime || mode !== "calendar" || !isOpen) return;
+    centerTimeValue(hourListRef, draftTime.hour, "smooth");
+    centerTimeValue(minuteListRef, draftTime.minute, "smooth");
+  }, [showTime, mode, isOpen, draftTime.hour, draftTime.minute]);
 
   // ---- Scroll mode ----
 
@@ -340,6 +363,52 @@ export function DatePicker({
   );
 
   const programmaticScrollRef = useRef(false);
+
+  // ---- Wheel-stepped and draggable lists ----
+
+  useSnapScroll(hourListRef, {
+    itemHeight: TIME_ITEM_HEIGHT,
+    itemCount: 24,
+    enabled: isOpen && mode === "calendar" && view === "days" && showTime,
+    onIndexChange: (index) => setDraftTime((t) => ({ ...t, hour: index })),
+  });
+  useSnapScroll(minuteListRef, {
+    itemHeight: TIME_ITEM_HEIGHT,
+    itemCount: 60,
+    enabled: isOpen && mode === "calendar" && view === "days" && showTime,
+    onIndexChange: (index) => setDraftTime((t) => ({ ...t, minute: index })),
+  });
+
+  useSnapScroll(yearColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: yearOptions.length,
+    enabled: isOpen && mode === "scroll",
+    onIndexChange: (index) => setDraft((d) => ({ ...d, year: yearOptions[index] })),
+  });
+  useSnapScroll(monthColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: monthOptionIndices.length,
+    enabled: isOpen && mode === "scroll",
+    onIndexChange: (index) => setDraft((d) => ({ ...d, month: monthOptionIndices[index] })),
+  });
+  useSnapScroll(dayColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: dayOptions.length,
+    enabled: isOpen && mode === "scroll",
+    onIndexChange: (index) => setDraft((d) => ({ ...d, day: dayOptions[index] })),
+  });
+  useSnapScroll(hourColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: 24,
+    enabled: isOpen && mode === "scroll" && showTime,
+    onIndexChange: (index) => setDraftTime((t) => ({ ...t, hour: index })),
+  });
+  useSnapScroll(minuteColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: 60,
+    enabled: isOpen && mode === "scroll" && showTime,
+    onIndexChange: (index) => setDraftTime((t) => ({ ...t, minute: index })),
+  });
 
   useEffect(() => {
     if (mode !== "scroll" || !isOpen) return;
