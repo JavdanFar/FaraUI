@@ -1,0 +1,327 @@
+/* Demo-page styles — App.tsx only, never shipped in the library build */
+
+* {
+    scroll-behavior: smooth;
+}
+
+[id] {
+    scroll-margin-top: var(--fara-spacing-lg);
+}
+
+body {
+    margin: 0;
+    background-color: var(--fara-color-background-secondary);
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+    font-family: var(--fara-font-family);
+    color: var(--fara-color-text);
+    /* Gallery chrome — clicking labels/previews must not show a text caret */
+    user-select: none;
+}
+
+/* Real text entry stays selectable/editable */
+.app input,
+.app textarea,
+.app [contenteditable] {
+    user-select: text;
+}
+
+/* ----------------------------------------
+   Sidebar navigation
+   ---------------------------------------- */
+
+.nav {
+    width: 250px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    background-color: var(--fara-color-background);
+    border-left: 1px solid var(--fara-color-border-light);
+    padding: var(--fara-spacing-lg) var(--fara-spacing-md);
+    box-sizing: border-box;
+}
+
+.navBrand {
+    font-size: var(--fara-font-size-2xl);
+    font-weight: 800;
+    margin: 0 0 var(--fara-spacing-2xs);
+}
+
+.navBrand span {
+    color: var(--fara-color-primary);
+}
+
+.navSubtitle {
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    margin: 0 0 var(--fara-spacing-lg);
+    padding-bottom: var(--fara-spacing-md);
+    border-bottom: 1px solid var(--fara-color-border-light);
+}
+
+.navList {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navItem a {
+    display: flex;
+    align-items: baseline;
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
+    border-radius: var(--fara-radius-sm);
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
+    text-decoration: none;
+    transition: background-color var(--fara-transition-fast), color var(--fara-transition-fast);
+}
+
+.navItem a:hover {
+    background-color: var(--fara-color-background-secondary);
+    color: var(--fara-color-primary);
+}
+
+.navNumber {
+    font-family: var(--fara-font-family-mono);
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    min-width: 18px;
+}
+
+.navSubItem a {
+    padding-right: var(--fara-spacing-xl);
+    font-size: var(--fara-font-size-xs);
+}
+
+/* ----------------------------------------
+   Main content
+   ---------------------------------------- */
+
+.content {
+    flex: 1;
+    min-width: 0;
+    padding: var(--fara-spacing-2xl) var(--fara-spacing-2xl) var(--fara-spacing-3xl);
+    max-width: 1150px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.pageHeader {
+    margin-bottom: var(--fara-spacing-3xl);
+    padding-bottom: var(--fara-spacing-xl);
+    border-bottom: 1px solid var(--fara-color-border);
+}
+
+.pageTitle {
+    font-size: var(--fara-font-size-3xl);
+    font-weight: 800;
+    margin: 0 0 var(--fara-spacing-sm);
+}
+
+.pageSubtitle {
+    font-size: var(--fara-font-size-md);
+    color: var(--fara-color-text-secondary);
+    margin: 0;
+}
+
+/* ----------------------------------------
+   Sections & subsections
+   ---------------------------------------- */
+
+.section {
+    margin-bottom: var(--fara-spacing-3xl);
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    gap: var(--fara-spacing-md);
+    margin-bottom: var(--fara-spacing-sm);
+}
+
+.sectionNumber {
+    font-family: var(--fara-font-family-mono);
+    font-size: var(--fara-font-size-xl);
+    font-weight: 700;
+    color: var(--fara-color-primary);
+    background-color: var(--fara-color-primary-bg);
+    border: 1px solid var(--fara-color-primary-border);
+    border-radius: var(--fara-radius-md);
+    padding: var(--fara-spacing-2xs) var(--fara-spacing-sm);
+}
+
+.sectionTitle {
+    font-size: var(--fara-font-size-2xl);
+    font-weight: 700;
+    margin: 0;
+}
+
+.sectionDescription {
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-secondary);
+    margin: 0 0 var(--fara-spacing-xl);
+}
+
+.subsection {
+    margin-bottom: var(--fara-spacing-xl);
+}
+
+.subsectionTitle {
+    display: flex;
+    align-items: center;
+    gap: var(--fara-spacing-sm);
+    font-size: var(--fara-font-size-md);
+    font-weight: 600;
+    color: var(--fara-color-text-secondary);
+    margin: 0 0 var(--fara-spacing-md);
+}
+
+.subsectionTitle::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--fara-color-border-light);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--fara-spacing-md);
+}
+
+.gridWide {
+    grid-template-columns: 1fr;
+}
+
+.gridTwo {
+    grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+}
+
+/* ----------------------------------------
+   Demo cards
+   ---------------------------------------- */
+
+.demo {
+    background-color: var(--fara-color-background);
+    border: 1px solid var(--fara-color-border-light);
+    border-radius: var(--fara-radius-lg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* No overflow:hidden — popups (DatePicker, Select, ...) must be able to
+       overflow the card. Corners are rounded on the header/preview instead. */
+}
+
+/* While interacting with a card, raise it above the cards that follow,
+   so its overflowing popup is not painted underneath them */
+.demo:focus-within,
+.demo:hover {
+    z-index: 10;
+}
+
+.demoHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    border-bottom: 1px solid var(--fara-color-border-light);
+    background-color: var(--fara-color-background);
+    border-radius: var(--fara-radius-lg) var(--fara-radius-lg) 0 0;
+}
+
+.demoName {
+    font-family: var(--fara-font-family-mono);
+    font-size: var(--fara-font-size-sm);
+    font-weight: 600;
+    color: var(--fara-color-primary-text);
+    direction: ltr;
+}
+
+.demoTitle {
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-text-tertiary);
+    text-align: left;
+}
+
+.preview {
+    padding: var(--fara-spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fara-spacing-md);
+    background-color: var(--fara-color-background-secondary);
+    flex: 1;
+    border-radius: 0 0 var(--fara-radius-lg) var(--fara-radius-lg);
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--fara-spacing-sm);
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fara-spacing-sm);
+}
+
+.sidebarDemoBox {
+    height: 280px;
+    border: 1px solid var(--fara-color-border-light);
+    border-radius: var(--fara-radius-lg);
+    overflow: hidden;
+    display: flex;
+    background-color: var(--fara-color-background);
+}
+
+.sidebarNav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fara-spacing-xs);
+    padding: var(--fara-spacing-sm);
+    font-size: var(--fara-font-size-sm);
+}
+
+.sidebarNav span {
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
+    border-radius: var(--fara-radius-sm);
+    color: var(--fara-color-text-secondary);
+}
+
+/* ----------------------------------------
+   Responsive
+   ---------------------------------------- */
+
+@media (max-width: 900px) {
+    .app {
+        flex-direction: column;
+    }
+
+    .nav {
+        position: static;
+        width: 100%;
+        height: auto;
+        border-left: none;
+        border-bottom: 1px solid var(--fara-color-border-light);
+    }
+
+    .navList {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .content {
+        padding: var(--fara-spacing-xl) var(--fara-spacing-md);
+    }
+}
