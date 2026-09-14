@@ -102,6 +102,15 @@
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
     scrollbar-width: none;
+    cursor: grab;
+}
+
+.scrollColumn[data-dragging="true"] {
+    cursor: grabbing;
+}
+
+.scrollColumn[data-dragging="true"] .scrollItem {
+    cursor: grabbing;
 }
 
 .scrollColumn::-webkit-scrollbar {
@@ -123,6 +132,7 @@
     font-size: var(--fara-font-size-md);
     color: var(--fara-color-text-tertiary);
     font-variant-numeric: tabular-nums;
+    user-select: none;
 }
 
 .scrollItemActive {

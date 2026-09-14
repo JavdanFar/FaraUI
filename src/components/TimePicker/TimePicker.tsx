@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./TimePicker.module.css";
-
-export interface TimeValue {
-  hour: number;
-  minute: number;
-  second?: number;
-}
+import { useSnapScroll } from "../../hooks/useSnapScroll";
+import { getCurrentTime } from "./getCurrentTime";
+import type { TimeValue } from "./getCurrentTime";
 
 export interface TimePickerProps {
   value: TimeValue | null;
@@ -48,15 +45,6 @@ function formatTimeValue(value: TimeValue, format: "24h" | "12h", showSeconds: b
 function to24Hour(hour12: number, period: "AM" | "PM"): number {
   if (period === "AM") return hour12 === 12 ? 0 : hour12;
   return hour12 === 12 ? 12 : hour12 + 12;
-}
-
-export function getCurrentTime(): TimeValue {
-  const now = new Date();
-  return {
-    hour: now.getHours(),
-    minute: now.getMinutes(),
-    second: now.getSeconds(),
-  };
 }
 
 export function TimePicker({
@@ -113,36 +101,42 @@ export function TimePicker({
   const displayHour12 = draft.hour % 12 === 0 ? 12 : draft.hour % 12;
   const displayPeriod: "AM" | "PM" = draft.hour < 12 ? "AM" : "PM";
 
+  // Latest draft for the "center on open" effect below, so it can depend on
+  // [isOpen] only without re-running while the user scrolls the columns
+  const draftRef = useRef(draft);
+  useEffect(() => {
+    draftRef.current = draft;
+  });
+
   useEffect(() => {
     if (!isOpen) return;
 
-    const hourDisplayValue = format === "24h" ? draft.hour : displayHour12;
+    const current = draftRef.current;
+    const currentHour12 = current.hour % 12 === 0 ? 12 : current.hour % 12;
+    const currentPeriod: "AM" | "PM" = current.hour < 12 ? "AM" : "PM";
+
+    const hourDisplayValue = format === "24h" ? current.hour : currentHour12;
     hourColumnRef.current
       ?.querySelector(`[data-value="${hourDisplayValue}"]`)
       ?.scrollIntoView({ block: "center" });
     minuteColumnRef.current
-      ?.querySelector(`[data-value="${draft.minute}"]`)
+      ?.querySelector(`[data-value="${current.minute}"]`)
       ?.scrollIntoView({ block: "center" });
     if (showSeconds) {
       secondColumnRef.current
-        ?.querySelector(`[data-value="${draft.second ?? 0}"]`)
+        ?.querySelector(`[data-value="${current.second ?? 0}"]`)
         ?.scrollIntoView({ block: "center" });
     }
     if (format === "12h") {
       periodColumnRef.current
-        ?.querySelector(`[data-value="${displayPeriod}"]`)
+        ?.querySelector(`[data-value="${currentPeriod}"]`)
         ?.scrollIntoView({ block: "center" });
     }
-  }, [isOpen]);
+  }, [isOpen, format, showSeconds]);
 
-  function handleColumnScroll(
-    columnRef: React.RefObject<HTMLDivElement | null>,
-    optionsLength: number,
-    applyIndex: (index: number) => void,
-  ) {
-    return () => {
-      const el = columnRef.current;
-      if (!el) return;
+  function handleColumnScroll(optionsLength: number, applyIndex: (index: number) => void) {
+    return (event: React.UIEvent<HTMLDivElement>) => {
+      const el = event.currentTarget;
       const rawIndex = Math.round(el.scrollTop / ITEM_HEIGHT);
       applyIndex(Math.max(0, Math.min(optionsLength - 1, rawIndex)));
     };
@@ -178,6 +172,35 @@ export function TimePicker({
 
   const hourOptions = format === "24h" ? HOURS_24 : HOURS_12;
 
+  useSnapScroll(hourColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: hourOptions.length,
+    enabled: isOpen,
+    onIndexChange: (index) => {
+      const selected = hourOptions[index];
+      if (format === "24h") setHourFrom24(selected);
+      else setHourFrom12(selected);
+    },
+  });
+  useSnapScroll(minuteColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: MINUTES_SECONDS.length,
+    enabled: isOpen,
+    onIndexChange: (index) => setDraft((d) => ({ ...d, minute: index })),
+  });
+  useSnapScroll(secondColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: MINUTES_SECONDS.length,
+    enabled: isOpen && showSeconds,
+    onIndexChange: (index) => setDraft((d) => ({ ...d, second: index })),
+  });
+  useSnapScroll(periodColumnRef, {
+    itemHeight: ITEM_HEIGHT,
+    itemCount: PERIODS.length,
+    enabled: isOpen && format === "12h",
+    onIndexChange: (index) => setPeriod(PERIODS[index].value),
+  });
+
   return (
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
       <input
@@ -205,7 +228,7 @@ export function TimePicker({
               <div
                 ref={hourColumnRef}
                 className={styles.scrollColumn}
-                onScroll={handleColumnScroll(hourColumnRef, hourOptions.length, (index) => {
+                onScroll={handleColumnScroll(hourOptions.length, (index) => {
                   const selected = hourOptions[index];
                   if (format === "24h") setHourFrom24(selected);
                   else setHourFrom12(selected);
@@ -238,7 +261,7 @@ export function TimePicker({
               <div
                 ref={minuteColumnRef}
                 className={styles.scrollColumn}
-                onScroll={handleColumnScroll(minuteColumnRef, MINUTES_SECONDS.length, (index) =>
+                onScroll={handleColumnScroll(MINUTES_SECONDS.length, (index) =>
                   setDraft((d) => ({ ...d, minute: index })),
                 )}
               >
@@ -270,7 +293,7 @@ export function TimePicker({
                   <div
                     ref={secondColumnRef}
                     className={styles.scrollColumn}
-                    onScroll={handleColumnScroll(secondColumnRef, MINUTES_SECONDS.length, (index) =>
+                    onScroll={handleColumnScroll(MINUTES_SECONDS.length, (index) =>
                       setDraft((d) => ({ ...d, second: index })),
                     )}
                   >
@@ -302,7 +325,7 @@ export function TimePicker({
                 <div
                   ref={periodColumnRef}
                   className={styles.scrollColumn}
-                  onScroll={handleColumnScroll(periodColumnRef, PERIODS.length, (index) =>
+                  onScroll={handleColumnScroll(PERIODS.length, (index) =>
                     setPeriod(PERIODS[index].value),
                   )}
                 >
