@@ -7,5 +7,5 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function Card({ className, ref, ...rest }: CardProps) {
-  return <div ref={ref} className={clsx(styles.card, className)} {...rest} />;
+  return <div ref={ref} data-fara-card className={clsx(styles.card, className)} {...rest} />;
 }
