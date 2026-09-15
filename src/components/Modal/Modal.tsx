@@ -56,14 +56,21 @@ export function Modal({ open, onClose, children, title, className }: ModalProps)
   if (!shouldRender) return null;
 
   return createPortal(
-    <div className={clsx(styles.overlay, isVisible && styles.overlayVisible)} onMouseDown={onClose}>
+    <div
+      className={clsx(styles.overlay, isVisible && styles.overlayVisible)}
+      data-fara-modal-overlay
+      data-open={isVisible || undefined}
+      onMouseDown={onClose}
+    >
       <div
         className={clsx(styles.modal, isVisible && styles.modalVisible, className)}
+        data-fara-modal
+        data-open={isVisible || undefined}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div className={styles.header}>
-          {title && <h2>{title}</h2>}
-          <button className={styles.closeButton} onClick={onClose} aria-label="بستن">
+        <div className={styles.header} data-fara-modal-header>
+          {title && <h2 data-fara-modal-title>{title}</h2>}
+          <button className={styles.closeButton} data-fara-modal-close onClick={onClose} aria-label="بستن">
             ✕
           </button>
         </div>
