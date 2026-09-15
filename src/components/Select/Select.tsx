@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import type { Ref } from "react";
 import clsx from "clsx";
 import styles from "./Select.module.css";
 import { AnchoredPopup } from "../AnchoredPopup";
@@ -15,6 +16,7 @@ export interface SelectProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
 export function Select({
@@ -24,10 +26,17 @@ export function Select({
   placeholder = "انتخاب کنید...",
   disabled = false,
   className,
+  ref,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function setTriggerRef(element: HTMLInputElement | null) {
+    inputRef.current = element;
+    if (typeof ref === "function") ref(element);
+    else if (ref) ref.current = element;
+  }
 
   const selectedOption = options.find((opt) => opt.value === value);
 
@@ -49,7 +58,7 @@ export function Select({
   return (
     <div data-fara-select className={clsx(styles.wrapper, className)}>
       <input
-        ref={inputRef}
+        ref={setTriggerRef}
         className={styles.trigger}
         data-fara-select-trigger
         disabled={disabled}
