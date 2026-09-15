@@ -25,6 +25,8 @@ export function Skeleton({
         variant === "rectangle" && styles.rectangle,
         className,
       )}
+      data-fara-skeleton
+      data-variant={variant}
       style={{ width, height, ...style }}
       aria-hidden="true"
       {...rest}
