@@ -13,20 +13,18 @@ export interface ModalProps {
 }
 
 export function Modal({ open, onClose, children, title, className }: ModalProps) {
-  const [shouldRender, setShouldRender] = useState(open);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setShouldRender(true);
-      requestAnimationFrame(() => {
+      const raf = requestAnimationFrame(() => {
         requestAnimationFrame(() => setIsVisible(true));
       });
-    } else {
-      setIsVisible(false);
-      const timeout = setTimeout(() => setShouldRender(false), 250);
-      return () => clearTimeout(timeout);
+      return () => cancelAnimationFrame(raf);
     }
+
+    const timeout = setTimeout(() => setIsVisible(false), 250);
+    return () => clearTimeout(timeout);
   }, [open]);
 
   useEffect(() => {
@@ -53,19 +51,19 @@ export function Modal({ open, onClose, children, title, className }: ModalProps)
     };
   }, [open, onClose]);
 
-  if (!shouldRender) return null;
+  if (!open && !isVisible) return null;
 
   return createPortal(
     <div
-      className={clsx(styles.overlay, isVisible && styles.overlayVisible)}
+      className={clsx(styles.overlay, open && isVisible && styles.overlayVisible)}
       data-fara-modal-overlay
-      data-open={isVisible || undefined}
+      data-open={(open && isVisible) || undefined}
       onMouseDown={onClose}
     >
       <div
-        className={clsx(styles.modal, isVisible && styles.modalVisible, className)}
+        className={clsx(styles.modal, open && isVisible && styles.modalVisible, className)}
         data-fara-modal
-        data-open={isVisible || undefined}
+        data-open={(open && isVisible) || undefined}
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className={styles.header} data-fara-modal-header>
