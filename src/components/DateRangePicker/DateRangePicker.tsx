@@ -209,14 +209,15 @@ export function DateRangePicker({
     const dayCells = Array.from({ length: monthLength }, (_, i) => i + 1);
 
     return (
-      <div className={styles.monthColumn} key={`${y}-${m}`}>
-        <div className={styles.monthTitle}>
+      <div className={styles.monthColumn} key={`${y}-${m}`} data-fara-date-range-picker-month-column>
+        <div className={styles.monthTitle} data-fara-date-range-picker-month-title>
           {PERSIAN_MONTHS[m - 1]} {y}
         </div>
-        <div className={styles.daysGrid}>
+        <div className={styles.daysGrid} data-fara-date-range-picker-days-grid>
           {PERSIAN_WEEKDAYS.map((day, index) => (
             <div
               key={day}
+              data-fara-date-range-picker-weekday
               className={clsx(
                 styles.weekday,
                 index === FRIDAY_WEEKDAY_INDEX && styles.weekdayFriday,
@@ -254,6 +255,10 @@ export function DateRangePicker({
               <button
                 key={day}
                 type="button"
+                data-fara-date-range-picker-day-cell
+                data-selected={isStart || isEnd || undefined}
+                data-in-range={inRange || undefined}
+                data-today={isToday || undefined}
                 className={clsx(styles.dayCell, variantClass)}
                 disabled={cellDisabled}
                 onClick={() => handleDayClick(cellDate)}
@@ -275,10 +280,16 @@ export function DateRangePicker({
     : "";
 
   return (
-    <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
+    <div
+      ref={wrapperRef}
+      data-fara-date-range-picker
+      className={clsx(styles.wrapper, className)}
+      dir="rtl"
+    >
       <input
         ref={inputRef}
         readOnly
+        data-fara-date-range-picker-input
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
@@ -292,12 +303,15 @@ export function DateRangePicker({
         onClose={() => setIsOpen(false)}
         className={styles.panel}
         gap={4}
+        dataFara="date-range-picker-panel"
       >
         <div onMouseLeave={() => setHoverDate(null)}>
-          <div className={styles.header}>
+          <div className={styles.header} data-fara-date-range-picker-header>
             <button
               type="button"
               className={styles.navButton}
+              data-fara-date-range-picker-nav-button
+              data-direction="previous"
               onClick={goToPreviousMonth}
               disabled={!canGoPrev}
               aria-label="ماه قبل"
@@ -309,6 +323,8 @@ export function DateRangePicker({
             <button
               type="button"
               className={styles.navButton}
+              data-fara-date-range-picker-nav-button
+              data-direction="next"
               onClick={goToNextMonth}
               disabled={!canGoNext}
               aria-label="ماه بعد"
@@ -318,18 +334,24 @@ export function DateRangePicker({
             </button>
           </div>
 
-          <div className={styles.monthsRow}>
+          <div className={styles.monthsRow} data-fara-date-range-picker-months-row>
             {renderMonth(viewYear, viewMonth)}
             {renderMonth(nextMonth.year, nextMonth.month)}
           </div>
 
-          <div className={styles.footer}>
-            <button type="button" className={styles.footerButton} onClick={handleGoToToday}>
+          <div className={styles.footer} data-fara-date-range-picker-footer>
+            <button
+              type="button"
+              className={styles.footerButton}
+              data-fara-date-range-picker-footer-button
+              onClick={handleGoToToday}
+            >
               برو به امروز
             </button>
             <button
               type="button"
               className={clsx(styles.footerButton, styles.footerButtonPrimary)}
+              data-fara-date-range-picker-footer-button
               onClick={handleConfirm}
               disabled={!draftStart}
             >
