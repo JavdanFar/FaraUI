@@ -148,16 +148,22 @@ export function Slider(props: SliderProps | SliderRangeProps) {
       : String(value);
 
   return (
-    <div className={clsx(styles.wrapper, className)}>
+    <div
+      data-fara-slider
+      data-range={isRange || undefined}
+      data-disabled={disabled || undefined}
+      className={clsx(styles.wrapper, className)}
+    >
       {(label || showValue) && (
-        <div className={styles.labelRow}>
+        <div data-fara-slider-label-row className={styles.labelRow}>
           <span>{label}</span>
-          {showValue && <span className={styles.valueText}>{displayText}</span>}
+          {showValue && <span data-fara-slider-value className={styles.valueText}>{displayText}</span>}
         </div>
       )}
 
       <div
         ref={trackRef}
+        data-fara-slider-track
         className={clsx(styles.track, disabled && styles.disabled)}
         dir="ltr"
         onPointerDown={handlePointerDown}
@@ -167,18 +173,25 @@ export function Slider(props: SliderProps | SliderRangeProps) {
         onLostPointerCapture={endDrag}
       >
         <div
+          data-fara-slider-fill
           className={styles.fill}
           style={{ left: `${percentMin}%`, width: `${percentMax - percentMin}%` }}
         />
 
         {isRange && (
           <div
+            data-fara-slider-thumb
+            data-handle="min"
+            data-active={dragState.activeHandle === "min" || undefined}
             className={clsx(styles.thumb, dragState.activeHandle === "min" && styles.thumbActive)}
             style={{ left: `${percentMin}%` }}
           />
         )}
 
         <div
+          data-fara-slider-thumb
+          data-handle="max"
+          data-active={dragState.activeHandle === "max" || undefined}
           className={clsx(styles.thumb, dragState.activeHandle === "max" && styles.thumbActive)}
           style={{ left: `${percentMax}%` }}
         />
@@ -186,6 +199,7 @@ export function Slider(props: SliderProps | SliderRangeProps) {
         <input
           ref={ref}
           type="range"
+          data-fara-slider-input
           className={styles.input}
           min={min}
           max={max}
