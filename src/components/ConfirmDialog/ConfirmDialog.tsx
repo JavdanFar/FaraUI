@@ -29,15 +29,22 @@ export function ConfirmDialog({
 }: ConfirmDialogProps) {
   return (
     <Modal open={open} onClose={onClose} title={title}>
-      <p className={styles.message}>{message}</p>
+      <p className={styles.message} data-fara-confirm-dialog-message>{message}</p>
 
-      <div className={styles.actions}>
-        <Button variant="secondary" onClick={onClose} disabled={loading}>
+      <div className={styles.actions} data-fara-confirm-dialog-actions data-loading={loading || undefined}>
+        <Button
+          variant="secondary"
+          data-fara-confirm-dialog-cancel
+          onClick={onClose}
+          disabled={loading}
+        >
           {cancelLabel}
         </Button>
         <Button
           variant="primary"
           className={clsx(danger && styles.confirmDanger)}
+          data-fara-confirm-dialog-confirm
+          data-danger={danger || undefined}
           onClick={onConfirm}
           disabled={loading}
         >
