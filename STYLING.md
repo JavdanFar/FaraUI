@@ -60,6 +60,8 @@ Hooks are listed in short form: `-track` on `ProgressBar` means `data-fara-progr
 
 ### Form controls
 
+- **Form**: `form` (the `<form>` element) — `Form.Field` renders no DOM of its own and passes field props (`value`/`checked`, `onChange`, `onBlur`, `ref`) to whatever you render
+
 - **Input**: `input` (the element itself is the root, `data-error`)
 - **Textarea**: `textarea` (root, `data-error`)
 - **Checkbox**: `checkbox` (root), `-input`
