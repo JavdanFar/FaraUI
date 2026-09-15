@@ -33,6 +33,7 @@ export function Popover({ trigger, children, align = "start", className }: Popov
 
   function closePopover() {
     if (!shouldRender) return;
+    setIsOpen(false);
     setIsVisible(false);
     closeTimer.current = window.setTimeout(() => setShouldRender(false), EXIT_ANIMATION_MS);
   }
@@ -46,8 +47,8 @@ export function Popover({ trigger, children, align = "start", className }: Popov
   }
 
   return (
-    <div className={clsx(styles.wrapper, className)}>
-      <span ref={triggerRef} onClick={togglePopover}>
+    <div data-fara-popover className={clsx(styles.wrapper, className)}>
+      <span ref={triggerRef} data-fara-popover-trigger onClick={togglePopover}>
         {trigger}
       </span>
 
@@ -57,6 +58,7 @@ export function Popover({ trigger, children, align = "start", className }: Popov
         onClose={closePopover}
         className={clsx(styles.content, isVisible && styles.contentVisible)}
         align={align}
+        dataFara="popover-content"
       >
         <div role="dialog">{children}</div>
       </AnchoredPopup>
