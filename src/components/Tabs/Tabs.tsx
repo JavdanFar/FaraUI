@@ -29,7 +29,9 @@ function Root({ defaultValue, children, className }: TabsRootProps) {
 
   return (
     <TabsContext.Provider value={{ activeTab, setActiveTab }}>
-      <div className={className}>{children}</div>
+      <div className={className} data-fara-tabs>
+        {children}
+      </div>
     </TabsContext.Provider>
   );
 }
@@ -40,7 +42,7 @@ export interface TabsListProps {
 
 function List({ children }: TabsListProps) {
   return (
-    <div className={styles.list} role="tablist">
+    <div className={styles.list} role="tablist" data-fara-tabs-list>
       {children}
     </div>
   );
@@ -63,6 +65,8 @@ function Tab({ value, children, disabled }: TabsTabProps) {
       aria-selected={isActive}
       disabled={disabled}
       className={clsx(styles.tab, isActive && styles.tabActive)}
+      data-fara-tabs-tab
+      data-active={isActive || undefined}
       onClick={() => setActiveTab(value)}
     >
       {children}
@@ -81,7 +85,7 @@ function Panel({ value, children }: TabsPanelProps) {
   if (activeTab !== value) return null;
 
   return (
-    <div className={styles.panel} role="tabpanel">
+    <div className={styles.panel} role="tabpanel" data-fara-tabs-panel>
       {children}
     </div>
   );
