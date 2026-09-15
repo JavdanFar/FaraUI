@@ -9,6 +9,12 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export function Input({ error = false, className, ref, ...rest }: InputProps) {
   return (
-    <input ref={ref} className={clsx(styles.input, error && styles.error, className)} {...rest} />
+    <input
+      ref={ref}
+      data-fara-input
+      data-error={error || undefined}
+      className={clsx(styles.input, error && styles.error, className)}
+      {...rest}
+    />
   );
 }
