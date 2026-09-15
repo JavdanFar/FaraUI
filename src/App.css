@@ -269,6 +269,11 @@ body {
     gap: var(--fara-spacing-sm);
 }
 
+.fieldError {
+    font-size: var(--fara-font-size-xs);
+    color: var(--fara-color-danger);
+}
+
 .sidebarDemoBox {
     height: 280px;
     border: 1px solid var(--fara-color-border-light);

@@ -20,6 +20,7 @@ import {
   DropdownMenu,
   DropdownMenuItem,
   FileUpload,
+  Form,
   Input,
   Modal,
   NotificationBadge,
@@ -440,6 +441,64 @@ function FormsSection() {
             onFilesSelected={() => showToast("فایل انتخاب شد", "success")}
             onRejected={(rejected) => rejected.forEach((r) => showToast(r.message, "danger"))}
           />
+        </Demo>
+      </Subsection>
+
+      <Subsection id="forms-validation" title="اعتبارسنجی فرم">
+        <Demo name="Form" title="قواعد declarative، touched و فوکوس روی اولین فیلد نامعتبر" span="wide">
+          <Form
+            initialValues={{ name: "", email: "", city: "", terms: false }}
+            rules={{
+              name: { required: "نام الزامی است", minLength: [3, "نام باید حداقل ۳ حرف باشد"] },
+              email: {
+                required: "ایمیل الزامی است",
+                pattern: [/^\S+@\S+\.\S+$/, "ایمیل معتبر نیست"],
+              },
+              city: { required: "شهر را انتخاب کنید" },
+              terms: { required: "پذیرش قوانین الزامی است" },
+            }}
+            onSubmit={(values) => showToast(`خوش آمدید، ${values.name}`, "success")}
+          >
+            <div className="column">
+              <Form.Field name="name">
+                {(field, error) => (
+                  <div className="column">
+                    <Input placeholder="نام و نام خانوادگی" {...field} error={!!error} />
+                    {error && <span className="fieldError">{error}</span>}
+                  </div>
+                )}
+              </Form.Field>
+
+              <Form.Field name="email">
+                {(field, error) => (
+                  <div className="column">
+                    <Input placeholder="ایمیل" {...field} error={!!error} />
+                    {error && <span className="fieldError">{error}</span>}
+                  </div>
+                )}
+              </Form.Field>
+
+              <Form.Field name="city">
+                {(field, error) => (
+                  <div className="column">
+                    <Select options={selectOptions} placeholder="شهر" {...field} />
+                    {error && <span className="fieldError">{error}</span>}
+                  </div>
+                )}
+              </Form.Field>
+
+              <Form.Field<boolean> name="terms">
+                {(field, error) => (
+                  <div className="column">
+                    <Checkbox label="قوانین را می‌پذیرم" {...field} />
+                    {error && <span className="fieldError">{error}</span>}
+                  </div>
+                )}
+              </Form.Field>
+
+              <Button type="submit">ثبت‌نام</Button>
+            </div>
+          </Form>
         </Demo>
       </Subsection>
     </Section>
