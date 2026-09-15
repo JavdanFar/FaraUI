@@ -8,5 +8,13 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 export function Badge({ variant = "primary", className, ref, ...rest }: BadgeProps) {
-  return <span ref={ref} className={clsx(styles.badge, styles[variant], className)} {...rest} />;
+  return (
+    <span
+      ref={ref}
+      data-fara-badge
+      data-variant={variant}
+      className={clsx(styles.badge, styles[variant], className)}
+      {...rest}
+    />
+  );
 }
