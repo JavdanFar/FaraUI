@@ -1,7 +1,10 @@
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import styles from "./Popover.module.css";
+import { AnchoredPopup } from "../AnchoredPopup";
+
+const EXIT_ANIMATION_MS = 150;
 
 export interface PopoverProps {
   trigger: ReactNode;
@@ -12,62 +15,51 @@ export interface PopoverProps {
 
 export function Popover({ trigger, children, align = "start", className }: PopoverProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLSpanElement>(null);
 
   const [shouldRender, setShouldRender] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const closeTimer = useRef<number | undefined>(undefined);
 
-  useEffect(() => {
-    if (isOpen) {
-      setShouldRender(true);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setIsVisible(true));
-      });
-    } else {
-      setIsVisible(false);
-      const timeout = setTimeout(() => setShouldRender(false), 150);
-      return () => clearTimeout(timeout);
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  function openPopover() {
+    window.clearTimeout(closeTimer.current);
+    if (!shouldRender) setShouldRender(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsVisible(true));
+    });
+  }
+
+  function closePopover() {
+    if (!shouldRender) return;
+    setIsVisible(false);
+    closeTimer.current = window.setTimeout(() => setShouldRender(false), EXIT_ANIMATION_MS);
+  }
+
+  function togglePopover() {
+    if (isOpen) closePopover();
+    else {
+      setIsOpen(true);
+      openPopover();
     }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsOpen(false);
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
+  }
 
   return (
-    <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>
-      <span onClick={() => setIsOpen((prev) => !prev)}>{trigger}</span>
+    <div className={clsx(styles.wrapper, className)}>
+      <span ref={triggerRef} onClick={togglePopover}>
+        {trigger}
+      </span>
 
-      {shouldRender && (
-        <div
-          className={clsx(
-            styles.content,
-            align === "end" && styles.contentEnd,
-            isVisible && styles.contentVisible,
-          )}
-          role="dialog"
-        >
-          {children}
-        </div>
-      )}
+      <AnchoredPopup
+        open={shouldRender}
+        anchorRef={triggerRef}
+        onClose={closePopover}
+        className={clsx(styles.content, isVisible && styles.contentVisible)}
+        align={align}
+      >
+        <div role="dialog">{children}</div>
+      </AnchoredPopup>
     </div>
   );
 }

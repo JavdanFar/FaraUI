@@ -4,14 +4,11 @@
 }
 
 .content {
-    position: absolute;
-    top: calc(100% + var(--fara-spacing-xs));
-    inset-inline-start: 0;
+    box-sizing: border-box;
     background-color: var(--fara-color-background);
     border: var(--fara-border-width-thin) solid var(--fara-color-border);
     border-radius: var(--fara-radius-md);
     box-shadow: var(--fara-shadow-md);
-    z-index: var(--fara-z-popover);
     padding: var(--fara-spacing-md);
     min-width: 200px;
     opacity: 0;
@@ -22,9 +19,4 @@
 .contentVisible {
     opacity: 1;
     transform: translateY(0) scale(1);
-}
-
-.contentEnd {
-    inset-inline-start: auto;
-    inset-inline-end: 0;
 }
