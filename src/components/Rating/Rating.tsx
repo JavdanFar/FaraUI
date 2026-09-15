@@ -15,12 +15,14 @@ export function Rating({ value, onChange, max = 5, readOnly = false, className }
   const displayValue = hoverValue ?? value;
 
   return (
-    <div className={clsx(styles.wrapper, className)} role="radiogroup" aria-label="امتیاز">
+    <div data-fara-rating className={clsx(styles.wrapper, className)} role="radiogroup" aria-label="امتیاز">
       {Array.from({ length: max }, (_, i) => i + 1).map((starValue) => (
         <button
           key={starValue}
           type="button"
           disabled={readOnly}
+          data-fara-rating-star
+          data-filled={starValue <= displayValue || undefined}
           className={clsx(styles.star, starValue <= displayValue && styles.starFilled)}
           onClick={() => onChange?.(starValue)}
           onMouseEnter={() => !readOnly && setHoverValue(starValue)}
