@@ -104,11 +104,16 @@ export function FileUpload({
   }
 
   return (
-    <div className={className}>
+    <div data-fara-file-upload className={className}>
       <div
         role="button"
         tabIndex={isDisabled ? -1 : 0}
         aria-disabled={isDisabled}
+        data-fara-file-upload-dropzone
+        data-variant={variant}
+        data-drag-active={isDragActive || undefined}
+        data-error={rejections.length > 0 || undefined}
+        data-disabled={isDisabled || undefined}
         className={clsx(
           styles.dropzone,
           isPreviewVariant && styles.dropzonePreview,
@@ -139,12 +144,14 @@ export function FileUpload({
             <img
               src={previewFile.url}
               alt={previewFile.name}
+              data-fara-file-upload-preview-image
               className={styles.previewDropzoneImage}
             />
 
             {onRemoveFile && (
               <button
                 type="button"
+                data-fara-file-upload-preview-remove
                 className={styles.previewDropzoneRemove}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -159,6 +166,7 @@ export function FileUpload({
         ) : (
           <>
             <svg
+              data-fara-file-upload-icon
               className={styles.icon}
               width="32"
               height="32"
@@ -174,8 +182,8 @@ export function FileUpload({
               <line x1="12" y1="3" x2="12" y2="15" />
             </svg>
 
-            <span>{label}</span>
-            {hint && <span className={styles.hint}>{hint}</span>}
+            <span data-fara-file-upload-label>{label}</span>
+            {hint && <span data-fara-file-upload-hint className={styles.hint}>{hint}</span>}
           </>
         )}
 
@@ -183,6 +191,7 @@ export function FileUpload({
           id={inputId}
           ref={inputRef}
           type="file"
+          data-fara-file-upload-input
           className={styles.hiddenInput}
           accept={accept}
           multiple={multiple}
@@ -192,18 +201,17 @@ export function FileUpload({
       </div>
 
       {rejections.length > 0 && (
-        <div className={styles.rejections}>
+        <div data-fara-file-upload-rejections className={styles.rejections}>
           {rejections.map((r, i) => (
-            <div key={i} className={styles.rejectionItem}>
+            <div key={i} data-fara-file-upload-rejection className={styles.rejectionItem}>
               {r.message}
             </div>
           ))}
         </div>
       )}
 
-      {/* File grid is skipped entirely in preview mode — the dropzone IS the preview */}
       {!isPreviewVariant && files && files.length > 0 && (
-        <div className={styles.fileGrid}>
+        <div data-fara-file-upload-file-list className={styles.fileGrid}>
           {files.map((item) => {
             const isImage = item.file
               ? item.file.type.startsWith("image/")
@@ -222,6 +230,9 @@ export function FileUpload({
             return (
               <div
                 key={item.id}
+                data-fara-file-upload-item
+                data-status={item.status}
+                data-clickable={isClickable || undefined}
                 className={clsx(
                   styles.fileCard,
                   isClickable && styles.fileCardClickable,
@@ -230,9 +241,14 @@ export function FileUpload({
                 onClick={isClickable ? handleCardClick : undefined}
               >
                 {isImage ? (
-                  <img src={item.url} alt={item.name} className={styles.previewImage} />
+                  <img
+                    src={item.url}
+                    alt={item.name}
+                    data-fara-file-upload-item-preview
+                    className={styles.previewImage}
+                  />
                 ) : (
-                  <div className={styles.previewPlaceholder}>
+                  <div data-fara-file-upload-item-placeholder className={styles.previewPlaceholder}>
                     <svg
                       width="32"
                       height="32"
@@ -248,13 +264,17 @@ export function FileUpload({
                 )}
 
                 {item.status === "uploading" && (
-                  <div className={styles.progressOverlay}>
+                  <div data-fara-file-upload-item-progress className={styles.progressOverlay}>
                     {item.progress !== undefined ? `${Math.round(item.progress)}%` : "..."}
                   </div>
                 )}
 
                 {item.status === "success" && (
-                  <span className={clsx(styles.statusIcon, styles.statusIconSuccess)}>
+                  <span
+                    data-fara-file-upload-item-status
+                    data-status="success"
+                    className={clsx(styles.statusIcon, styles.statusIconSuccess)}
+                  >
                     <svg
                       width="12"
                       height="12"
@@ -269,7 +289,11 @@ export function FileUpload({
                 )}
 
                 {item.status === "error" && (
-                  <span className={clsx(styles.statusIcon, styles.statusIconError)}>
+                  <span
+                    data-fara-file-upload-item-status
+                    data-status="error"
+                    className={clsx(styles.statusIcon, styles.statusIconError)}
+                  >
                     <svg
                       width="12"
                       height="12"
@@ -284,13 +308,22 @@ export function FileUpload({
                   </span>
                 )}
 
-                <div className={styles.fileCardFooter}>
-                  <div className={styles.fileCardName}>{item.name}</div>
+                <div data-fara-file-upload-item-footer className={styles.fileCardFooter}>
+                  <div data-fara-file-upload-item-name className={styles.fileCardName}>
+                    {item.name}
+                  </div>
                   {item.status === "error" && item.errorMessage ? (
-                    <div className={styles.fileCardErrorText}>{item.errorMessage}</div>
+                    <div
+                      data-fara-file-upload-item-error-text
+                      className={styles.fileCardErrorText}
+                    >
+                      {item.errorMessage}
+                    </div>
                   ) : (
                     item.size !== undefined && (
-                      <div className={styles.fileCardSize}>{formatFileSize(item.size)}</div>
+                      <div data-fara-file-upload-item-size className={styles.fileCardSize}>
+                        {formatFileSize(item.size)}
+                      </div>
                     )
                   )}
                 </div>
@@ -298,6 +331,7 @@ export function FileUpload({
                 {onRemoveFile && (
                   <button
                     type="button"
+                    data-fara-file-upload-item-remove
                     className={styles.fileCardRemove}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -321,7 +355,12 @@ export function FileUpload({
           title={previewItem?.name}
         >
           {previewItem && (
-            <img src={previewItem.url} alt={previewItem.name} className={styles.previewLarge} />
+            <img
+              src={previewItem.url}
+              alt={previewItem.name}
+              data-fara-file-upload-preview-large
+              className={styles.previewLarge}
+            />
           )}
         </Modal>
       )}
