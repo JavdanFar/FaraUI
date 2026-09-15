@@ -76,7 +76,7 @@ Hooks are listed in short form: `-track` on `ProgressBar` means `data-fara-progr
 - **Drawer**: `drawer-overlay` (`data-open`), `drawer` (`data-open`, `data-side`), `-header`, `-title`, `-close`, `-body`
 - **ConfirmDialog** (renders through Modal): `-message`, `-actions` (`data-loading`), `-cancel`, `-confirm` (`data-danger`)
 - **Alert**: `alert` (root, `data-variant`, `data-open`), `-content`, `-close`
-- **Toast**: `toaster` (portal container), `toast` (`data-variant`), `-message`, `-close`, `-progress`
+- **Toast**: `toaster` (portal container, `data-position: top|bottom-left|center|right`), `toast` (`data-variant`), `-message`, `-close`, `-progress`
 - **Tooltip**: `tooltip-wrapper`, `tooltip` (`data-open`)
 - **Skeleton**: `skeleton` (root, `data-variant: text|circle|rectangle`)
 - **Spinner**: `spinner` (root, `data-size`)
