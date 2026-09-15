@@ -10,7 +10,6 @@ export interface ToastItem {
   duration: number;
 }
 
-// This array lives outside any component — a single shared list for the whole app
 let toasts: ToastItem[] = [];
 let listeners: Array<() => void> = [];
 
@@ -52,19 +51,29 @@ export function Toaster() {
   }, []);
 
   return createPortal(
-    <div className={styles.container}>
+    <div className={styles.container} data-fara-toaster>
       {items.map((toast) => (
-        <div key={toast.id} className={clsx(styles.toast, styles[toast.variant])}>
-          <span className={styles.message}>{toast.message}</span>
+        <div
+          key={toast.id}
+          className={clsx(styles.toast, styles[toast.variant])}
+          data-fara-toast
+          data-variant={toast.variant}
+        >
+          <span className={styles.message} data-fara-toast-message>{toast.message}</span>
           <button
             type="button"
             className={styles.closeButton}
+            data-fara-toast-close
             onClick={() => dismissToast(toast.id)}
             aria-label="بستن"
           >
             ✕
           </button>
-          <span className={styles.progress} style={{ animationDuration: `${toast.duration}ms` }} />
+          <span
+            className={styles.progress}
+            data-fara-toast-progress
+            style={{ animationDuration: `${toast.duration}ms` }}
+          />
         </div>
       ))}
     </div>,
