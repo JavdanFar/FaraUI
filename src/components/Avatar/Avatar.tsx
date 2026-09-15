@@ -25,9 +25,22 @@ export function Avatar({
   const showImage = src && !imageError;
 
   return (
-    <div ref={ref} className={clsx(styles.avatar, styles[size], className)} {...rest}>
+    <div
+      ref={ref}
+      data-fara-avatar
+      data-size={size}
+      data-fallback={!showImage || undefined}
+      className={clsx(styles.avatar, styles[size], className)}
+      {...rest}
+    >
       {showImage ? (
-        <img src={src} alt={alt} className={styles.image} onError={() => setImageError(true)} />
+        <img
+          src={src}
+          alt={alt}
+          className={styles.image}
+          data-fara-avatar-image
+          onError={() => setImageError(true)}
+        />
       ) : (
         fallback
       )}
