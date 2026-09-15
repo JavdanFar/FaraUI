@@ -49,13 +49,22 @@ export function Alert({
     <div
       ref={ref}
       role="alert"
+      data-fara-alert
+      data-variant={variant}
+      data-open={isVisible || undefined}
       className={clsx(styles.alert, styles[variant], isVisible && styles.visible, className)}
       {...rest}
     >
       {icon}
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content} data-fara-alert-content>{children}</div>
       {closable && (
-        <button type="button" className={styles.closeButton} aria-label={closeLabel} onClick={handleClose}>
+        <button
+          type="button"
+          className={styles.closeButton}
+          data-fara-alert-close
+          aria-label={closeLabel}
+          onClick={handleClose}
+        >
           ✕
         </button>
       )}
