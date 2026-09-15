@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import clsx from "clsx";
 import styles from "./Select.module.css";
+import { AnchoredPopup } from "../AnchoredPopup";
 
 export interface SelectOption {
   value: string;
@@ -26,7 +27,7 @@ export function Select({
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const selectedOption = options.find((opt) => opt.value === value);
 
@@ -34,27 +35,21 @@ export function Select({
     opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-        setSearchTerm("");
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   function handleSelect(optionValue: string) {
     onChange?.(optionValue);
     setIsOpen(false);
     setSearchTerm("");
   }
 
+  function closeDropdown() {
+    setIsOpen(false);
+    setSearchTerm("");
+  }
+
   return (
-    <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>
+    <div className={clsx(styles.wrapper, className)}>
       <input
+        ref={inputRef}
         className={styles.trigger}
         disabled={disabled}
         placeholder={placeholder}
@@ -63,23 +58,27 @@ export function Select({
         onFocus={() => setIsOpen(true)}
       />
 
-      {isOpen && (
-        <div className={styles.dropdown}>
-          {filteredOptions.length === 0 ? (
-            <div className={styles.empty}>نتیجه‌ای یافت نشد</div>
-          ) : (
-            filteredOptions.map((opt) => (
-              <div
-                key={opt.value}
-                className={clsx(styles.option, opt.value === value && styles.optionSelected)}
-                onMouseDown={() => handleSelect(opt.value)}
-              >
-                {opt.label}
-              </div>
-            ))
-          )}
-        </div>
-      )}
+      <AnchoredPopup
+        open={isOpen}
+        anchorRef={inputRef}
+        onClose={closeDropdown}
+        className={styles.dropdown}
+        matchAnchorWidth
+      >
+        {filteredOptions.length === 0 ? (
+          <div className={styles.empty}>نتیجه‌ای یافت نشد</div>
+        ) : (
+          filteredOptions.map((opt) => (
+            <div
+              key={opt.value}
+              className={clsx(styles.option, opt.value === value && styles.optionSelected)}
+              onMouseDown={() => handleSelect(opt.value)}
+            >
+              {opt.label}
+            </div>
+          ))
+        )}
+      </AnchoredPopup>
     </div>
   );
 }
