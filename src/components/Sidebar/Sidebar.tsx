@@ -25,11 +25,16 @@ export function Sidebar({
     <aside
       ref={ref}
       className={clsx(styles.sidebar, collapsed && styles.collapsed, className)}
+      data-fara-sidebar
+      data-collapsed={collapsed || undefined}
       {...rest}
     >
-      <div className={styles.header}>
+      <div className={styles.header} data-fara-sidebar-header>
         {title && (
-          <div className={clsx(styles.headerContent, collapsed && styles.headerContentHidden)}>
+          <div
+            className={clsx(styles.headerContent, collapsed && styles.headerContentHidden)}
+            data-fara-sidebar-header-content
+          >
             {title}
           </div>
         )}
@@ -38,6 +43,7 @@ export function Sidebar({
           <button
             type="button"
             className={clsx(styles.toggleButton, collapsed && styles.toggleButtonCollapsed)}
+            data-fara-sidebar-toggle
             onClick={() => onCollapsedChange(!collapsed)}
             aria-label={collapsed ? "باز کردن منو" : "بستن منو"}
           >
@@ -46,7 +52,9 @@ export function Sidebar({
         )}
       </div>
 
-      <div className={styles.body}>{children}</div>
+      <div className={styles.body} data-fara-sidebar-body>
+        {children}
+      </div>
     </aside>
   );
 }
