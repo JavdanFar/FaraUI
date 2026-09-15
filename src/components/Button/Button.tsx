@@ -13,6 +13,9 @@ export function Button({ variant = "primary", size = "md", className, ref, ...re
     <button
       ref={ref}
       className={clsx(styles.button, styles[variant], styles[size], className)}
+      data-fara-button
+      data-variant={variant}
+      data-size={size}
       {...rest}
     />
   );
