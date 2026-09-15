@@ -1,29 +1,9 @@
 import { useEffect, useRef } from "react";
 
-/**
- * Wheel-and-drag behavior for snap-scrolling lists (wheel-picker style):
- *
- * - Mouse wheel moves exactly ONE item per wheel tick (trackpads accumulate
- *   small deltas until a full step is reached).
- * - The list can be dragged with the mouse; on release it snaps to the
- *   nearest item.
- *
- * The list must be laid out so that item `i` sits at the center when
- * `scrollTop === i * itemHeight` (half-height padding at both ends).
- *
- * While dragging, the element gets a `data-dragging` attribute so CSS can
- * switch the cursor, and a capture-phase click blocker suppresses the click
- * that the browser fires on the release target after a drag.
- */
-
 interface SnapScrollOptions {
-  /** Height of a single item in px */
   itemHeight: number;
-  /** Number of items — used for clamping */
   itemCount: number;
-  /** Attach only while the list is actually rendered */
   enabled: boolean;
-  /** Called when wheel/drag settles on a new index */
   onIndexChange?: (index: number) => void;
 }
 
@@ -43,7 +23,6 @@ export function useSnapScroll<T extends HTMLElement>(
 
     let wheelAcc = 0;
     let lastWheelTime = 0;
-    // Index the list is currently animating toward (null = resting)
     let targetIndex: number | null = null;
     let isDragging = false;
     let dragMoved = false;
@@ -61,22 +40,18 @@ export function useSnapScroll<T extends HTMLElement>(
       e.preventDefault();
 
       const now = performance.now();
-      // A pause between gestures — reset the accumulated state
       if (now - lastWheelTime > 200) {
         wheelAcc = 0;
         targetIndex = null;
       }
       lastWheelTime = now;
 
-      // Normalize Firefox line-mode deltas to pixels
       const delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
 
       let steps = 0;
       if (Math.abs(delta) >= 50) {
-        // A discrete mouse-wheel tick — exactly one item
         steps = delta > 0 ? 1 : -1;
       } else {
-        // Trackpad — accumulate until a full step is reached
         wheelAcc += delta;
         if (Math.abs(wheelAcc) >= 40) {
           steps = wheelAcc > 0 ? 1 : -1;
@@ -94,7 +69,6 @@ export function useSnapScroll<T extends HTMLElement>(
     };
 
     const handlePointerDown = (e: PointerEvent) => {
-      // Touch keeps native momentum scrolling — don't hijack it
       if (e.pointerType === "touch" || e.button !== 0) return;
       isDragging = true;
       dragMoved = false;
@@ -111,9 +85,6 @@ export function useSnapScroll<T extends HTMLElement>(
       if (!isDragging) return;
       const dy = e.clientY - startY;
       if (!dragMoved && Math.abs(dy) > 3) {
-        // Real drag started — capture the pointer so it keeps tracking
-        // outside the list. Only now: a capture from the start would
-        // retarget the click event and break tap-to-select.
         dragMoved = true;
         el.style.scrollBehavior = "auto";
         el.dataset.dragging = "true";
@@ -131,7 +102,6 @@ export function useSnapScroll<T extends HTMLElement>(
       window.removeEventListener("pointercancel", handlePointerUp);
 
       if (!dragMoved) {
-        // A plain click — let the native click select the item
         return;
       }
 
@@ -146,7 +116,6 @@ export function useSnapScroll<T extends HTMLElement>(
 
     const handleClickCapture = (e: MouseEvent) => {
       if (!dragMoved) return;
-      // The pointer was dragged — this click is not a selection
       e.stopPropagation();
       e.preventDefault();
       dragMoved = false;
