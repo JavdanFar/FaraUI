@@ -16,6 +16,7 @@ export interface AnchoredPopupProps {
   align?: "start" | "end";
   matchAnchorWidth?: boolean;
   viewportPadding?: number;
+  dataFara?: string;
 }
 
 interface Position {
@@ -36,6 +37,7 @@ export function AnchoredPopup({
   align = "start",
   matchAnchorWidth = false,
   viewportPadding = 8,
+  dataFara,
 }: AnchoredPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<Position | null>(null);
@@ -124,10 +126,13 @@ export function AnchoredPopup({
 
   if (!open) return null;
 
+  const faraAttrs = dataFara ? { [`data-fara-${dataFara}`]: "" } : undefined;
+
   return createPortal(
     <div
       ref={popupRef}
       dir={dir}
+      {...faraAttrs}
       className={clsx(styles.popup, className)}
       style={{
         ...style,
