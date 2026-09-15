@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./DatePicker.module.css";
 import { useSnapScroll } from "../../hooks/useSnapScroll";
+import { centerInScroller } from "../../utils/centerInScroller";
+import { AnchoredPopup } from "../AnchoredPopup";
 import {
   getJalaliMonthLength,
   getJalaliWeekday,
@@ -140,6 +142,7 @@ export function DatePicker({
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState<CalendarView>("days");
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const yearsGridRef = useRef<HTMLDivElement>(null);
   const today = getTodayJalali();
   const jalaliValue = deriveJalali(currentValue);
@@ -167,9 +170,11 @@ export function DatePicker({
   const [draftTime, setDraftTime] = useState(() => deriveClockTime(currentValue));
 
   const draftRef = useRef(draft);
-  draftRef.current = draft;
   const draftTimeRef = useRef(draftTime);
-  draftTimeRef.current = draftTime;
+  useEffect(() => {
+    draftRef.current = draft;
+    draftTimeRef.current = draftTime;
+  });
 
   const dayColumnRef = useRef<HTMLDivElement>(null);
   const monthColumnRef = useRef<HTMLDivElement>(null);
@@ -179,31 +184,10 @@ export function DatePicker({
   const hourListRef = useRef<HTMLUListElement>(null);
   const minuteListRef = useRef<HTMLUListElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      const path = event.composedPath();
-      if (wrapperRef.current && !path.includes(wrapperRef.current)) {
-        setIsOpen(false);
-        setView("days");
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsOpen(false);
-        setView("days");
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
+  function closePicker() {
+    setIsOpen(false);
+    setView("days");
+  }
 
   function openPicker() {
     if (disabled) return;
@@ -310,39 +294,19 @@ export function DatePicker({
 
   useEffect(() => {
     if (view !== "years" || !yearsGridRef.current) return;
-    const activeButton = yearsGridRef.current.querySelector(`[data-year="${viewYear}"]`);
-    activeButton?.scrollIntoView({ block: "center" });
+    centerInScroller(yearsGridRef, `[data-year="${viewYear}"]`);
   }, [view, viewYear]);
 
-  // Centers a time value inside its list by scrolling only the list itself
-  // (unlike scrollIntoView, this never scrolls the page or the panel)
-  function centerTimeValue(
-    listRef: React.RefObject<HTMLElement | null>,
-    value: number,
-    behavior: ScrollBehavior,
-  ) {
-    const list = listRef.current;
-    const item = list?.querySelector<HTMLElement>(`[data-value="${value}"]`);
-    if (!list || !item) return;
-
-    const listRect = list.getBoundingClientRect();
-    const itemRect = item.getBoundingClientRect();
-    const delta = itemRect.top + itemRect.height / 2 - (listRect.top + listRect.height / 2);
-    list.scrollTo({ top: list.scrollTop + delta, behavior });
-  }
-
-  // Snap to the current time the moment the panel opens — no animation
   useEffect(() => {
     if (!showTime || mode !== "calendar" || !isOpen) return;
-    centerTimeValue(hourListRef, draftTimeRef.current.hour, "instant");
-    centerTimeValue(minuteListRef, draftTimeRef.current.minute, "instant");
+    centerInScroller(hourListRef, `[data-value="${draftTimeRef.current.hour}"]`, "instant");
+    centerInScroller(minuteListRef, `[data-value="${draftTimeRef.current.minute}"]`, "instant");
   }, [showTime, mode, isOpen]);
 
-  // Keep the selected hour/minute centered whenever it changes
   useEffect(() => {
     if (!showTime || mode !== "calendar" || !isOpen) return;
-    centerTimeValue(hourListRef, draftTime.hour, "smooth");
-    centerTimeValue(minuteListRef, draftTime.minute, "smooth");
+    centerInScroller(hourListRef, `[data-value="${draftTime.hour}"]`, "smooth");
+    centerInScroller(minuteListRef, `[data-value="${draftTime.minute}"]`, "smooth");
   }, [showTime, mode, isOpen, draftTime.hour, draftTime.minute]);
 
   // ---- Scroll mode ----
@@ -413,23 +377,15 @@ export function DatePicker({
   useEffect(() => {
     if (mode !== "scroll" || !isOpen) return;
 
+    const current = draftRef.current;
+    const currentTime = draftTimeRef.current;
     programmaticScrollRef.current = true;
-    dayColumnRef.current
-      ?.querySelector(`[data-value="${draft.day}"]`)
-      ?.scrollIntoView({ block: "center" });
-    monthColumnRef.current
-      ?.querySelector(`[data-value="${draft.month}"]`)
-      ?.scrollIntoView({ block: "center" });
-    yearColumnRef.current
-      ?.querySelector(`[data-value="${draft.year}"]`)
-      ?.scrollIntoView({ block: "center" });
+    centerInScroller(dayColumnRef, `[data-value="${current.day}"]`);
+    centerInScroller(monthColumnRef, `[data-value="${current.month}"]`);
+    centerInScroller(yearColumnRef, `[data-value="${current.year}"]`);
     if (showTime) {
-      hourColumnRef.current
-        ?.querySelector(`[data-value="${draftTime.hour}"]`)
-        ?.scrollIntoView({ block: "center" });
-      minuteColumnRef.current
-        ?.querySelector(`[data-value="${draftTime.minute}"]`)
-        ?.scrollIntoView({ block: "center" });
+      centerInScroller(hourColumnRef, `[data-value="${currentTime.hour}"]`);
+      centerInScroller(minuteColumnRef, `[data-value="${currentTime.minute}"]`);
     }
     const timer = window.setTimeout(() => {
       programmaticScrollRef.current = false;
@@ -440,9 +396,7 @@ export function DatePicker({
   useEffect(() => {
     if (mode !== "scroll" || !isOpen) return;
     if (programmaticScrollRef.current) return;
-    dayColumnRef.current
-      ?.querySelector(`[data-value="${draftRef.current.day}"]`)
-      ?.scrollIntoView({ block: "center" });
+    centerInScroller(dayColumnRef, `[data-value="${draftRef.current.day}"]`);
   }, [mode, isOpen, draft.year, draft.month]);
 
   function handleColumnScroll(optionsLength: number, applyIndex: (index: number) => void) {
@@ -461,9 +415,7 @@ export function DatePicker({
     applyValue: () => void,
   ) {
     applyValue();
-    columnRef.current
-      ?.querySelector(`[data-value="${value}"]`)
-      ?.scrollIntoView({ block: "center", behavior: "smooth" });
+    centerInScroller(columnRef, `[data-value="${value}"]`, "smooth");
   }
 
   function handleConfirmScroll() {
@@ -476,6 +428,7 @@ export function DatePicker({
   return (
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
       <input
+        ref={inputRef}
         readOnly
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
@@ -489,9 +442,14 @@ export function DatePicker({
         onClick={openPicker}
       />
 
-      {isOpen && mode === "calendar" && (
-        <div className={clsx(styles.panel, showTime && styles.panelWithTime)}>
-          {view === "days" && (
+      <AnchoredPopup
+        open={isOpen && mode === "calendar"}
+        anchorRef={inputRef}
+        onClose={closePicker}
+        className={clsx(styles.panel, showTime && styles.panelWithTime)}
+        gap={4}
+      >
+        {view === "days" && (
             <>
               <div className={styles.panelPadding}>
                 <div className={showTime ? styles.calendarWithTimeRow : undefined}>
@@ -706,11 +664,15 @@ export function DatePicker({
               </div>
             </div>
           )}
-        </div>
-      )}
+      </AnchoredPopup>
 
-      {isOpen && mode === "scroll" && (
-        <div className={styles.panel}>
+      <AnchoredPopup
+        open={isOpen && mode === "scroll"}
+        anchorRef={inputRef}
+        onClose={closePicker}
+        className={styles.panel}
+        gap={4}
+      >
           <div className={styles.scrollHeader}>
             <span className={styles.columnLabel}>سال</span>
             <span className={styles.columnLabel}>ماه</span>
@@ -879,8 +841,7 @@ export function DatePicker({
               تایید
             </button>
           </div>
-        </div>
-      )}
+      </AnchoredPopup>
     </div>
   );
 }
