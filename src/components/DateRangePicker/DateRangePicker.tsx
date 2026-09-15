@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./DateRangePicker.module.css";
+import { AnchoredPopup } from "../AnchoredPopup";
 import {
   getJalaliMonthLength,
   getJalaliWeekday,
@@ -96,6 +97,7 @@ export function DateRangePicker({
 
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const today = getTodayJalali();
 
   const [viewYear, setViewYear] = useState(currentValue?.start.year ?? today.year);
@@ -120,28 +122,6 @@ export function DateRangePicker({
     if (disabledDates && disabledDates(jalaliToGregorian(cellDate))) return true;
     return false;
   }
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      const path = event.composedPath();
-      if (wrapperRef.current && !path.includes(wrapperRef.current)) {
-        setIsOpen(false);
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsOpen(false);
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
 
   function openPicker() {
     if (disabled) return;
@@ -175,19 +155,15 @@ export function DateRangePicker({
     if (isDateDisabled(cellDate)) return;
 
     if (!draftStart || (draftStart && draftEnd)) {
-      // Starting a fresh selection (either nothing picked yet, or a
-      // previous range was already complete)
       setDraftStart(cellDate);
       setDraftEnd(null);
       setHoverDate(null);
       return;
     }
 
-    // draftStart is set and draftEnd isn't yet — this click completes the range
     let start = draftStart;
     let end = cellDate;
     if (compareJalali(end, start) < 0) {
-      // Clicked before the start date: swap so start always stays earliest
       start = cellDate;
       end = draftStart;
     }
@@ -301,6 +277,7 @@ export function DateRangePicker({
   return (
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
       <input
+        ref={inputRef}
         readOnly
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
@@ -309,8 +286,14 @@ export function DateRangePicker({
         onClick={openPicker}
       />
 
-      {isOpen && (
-        <div className={styles.panel} onMouseLeave={() => setHoverDate(null)}>
+      <AnchoredPopup
+        open={isOpen}
+        anchorRef={inputRef}
+        onClose={() => setIsOpen(false)}
+        className={styles.panel}
+        gap={4}
+      >
+        <div onMouseLeave={() => setHoverDate(null)}>
           <div className={styles.header}>
             <button
               type="button"
@@ -354,7 +337,7 @@ export function DateRangePicker({
             </button>
           </div>
         </div>
-      )}
+      </AnchoredPopup>
     </div>
   );
 }
