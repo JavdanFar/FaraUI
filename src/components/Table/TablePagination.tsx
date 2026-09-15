@@ -23,14 +23,15 @@ export function TablePagination({
   const endItem = Math.min(page * pageSize, totalItems);
 
   return (
-    <div className={styles.pagination}>
-      <span className={styles.paginationInfo}>
+    <div className={styles.pagination} data-fara-table-pagination>
+      <span className={styles.paginationInfo} data-fara-table-pagination-info>
         نمایش {startItem}-{endItem} از {totalItems}
       </span>
 
-      <div className={styles.paginationControls}>
+      <div className={styles.paginationControls} data-fara-table-pagination-controls>
         <select
           className={styles.pageSizeSelect}
+          data-fara-table-page-size-select
           value={pageSize}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
         >
@@ -44,6 +45,7 @@ export function TablePagination({
         <button
           type="button"
           className={styles.paginationButton}
+          data-fara-table-pagination-button
           onClick={() => onPageChange(page - 1)}
           disabled={page <= 1}
           aria-label="صفحه قبل"
@@ -51,13 +53,14 @@ export function TablePagination({
           ‹
         </button>
 
-        <span className={styles.paginationCurrent}>
+        <span className={styles.paginationCurrent} data-fara-table-pagination-current>
           {page} / {totalPages}
         </span>
 
         <button
           type="button"
           className={styles.paginationButton}
+          data-fara-table-pagination-button
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
           aria-label="صفحه بعد"

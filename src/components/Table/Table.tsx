@@ -37,11 +37,13 @@ function ColumnFilter({
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <span className={styles.filterWrapper}>
+    <span className={styles.filterWrapper} data-fara-table-filter>
       <button
         ref={buttonRef}
         type="button"
         className={clsx(styles.filterButton, highlighted && styles.filterButtonActive)}
+        data-fara-table-filter-button
+        data-active={highlighted || undefined}
         onClick={onToggle}
         aria-label={`فیلتر ${header}`}
       >
@@ -53,10 +55,12 @@ function ColumnFilter({
         anchorRef={buttonRef}
         onClose={onClose}
         className={styles.filterPopover}
+        dataFara="table-filter-popover"
       >
         <input
           autoFocus
           className={styles.filterPopoverInput}
+          data-fara-table-filter-input
           placeholder="فیلتر..."
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -138,10 +142,11 @@ export function Table<T>({
   const rowsToRender = paginatedData;
 
   return (
-    <div className={clsx(styles.wrapper, className)}>
+    <div data-fara-table className={clsx(styles.wrapper, className)}>
       {searchEnabled && (
         <input
           className={styles.globalSearch}
+          data-fara-table-search-input
           placeholder={searchPlaceholder}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -150,21 +155,22 @@ export function Table<T>({
 
       <div className={styles.tableContainer}>
         {loading && (
-          <div className={styles.loadingOverlay}>
+          <div className={styles.loadingOverlay} data-fara-table-loading-overlay>
             <Spinner size="lg" />
           </div>
         )}
 
         <div className={styles.tableScroll} style={maxHeight ? { maxHeight } : undefined}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
+          <table className={styles.table} data-fara-table-table>
+            <thead className={styles.thead} data-fara-table-head>
               <tr>
                 {selectionEnabled && (
-                  <th className={styles.checkboxCell}>
+                  <th className={styles.checkboxCell} data-fara-table-checkbox-cell>
                     <input
                       ref={selectAllRef}
                       type="checkbox"
                       className={styles.checkbox}
+                      data-fara-table-checkbox
                       checked={isAllSelected}
                       onChange={toggleAll}
                       aria-label="انتخاب همه ردیف‌ها"
@@ -178,7 +184,7 @@ export function Table<T>({
                   const hasActiveFilter = Boolean(columnFilters[col.key]?.trim());
 
                   return (
-                    <th key={col.key} className={styles.th}>
+                    <th key={col.key} className={styles.th} data-fara-table-header-cell>
                       <span className={styles.thContent}>
                         <span
                           onClick={() => isSortable && toggleSort(col)}
@@ -190,6 +196,8 @@ export function Table<T>({
                         {isSortable && (
                           <span
                             onClick={() => toggleSort(col)}
+                            data-fara-table-sort-icon
+                            data-active={sortKey === col.key || undefined}
                             className={clsx(
                               styles.sortIcon,
                               sortKey === col.key && styles.sortIconActive,
@@ -219,12 +227,13 @@ export function Table<T>({
               </tr>
             </thead>
 
-            <tbody className={styles.tbody}>
+            <tbody className={styles.tbody} data-fara-table-body>
               {rowsToRender.length === 0 ? (
                 <tr>
                   <td
                     colSpan={columns.length + (selectionEnabled ? 1 : 0)}
                     className={styles.empty}
+                    data-fara-table-empty
                   >
                     {emptyMessage}
                   </td>
@@ -235,12 +244,18 @@ export function Table<T>({
                   const selected = isRowSelected(key);
 
                   return (
-                    <tr key={key} className={clsx(styles.tr, selected && styles.trSelected)}>
+                    <tr
+                      key={key}
+                      data-fara-table-row
+                      data-selected={selected || undefined}
+                      className={clsx(styles.tr, selected && styles.trSelected)}
+                    >
                       {selectionEnabled && (
-                        <td className={styles.checkboxCell}>
+                        <td className={styles.checkboxCell} data-fara-table-checkbox-cell>
                           <input
                             type="checkbox"
                             className={styles.checkbox}
+                            data-fara-table-checkbox
                             checked={selected}
                             onChange={() => toggleRow(key)}
                             aria-label={`انتخاب ردیف ${key}`}
@@ -248,7 +263,7 @@ export function Table<T>({
                         </td>
                       )}
                       {columns.map((col) => (
-                        <td key={col.key} className={styles.td}>
+                        <td key={col.key} className={styles.td} data-fara-table-cell>
                           {col.render ? col.render(row) : String(getCellValue(row, col) ?? "")}
                         </td>
                       ))}
