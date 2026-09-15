@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import styles from "./DropdownMenu.module.css";
+import { AnchoredPopup } from "../AnchoredPopup";
+
+const EXIT_ANIMATION_MS = 150;
 
 export interface DropdownMenuProps {
   trigger: ReactNode;
@@ -10,48 +13,56 @@ export interface DropdownMenuProps {
 
 export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLSpanElement>(null);
 
   const [shouldRender, setShouldRender] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const closeTimer = useRef<number | undefined>(undefined);
 
-  useEffect(() => {
-    if (isOpen) {
-      setShouldRender(true);
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setIsVisible(true));
-      });
-    } else {
-      setIsVisible(false);
-      const timeout = setTimeout(() => setShouldRender(false), 150);
-      return () => clearTimeout(timeout);
+  useEffect(() => () => window.clearTimeout(closeTimer.current), []);
+
+  function openMenu() {
+    window.clearTimeout(closeTimer.current);
+    if (!shouldRender) setShouldRender(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setIsVisible(true));
+    });
+  }
+
+  function closeMenu() {
+    if (!shouldRender) return;
+    setIsVisible(false);
+    closeTimer.current = window.setTimeout(() => setShouldRender(false), EXIT_ANIMATION_MS);
+  }
+
+  function toggleMenu() {
+    if (isOpen) closeMenu();
+    else {
+      setIsOpen(true);
+      openMenu();
     }
-  }, [isOpen]);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }
 
   return (
-    <div ref={wrapperRef} className={styles.wrapper}>
-      <span onClick={() => setIsOpen((prev) => !prev)}>{trigger}</span>
+    <div className={styles.wrapper}>
+      <span ref={triggerRef} onClick={toggleMenu}>
+        {trigger}
+      </span>
 
-      {shouldRender && (
+      <AnchoredPopup
+        open={shouldRender}
+        anchorRef={triggerRef}
+        onClose={closeMenu}
+        className={clsx(styles.menu, isVisible && styles.menuVisible)}
+        align="end"
+      >
         <div
-          className={clsx(styles.menu, isVisible && styles.menuVisible)}
           role="menu"
-          onClick={() => setIsOpen(false)}
+          onClick={closeMenu}
         >
           {children}
         </div>
-      )}
+      </AnchoredPopup>
     </div>
   );
 }
