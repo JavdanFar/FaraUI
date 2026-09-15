@@ -426,10 +426,11 @@ export function DatePicker({
   }
 
   return (
-    <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
+    <div ref={wrapperRef} data-fara-date-picker className={clsx(styles.wrapper, className)} dir="rtl">
       <input
         ref={inputRef}
         readOnly
+        data-fara-date-picker-input
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
@@ -448,22 +449,25 @@ export function DatePicker({
         onClose={closePicker}
         className={clsx(styles.panel, showTime && styles.panelWithTime)}
         gap={4}
+        dataFara="date-picker-panel"
       >
         {view === "days" && (
             <>
               <div className={styles.panelPadding}>
                 <div className={showTime ? styles.calendarWithTimeRow : undefined}>
                   {showTime && (
-                    <div className={styles.timeColumn}>
-                      <div className={styles.timeSelectRow}>
+                    <div className={styles.timeColumn} data-fara-date-picker-time-column>
+                      <div className={styles.timeSelectRow} data-fara-date-picker-time-row>
                         <div>
-                          <p className={styles.columnLabel}>ساعت</p>
-                          <ul className={styles.timeList} aria-label="ساعت" ref={hourListRef}>
+                          <p className={styles.columnLabel} data-fara-date-picker-column-label>ساعت</p>
+                          <ul className={styles.timeList} aria-label="ساعت" ref={hourListRef} data-fara-date-picker-time-list>
                             {Array.from({ length: 24 }, (_, h) => (
                               <li
                                 key={h}
                                 data-value={h}
                                 role="button"
+                                data-fara-date-picker-time-item
+                                data-selected={h === draftTime.hour || undefined}
                                 className={clsx(
                                   styles.timeListItem,
                                   h === draftTime.hour && styles.timeListItemActive,
@@ -477,13 +481,15 @@ export function DatePicker({
                         </div>
 
                         <div>
-                          <p className={styles.columnLabel}>دقیقه</p>
-                          <ul className={styles.timeList} aria-label="دقیقه" ref={minuteListRef}>
+                          <p className={styles.columnLabel} data-fara-date-picker-column-label>دقیقه</p>
+                          <ul className={styles.timeList} aria-label="دقیقه" ref={minuteListRef} data-fara-date-picker-time-list>
                             {Array.from({ length: 60 }, (_, m) => (
                               <li
                                 key={m}
                                 data-value={m}
                                 role="button"
+                                data-fara-date-picker-time-item
+                                data-selected={m === draftTime.minute || undefined}
                                 className={clsx(
                                   styles.timeListItem,
                                   m === draftTime.minute && styles.timeListItemActive,
@@ -499,10 +505,12 @@ export function DatePicker({
                     </div>
                   )}
                   <div className={showTime ? styles.calendarColumn : undefined}>
-                    <div className={styles.header}>
+                    <div className={styles.header} data-fara-date-picker-header>
                       <button
                         type="button"
                         className={styles.navButton}
+                        data-fara-date-picker-nav-button
+                        data-direction="previous"
                         onClick={goToPreviousMonth}
                         disabled={!canGoPrev}
                         aria-label="ماه قبل"
@@ -511,10 +519,11 @@ export function DatePicker({
                         <ChevronIcon direction="previous" />
                       </button>
 
-                      <div className={styles.monthYearGroup}>
+                      <div className={styles.monthYearGroup} data-fara-date-picker-month-year-group>
                         <button
                           type="button"
                           className={styles.monthYearButton}
+                          data-fara-date-picker-month-button
                           onClick={() => setView("months")}
                         >
                           {PERSIAN_MONTHS[viewMonth - 1]}
@@ -522,6 +531,7 @@ export function DatePicker({
                         <button
                           type="button"
                           className={styles.monthYearButton}
+                          data-fara-date-picker-year-button
                           onClick={() => setView("years")}
                         >
                           {viewYear}
@@ -531,6 +541,8 @@ export function DatePicker({
                       <button
                         type="button"
                         className={styles.navButton}
+                        data-fara-date-picker-nav-button
+                        data-direction="next"
                         onClick={goToNextMonth}
                         disabled={!canGoNext}
                         aria-label="ماه بعد"
@@ -540,10 +552,11 @@ export function DatePicker({
                       </button>
                     </div>
 
-                    <div className={styles.daysGrid}>
+                    <div className={styles.daysGrid} data-fara-date-picker-days-grid>
                       {PERSIAN_WEEKDAYS.map((day, index) => (
                         <div
                           key={day}
+                          data-fara-date-picker-weekday
                           className={clsx(
                             styles.weekday,
                             index === FRIDAY_WEEKDAY_INDEX && styles.weekdayFriday,
@@ -582,6 +595,9 @@ export function DatePicker({
                           <button
                             key={day}
                             type="button"
+                            data-fara-date-picker-day-cell
+                            data-selected={isSelected || undefined}
+                            data-today={isToday || undefined}
                             className={clsx(styles.dayCell, variantClass)}
                             disabled={cellDisabled}
                             onClick={() => handleDayClick(day)}
@@ -595,11 +611,12 @@ export function DatePicker({
                 </div>
 
                 {(showTodayButton || showTime) && (
-                  <div className={styles.footer}>
+                  <div className={styles.footer} data-fara-date-picker-footer>
                     {showTodayButton && (
                       <button
                         type="button"
                         className={styles.footerButton}
+                        data-fara-date-picker-footer-button
                         onClick={handleTodayClick}
                       >
                         امروز
@@ -609,6 +626,7 @@ export function DatePicker({
                       <button
                         type="button"
                         className={clsx(styles.footerButton, styles.footerButtonPrimary)}
+                        data-fara-date-picker-footer-button
                         onClick={handleConfirmCalendarTime}
                       >
                         تایید
@@ -623,7 +641,7 @@ export function DatePicker({
           {view === "months" && (
             <>
               <div className={styles.panelPadding}>
-                <div className={styles.monthsGrid}>
+                <div className={styles.monthsGrid} data-fara-date-picker-months-grid>
                   {PERSIAN_MONTHS.map((month, index) => {
                     const monthNumber = index + 1;
                     const isOutOfRange = isMonthOutOfRange(monthNumber);
@@ -632,6 +650,8 @@ export function DatePicker({
                         key={month}
                         type="button"
                         disabled={isOutOfRange}
+                        data-fara-date-picker-month-cell
+                        data-selected={monthNumber === viewMonth || undefined}
                         className={clsx(
                           styles.monthCell,
                           monthNumber === viewMonth && styles.monthCellActive,
@@ -649,12 +669,14 @@ export function DatePicker({
 
           {view === "years" && (
             <div className={styles.yearsGridWrapper} ref={yearsGridRef}>
-              <div className={styles.yearsGrid}>
+              <div className={styles.yearsGrid} data-fara-date-picker-years-grid>
                 {yearOptionsForGrid.map((year) => (
                   <button
                     key={year}
                     type="button"
                     data-year={year}
+                    data-fara-date-picker-year-cell
+                    data-selected={year === viewYear || undefined}
                     className={clsx(styles.yearCell, year === viewYear && styles.yearCellActive)}
                     onClick={() => handleYearSelect(year)}
                   >
@@ -672,15 +694,16 @@ export function DatePicker({
         onClose={closePicker}
         className={styles.panel}
         gap={4}
+        dataFara="date-picker-panel"
       >
-          <div className={styles.scrollHeader}>
-            <span className={styles.columnLabel}>سال</span>
-            <span className={styles.columnLabel}>ماه</span>
-            <span className={styles.columnLabel}>روز</span>
+          <div className={styles.scrollHeader} data-fara-date-picker-scroll-header>
+            <span className={styles.columnLabel} data-fara-date-picker-column-label>سال</span>
+            <span className={styles.columnLabel} data-fara-date-picker-column-label>ماه</span>
+            <span className={styles.columnLabel} data-fara-date-picker-column-label>روز</span>
             {showTime && (
               <>
-                <span className={styles.columnLabel}>ساعت</span>
-                <span className={styles.columnLabel}>دقیقه</span>
+                <span className={styles.columnLabel} data-fara-date-picker-column-label>ساعت</span>
+                <span className={styles.columnLabel} data-fara-date-picker-column-label>دقیقه</span>
               </>
             )}
           </div>
@@ -689,10 +712,12 @@ export function DatePicker({
             <div className={styles.scrollGuideTop} />
             <div className={styles.scrollGuideBottom} />
 
-            <div className={styles.scrollContainer}>
+            <div className={styles.scrollContainer} data-fara-date-picker-scroll-container>
               <div
                 ref={yearColumnRef}
                 className={styles.scrollColumn}
+                data-fara-date-picker-scroll-column
+                data-column="year"
                 onScroll={handleColumnScroll(yearOptions.length, (index) =>
                   setDraft((d) => ({ ...d, year: yearOptions[index] })),
                 )}
@@ -702,6 +727,8 @@ export function DatePicker({
                   <div
                     key={year}
                     data-value={year}
+                    data-fara-date-picker-scroll-item
+                    data-selected={year === draft.year || undefined}
                     className={clsx(
                       styles.scrollItem,
                       year === draft.year && styles.scrollItemActive,
@@ -719,6 +746,8 @@ export function DatePicker({
               <div
                 ref={monthColumnRef}
                 className={styles.scrollColumn}
+                data-fara-date-picker-scroll-column
+                data-column="month"
                 onScroll={handleColumnScroll(monthOptionIndices.length, (index) =>
                   setDraft((d) => ({ ...d, month: monthOptionIndices[index] })),
                 )}
@@ -728,6 +757,8 @@ export function DatePicker({
                   <div
                     key={month}
                     data-value={month}
+                    data-fara-date-picker-scroll-item
+                    data-selected={month === draft.month || undefined}
                     className={clsx(
                       styles.scrollItem,
                       month === draft.month && styles.scrollItemActive,
@@ -747,6 +778,8 @@ export function DatePicker({
               <div
                 ref={dayColumnRef}
                 className={styles.scrollColumn}
+                data-fara-date-picker-scroll-column
+                data-column="day"
                 onScroll={handleColumnScroll(dayOptions.length, (index) =>
                   setDraft((d) => ({ ...d, day: dayOptions[index] })),
                 )}
@@ -756,6 +789,8 @@ export function DatePicker({
                   <div
                     key={day}
                     data-value={day}
+                    data-fara-date-picker-scroll-item
+                    data-selected={day === draft.day || undefined}
                     className={clsx(
                       styles.scrollItem,
                       day === draft.day && styles.scrollItemActive,
@@ -775,6 +810,8 @@ export function DatePicker({
                   <div
                     ref={hourColumnRef}
                     className={styles.scrollColumn}
+                    data-fara-date-picker-scroll-column
+                    data-column="hour"
                     onScroll={handleColumnScroll(24, (index) =>
                       setDraftTime((t) => ({ ...t, hour: index })),
                     )}
@@ -784,6 +821,8 @@ export function DatePicker({
                       <div
                         key={h}
                         data-value={h}
+                        data-fara-date-picker-scroll-item
+                        data-selected={h === draftTime.hour || undefined}
                         className={clsx(
                           styles.scrollItem,
                           h === draftTime.hour && styles.scrollItemActive,
@@ -803,6 +842,8 @@ export function DatePicker({
                   <div
                     ref={minuteColumnRef}
                     className={styles.scrollColumn}
+                    data-fara-date-picker-scroll-column
+                    data-column="minute"
                     onScroll={handleColumnScroll(60, (index) =>
                       setDraftTime((t) => ({ ...t, minute: index })),
                     )}
@@ -812,6 +853,8 @@ export function DatePicker({
                       <div
                         key={m}
                         data-value={m}
+                        data-fara-date-picker-scroll-item
+                        data-selected={m === draftTime.minute || undefined}
                         className={clsx(
                           styles.scrollItem,
                           m === draftTime.minute && styles.scrollItemActive,
@@ -832,10 +875,11 @@ export function DatePicker({
             </div>
           </div>
 
-          <div className={styles.scrollConfirm}>
+          <div className={styles.scrollConfirm} data-fara-date-picker-confirm-row>
             <button
               type="button"
               className={clsx(styles.footerButton, styles.footerButtonPrimary)}
+              data-fara-date-picker-confirm-button
               onClick={handleConfirmScroll}
             >
               تایید
