@@ -1,4 +1,3 @@
-/* Demo-page styles — App.tsx only, never shipped in the library build */
 
 * {
     scroll-behavior: smooth;
@@ -18,11 +17,9 @@ body {
     min-height: 100vh;
     font-family: var(--fara-font-family);
     color: var(--fara-color-text);
-    /* Gallery chrome — clicking labels/previews must not show a text caret */
     user-select: none;
 }
 
-/* Real text entry stays selectable/editable */
 .app input,
 .app textarea,
 .app [contenteditable] {
@@ -217,12 +214,8 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    /* No overflow:hidden — popups (DatePicker, Select, ...) must be able to
-       overflow the card. Corners are rounded on the header/preview instead. */
 }
 
-/* While interacting with a card, raise it above the cards that follow,
-   so its overflowing popup is not painted underneath them */
 .demo:focus-within,
 .demo:hover {
     z-index: 10;
