@@ -24,9 +24,9 @@ export function ProgressBar({
   const clampedValue = Math.min(100, Math.max(0, value));
 
   return (
-    <div ref={ref} className={className} {...rest}>
+    <div ref={ref} data-fara-progress-bar className={className} {...rest}>
       {(label || showValue) && (
-        <div className={styles.labelRow}>
+        <div className={styles.labelRow} data-fara-progress-label-row>
           <span>{label}</span>
           {showValue && !indeterminate && <span>{clampedValue}%</span>}
         </div>
@@ -34,6 +34,7 @@ export function ProgressBar({
 
       <div
         className={styles.track}
+        data-fara-progress-track
         role="progressbar"
         aria-valuenow={indeterminate ? undefined : clampedValue}
         aria-valuemin={0}
@@ -45,6 +46,9 @@ export function ProgressBar({
             variant !== "primary" && styles[variant],
             indeterminate && styles.indeterminate,
           )}
+          data-fara-progress-fill
+          data-variant={variant}
+          data-indeterminate={indeterminate || undefined}
           style={indeterminate ? undefined : { width: `${clampedValue}%` }}
         />
       </div>
