@@ -1,8 +1,5 @@
 .container {
     position: fixed;
-    bottom: var(--fara-spacing-lg);
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     gap: var(--fara-spacing-sm);
@@ -10,12 +7,44 @@
     pointer-events: none;
 }
 
+.topLeft {
+    top: var(--fara-spacing-lg);
+    left: var(--fara-spacing-lg);
+}
+
+.topCenter {
+    top: var(--fara-spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.topRight {
+    top: var(--fara-spacing-lg);
+    right: var(--fara-spacing-lg);
+}
+
+.bottomLeft {
+    bottom: var(--fara-spacing-lg);
+    left: var(--fara-spacing-lg);
+}
+
+.bottomCenter {
+    bottom: var(--fara-spacing-lg);
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bottomRight {
+    bottom: var(--fara-spacing-lg);
+    right: var(--fara-spacing-lg);
+}
+
 .toast {
     position: relative;
     display: flex;
     align-items: center;
     gap: var(--fara-spacing-sm);
-    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    padding: var(--fara-spacing-md);
     border-radius: var(--fara-radius-md);
     font-family: var(--fara-font-family);
     font-size: var(--fara-font-size-md);
@@ -60,12 +89,24 @@
 }
 
 .progress {
+    display: block;
+    margin-top: 16px;
     position: absolute;
     bottom: 0;
     left: 0;
     height: 3px;
     background-color: var(--fara-color-scrim-light);
     animation: shrink linear forwards;
+}
+
+.toast:hover .progress {
+    animation-play-state: paused;
+}
+
+.topLeft .toast,
+.topCenter .toast,
+.topRight .toast {
+    animation-name: slideDown;
 }
 
 @keyframes slideUp {
@@ -80,12 +121,24 @@
     }
 }
 
-@keyframes shrink {
+@keyframes slideDown {
     from {
-        width: 100%;
+        opacity: 0;
+        transform: translateY(-10px);
     }
 
     to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shrink {
+    from {
         width: 0%;
+    }
+
+    to {
+        width: 100%;
     }
 }
