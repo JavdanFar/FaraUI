@@ -51,13 +51,14 @@ export function Slider(props: SliderProps | SliderRangeProps) {
     disabled,
     className,
     ref,
+    range,
     ...rest
   } = props;
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [dragState, setDragState] = useState<DragState>({ activeHandle: null });
 
-  const isRange = props.range === true;
+  const isRange = range === true;
 
   const valueMin = isRange ? (value as SliderRangeValue).min : min;
   const valueMax = isRange ? (value as SliderRangeValue).max : (value as number);
@@ -157,7 +158,11 @@ export function Slider(props: SliderProps | SliderRangeProps) {
       {(label || showValue) && (
         <div data-fara-slider-label-row className={styles.labelRow}>
           <span>{label}</span>
-          {showValue && <span data-fara-slider-value className={styles.valueText}>{displayText}</span>}
+          {showValue && (
+            <span data-fara-slider-value className={styles.valueText}>
+              {displayText}
+            </span>
+          )}
         </div>
       )}
 
