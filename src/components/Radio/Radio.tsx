@@ -13,8 +13,15 @@ export function Radio({ label, className, id, ref, ...rest }: RadioProps) {
   const inputId = id ?? generatedId;
 
   return (
-    <label htmlFor={inputId} className={clsx(styles.wrapper, className)}>
-      <input ref={ref} type="radio" id={inputId} className={styles.radio} {...rest} />
+    <label htmlFor={inputId} data-fara-radio className={clsx(styles.wrapper, className)}>
+      <input
+        ref={ref}
+        type="radio"
+        id={inputId}
+        data-fara-radio-input
+        className={styles.radio}
+        {...rest}
+      />
       {label}
     </label>
   );
