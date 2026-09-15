@@ -1,7 +1,8 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./Combobox.module.css";
 import { Chip } from "../Chip";
+import { AnchoredPopup } from "../AnchoredPopup";
 
 export interface ComboboxOption {
   value: string;
@@ -29,7 +30,7 @@ export function Combobox({
 }: ComboboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
   const inputId = useId();
 
   const selectedOptions = options.filter((opt) => value.includes(opt.value));
@@ -38,32 +39,6 @@ export function Combobox({
       !value.includes(opt.value) &&
       opt.label.toLowerCase().includes(searchTerm.trim().toLowerCase()),
   );
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      const path = event.composedPath();
-      if (wrapperRef.current && !path.includes(wrapperRef.current)) {
-        setIsOpen(false);
-        setSearchTerm("");
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsOpen(false);
-        setSearchTerm("");
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
 
   function selectOption(optionValue: string) {
     onChange([...value, optionValue]);
@@ -78,6 +53,11 @@ export function Combobox({
     if (!disabled) setIsOpen(true);
   }
 
+  function closeDropdown() {
+    setIsOpen(false);
+    setSearchTerm("");
+  }
+
   function handleBackspace(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Backspace" && searchTerm === "" && selectedOptions.length > 0) {
       removeOption(selectedOptions[selectedOptions.length - 1].value);
@@ -85,8 +65,9 @@ export function Combobox({
   }
 
   return (
-    <div ref={wrapperRef} className={clsx(styles.wrapper, className)}>
+    <div className={clsx(styles.wrapper, className)}>
       <div
+        ref={triggerRef}
         className={clsx(styles.trigger, disabled && styles.triggerDisabled)}
         onClick={handleTriggerClick}
       >
@@ -108,8 +89,14 @@ export function Combobox({
         />
       </div>
 
-      {isOpen && !disabled && (
-        <div className={styles.dropdown} role="listbox">
+      <AnchoredPopup
+        open={isOpen && !disabled}
+        anchorRef={triggerRef}
+        onClose={closeDropdown}
+        className={styles.dropdown}
+        matchAnchorWidth
+      >
+        <div role="listbox">
           {filteredOptions.length === 0 ? (
             <div className={styles.empty}>{emptyMessage}</div>
           ) : (
@@ -129,7 +116,7 @@ export function Combobox({
             ))
           )}
         </div>
-      )}
+      </AnchoredPopup>
     </div>
   );
 }
