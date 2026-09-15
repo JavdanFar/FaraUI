@@ -14,11 +14,17 @@ export function Tooltip({ content, children }: TooltipProps) {
   return (
     <span
       className={styles.wrapper}
+      data-fara-tooltip-wrapper
       onMouseEnter={() => setIsVisible(true)}
       onMouseLeave={() => setIsVisible(false)}
     >
       {children}
-      <span className={clsx(styles.tooltip, isVisible && styles.visible)} role="tooltip">
+      <span
+        className={clsx(styles.tooltip, isVisible && styles.visible)}
+        data-fara-tooltip
+        data-open={isVisible || undefined}
+        role="tooltip"
+      >
         {content}
       </span>
     </span>
