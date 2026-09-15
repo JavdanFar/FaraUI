@@ -65,14 +65,20 @@ export function Combobox({
   }
 
   return (
-    <div className={clsx(styles.wrapper, className)}>
+    <div data-fara-combobox className={clsx(styles.wrapper, className)}>
       <div
         ref={triggerRef}
+        data-fara-combobox-trigger
+        data-disabled={disabled || undefined}
         className={clsx(styles.trigger, disabled && styles.triggerDisabled)}
         onClick={handleTriggerClick}
       >
         {selectedOptions.map((opt) => (
-          <Chip key={opt.value} onRemove={disabled ? undefined : () => removeOption(opt.value)}>
+          <Chip
+            key={opt.value}
+            data-fara-combobox-chip
+            onRemove={disabled ? undefined : () => removeOption(opt.value)}
+          >
             {opt.label}
           </Chip>
         ))}
@@ -80,6 +86,7 @@ export function Combobox({
         <input
           id={inputId}
           className={styles.searchInput}
+          data-fara-combobox-search-input
           disabled={disabled}
           placeholder={selectedOptions.length === 0 ? placeholder : ""}
           value={searchTerm}
@@ -95,16 +102,18 @@ export function Combobox({
         onClose={closeDropdown}
         className={styles.dropdown}
         matchAnchorWidth
+        dataFara="combobox-dropdown"
       >
-        <div role="listbox">
+        <div role="listbox" data-fara-combobox-option-list>
           {filteredOptions.length === 0 ? (
-            <div className={styles.empty}>{emptyMessage}</div>
+            <div className={styles.empty} data-fara-combobox-empty>{emptyMessage}</div>
           ) : (
             filteredOptions.map((opt) => (
               <div
                 key={opt.value}
                 role="option"
                 aria-selected={false}
+                data-fara-combobox-option
                 className={styles.option}
                 onMouseDown={(e) => {
                   e.preventDefault();
