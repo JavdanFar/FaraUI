@@ -175,10 +175,11 @@ export function TimePicker({
   });
 
   return (
-    <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
+    <div ref={wrapperRef} data-fara-time-picker className={clsx(styles.wrapper, className)} dir="rtl">
       <input
         ref={inputRef}
         readOnly
+        data-fara-time-picker-input
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
         disabled={disabled}
@@ -192,21 +193,26 @@ export function TimePicker({
         onClose={closePicker}
         className={styles.panel}
         gap={4}
+        dataFara="time-picker-panel"
       >
-          <div className={styles.scrollHeader}>
-            <span className={styles.columnLabel}>ساعت</span>
-            <span className={styles.columnLabel}>دقیقه</span>
-            {showSeconds && <span className={styles.columnLabel}>ثانیه</span>}
+          <div className={styles.scrollHeader} data-fara-time-picker-header>
+            <span className={styles.columnLabel} data-fara-time-picker-column-label>ساعت</span>
+            <span className={styles.columnLabel} data-fara-time-picker-column-label>دقیقه</span>
+            {showSeconds && (
+              <span className={styles.columnLabel} data-fara-time-picker-column-label>ثانیه</span>
+            )}
           </div>
           <div className={styles.scrollWrapper}>
             <div className={styles.scrollGuideTop} />
             <div className={styles.scrollGuideBottom} />
 
-            <div className={styles.scrollContainer}>
+            <div className={styles.scrollContainer} data-fara-time-picker-scroll-container>
               {/* Hour column */}
               <div
                 ref={hourColumnRef}
                 className={styles.scrollColumn}
+                data-fara-time-picker-column
+                data-column="hour"
                 onScroll={handleColumnScroll(hourOptions.length, (index) => {
                   const selected = hourOptions[index];
                   if (format === "24h") setHourFrom24(selected);
@@ -220,6 +226,8 @@ export function TimePicker({
                     <div
                       key={h}
                       data-value={h}
+                      data-fara-time-picker-item
+                      data-selected={isActive || undefined}
                       className={clsx(styles.scrollItem, isActive && styles.scrollItemActive)}
                       onClick={() =>
                         handleItemClick(hourColumnRef, h, () =>
@@ -234,12 +242,14 @@ export function TimePicker({
                 <div className={styles.scrollPadding} />
               </div>
 
-              <div className={styles.separator}>:</div>
+              <div className={styles.separator} data-fara-time-picker-separator>:</div>
 
               {/* Minute column */}
               <div
                 ref={minuteColumnRef}
                 className={styles.scrollColumn}
+                data-fara-time-picker-column
+                data-column="minute"
                 onScroll={handleColumnScroll(MINUTES_SECONDS.length, (index) =>
                   setDraft((d) => ({ ...d, minute: index })),
                 )}
@@ -249,6 +259,8 @@ export function TimePicker({
                   <div
                     key={m}
                     data-value={m}
+                    data-fara-time-picker-item
+                    data-selected={m === draft.minute || undefined}
                     className={clsx(
                       styles.scrollItem,
                       m === draft.minute && styles.scrollItemActive,
@@ -268,10 +280,12 @@ export function TimePicker({
               {/* Second column (optional) */}
               {showSeconds && (
                 <>
-                  <div className={styles.separator}>:</div>
+                  <div className={styles.separator} data-fara-time-picker-separator>:</div>
                   <div
                     ref={secondColumnRef}
                     className={styles.scrollColumn}
+                    data-fara-time-picker-column
+                    data-column="second"
                     onScroll={handleColumnScroll(MINUTES_SECONDS.length, (index) =>
                       setDraft((d) => ({ ...d, second: index })),
                     )}
@@ -281,6 +295,8 @@ export function TimePicker({
                       <div
                         key={s}
                         data-value={s}
+                        data-fara-time-picker-item
+                        data-selected={s === (draft.second ?? 0) || undefined}
                         className={clsx(
                           styles.scrollItem,
                           s === (draft.second ?? 0) && styles.scrollItemActive,
@@ -304,6 +320,8 @@ export function TimePicker({
                 <div
                   ref={periodColumnRef}
                   className={styles.scrollColumn}
+                  data-fara-time-picker-column
+                  data-column="period"
                   onScroll={handleColumnScroll(PERIODS.length, (index) =>
                     setPeriod(PERIODS[index].value),
                   )}
@@ -313,6 +331,8 @@ export function TimePicker({
                     <div
                       key={p.value}
                       data-value={p.value}
+                      data-fara-time-picker-item
+                      data-selected={p.value === displayPeriod || undefined}
                       className={clsx(
                         styles.scrollItem,
                         p.value === displayPeriod && styles.scrollItemActive,
@@ -330,8 +350,13 @@ export function TimePicker({
             </div>
           </div>
 
-          <div className={styles.confirmRow}>
-            <button type="button" className={styles.confirmButton} onClick={handleConfirm}>
+          <div className={styles.confirmRow} data-fara-time-picker-confirm-row>
+            <button
+              type="button"
+              className={styles.confirmButton}
+              data-fara-time-picker-confirm-button
+              onClick={handleConfirm}
+            >
               تایید
             </button>
           </div>
