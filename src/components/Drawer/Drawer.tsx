@@ -59,7 +59,12 @@ export function Drawer({ open, onClose, children, title, side = "end", className
 
   return createPortal(
     <>
-      <div className={clsx(styles.overlay, isVisible && styles.overlayVisible)} onClick={onClose} />
+      <div
+        className={clsx(styles.overlay, isVisible && styles.overlayVisible)}
+        data-fara-drawer-overlay
+        data-open={isVisible || undefined}
+        onClick={onClose}
+      />
       <div
         className={clsx(
           styles.panel,
@@ -67,14 +72,17 @@ export function Drawer({ open, onClose, children, title, side = "end", className
           isVisible && styles.panelVisible,
           className,
         )}
+        data-fara-drawer
+        data-open={isVisible || undefined}
+        data-side={side}
       >
-        <div className={styles.header}>
-          {title && <h2>{title}</h2>}
-          <button className={styles.closeButton} onClick={onClose} aria-label="بستن">
+        <div className={styles.header} data-fara-drawer-header>
+          {title && <h2 data-fara-drawer-title>{title}</h2>}
+          <button className={styles.closeButton} data-fara-drawer-close onClick={onClose} aria-label="بستن">
             ✕
           </button>
         </div>
-        <div className={styles.body}>{children}</div>
+        <div className={styles.body} data-fara-drawer-body>{children}</div>
       </div>
     </>,
     document.body,
