@@ -49,7 +49,7 @@ export { DropdownMenu, DropdownMenuItem } from "./components/DropdownMenu";
 export type { DropdownMenuProps, DropdownMenuItemProps } from "./components/DropdownMenu";
 
 export { showToast, Toaster } from "./components/Toast";
-export type { ToastItem } from "./components/Toast";
+export type { ToastItem, ToasterProps, ToastPosition } from "./components/Toast";
 
 export { Table } from "./components/Table";
 export type {
