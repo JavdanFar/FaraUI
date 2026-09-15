@@ -47,7 +47,9 @@ function Root({
 
   return (
     <AccordionContext.Provider value={{ openItems, toggleItem }}>
-      <div className={clsx(styles.root, className)}>{children}</div>
+      <div data-fara-accordion className={clsx(styles.root, className)}>
+        {children}
+      </div>
     </AccordionContext.Provider>
   );
 }
@@ -59,7 +61,7 @@ export interface AccordionItemProps {
 
 function Item({ value, children }: AccordionItemProps) {
   return (
-    <div className={styles.item} data-accordion-value={value}>
+    <div className={styles.item} data-fara-accordion-item data-accordion-value={value}>
       {children}
     </div>
   );
@@ -78,12 +80,15 @@ function Trigger({ value, children }: AccordionTriggerProps) {
     <button
       type="button"
       className={styles.trigger}
+      data-fara-accordion-trigger
+      data-open={isOpen || undefined}
       onClick={() => toggleItem(value)}
       aria-expanded={isOpen}
     >
       {children}
       <svg
         className={clsx(styles.icon, isOpen && styles.iconOpen)}
+        data-fara-accordion-icon
         width="16"
         height="16"
         viewBox="0 0 24 24"
@@ -109,9 +114,15 @@ function Panel({ value, children }: AccordionPanelProps) {
   const isOpen = openItems.includes(value);
 
   return (
-    <div className={clsx(styles.panel, isOpen && styles.panelOpen)}>
-      <div className={styles.panelInner}>
-        <div className={styles.panelContent}>{children}</div>
+    <div
+      className={clsx(styles.panel, isOpen && styles.panelOpen)}
+      data-fara-accordion-panel
+      data-open={isOpen || undefined}
+    >
+      <div className={styles.panelInner} data-fara-accordion-panel-inner>
+        <div className={styles.panelContent} data-fara-accordion-panel-content>
+          {children}
+        </div>
       </div>
     </div>
   );
