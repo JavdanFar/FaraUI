@@ -16,7 +16,7 @@ export interface RadioGroupProps {
 
 export function RadioGroup({ name, options, value, onChange, disabled = false }: RadioGroupProps) {
   return (
-    <div className={styles.group}>
+    <div data-fara-radio-group className={styles.group}>
       {options.map((opt) => (
         <Radio
           key={opt.value}
