@@ -1,0 +1,17 @@
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: var(--fara-z-popover);
+    font-family: var(--fara-font-family);
+    font-size: var(--fara-font-size-md);
+    line-height: var(--fara-line-height-normal);
+    color: var(--fara-color-text);
+    box-sizing: border-box;
+}
+
+.popup *,
+.popup *::before,
+.popup *::after {
+    box-sizing: border-box;
+}
