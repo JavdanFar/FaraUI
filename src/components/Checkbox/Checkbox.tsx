@@ -13,8 +13,15 @@ export function Checkbox({ label, className, id, ref, ...rest }: CheckboxProps) 
   const inputId = id ?? generatedId;
 
   return (
-    <label htmlFor={inputId} className={clsx(styles.wrapper, className)}>
-      <input ref={ref} type="checkbox" id={inputId} className={styles.checkbox} {...rest} />
+    <label htmlFor={inputId} data-fara-checkbox className={clsx(styles.wrapper, className)}>
+      <input
+        ref={ref}
+        type="checkbox"
+        id={inputId}
+        data-fara-checkbox-input
+        className={styles.checkbox}
+        {...rest}
+      />
       {label}
     </label>
   );
