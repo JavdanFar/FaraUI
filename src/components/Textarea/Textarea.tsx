@@ -37,6 +37,8 @@ export function Textarea({
         if (typeof ref === "function") ref(node);
         else if (ref) ref.current = node;
       }}
+      data-fara-textarea
+      data-error={error || undefined}
       className={clsx(
         styles.textarea,
         error && styles.error,
