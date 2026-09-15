@@ -9,10 +9,21 @@ export interface ChipProps extends HTMLAttributes<HTMLSpanElement> {
 
 export function Chip({ children, onRemove, className, ...rest }: ChipProps) {
   return (
-    <span className={clsx(styles.chip, className)} {...rest}>
+    <span
+      className={clsx(styles.chip, className)}
+      data-fara-chip
+      data-removable={onRemove ? true : undefined}
+      {...rest}
+    >
       {children}
       {onRemove && (
-        <button type="button" className={styles.removeButton} onClick={onRemove} aria-label="حذف">
+        <button
+          type="button"
+          className={styles.removeButton}
+          data-fara-chip-remove
+          onClick={onRemove}
+          aria-label="حذف"
+        >
           ✕
         </button>
       )}
