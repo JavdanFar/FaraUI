@@ -31,6 +31,7 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
 
   function closeMenu() {
     if (!shouldRender) return;
+    setIsOpen(false);
     setIsVisible(false);
     closeTimer.current = window.setTimeout(() => setShouldRender(false), EXIT_ANIMATION_MS);
   }
@@ -44,8 +45,8 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <span ref={triggerRef} onClick={toggleMenu}>
+    <div className={styles.wrapper} data-fara-dropdown-menu>
+      <span ref={triggerRef} data-fara-dropdown-menu-trigger onClick={toggleMenu}>
         {trigger}
       </span>
 
@@ -55,9 +56,11 @@ export function DropdownMenu({ trigger, children }: DropdownMenuProps) {
         onClose={closeMenu}
         className={clsx(styles.menu, isVisible && styles.menuVisible)}
         align="end"
+        dataFara="dropdown-menu-menu"
       >
         <div
           role="menu"
+          data-fara-dropdown-menu-list
           onClick={closeMenu}
         >
           {children}
@@ -80,6 +83,9 @@ export function DropdownMenuItem({ children, onClick, disabled, danger }: Dropdo
       type="button"
       role="menuitem"
       disabled={disabled}
+      data-fara-dropdown-menu-item
+      data-danger={danger || undefined}
+      data-disabled={disabled || undefined}
       onClick={onClick}
       className={clsx(styles.item, danger && styles.itemDanger)}
     >
