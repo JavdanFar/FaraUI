@@ -18,9 +18,13 @@ export function NotificationBadge({
   const shouldShow = count !== undefined && (count > 0 || showZero);
 
   return (
-    <span className={styles.wrapper}>
+    <span className={styles.wrapper} data-fara-notification-badge>
       {children}
-      {shouldShow && <span className={clsx(styles.dot, styles[variant])}>{count}</span>}
+      {shouldShow && (
+        <span className={clsx(styles.dot, styles[variant])} data-fara-notification-badge-count data-variant={variant}>
+          {count}
+        </span>
+      )}
     </span>
   );
 }
