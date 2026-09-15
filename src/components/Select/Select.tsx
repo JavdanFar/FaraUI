@@ -47,10 +47,11 @@ export function Select({
   }
 
   return (
-    <div className={clsx(styles.wrapper, className)}>
+    <div data-fara-select className={clsx(styles.wrapper, className)}>
       <input
         ref={inputRef}
         className={styles.trigger}
+        data-fara-select-trigger
         disabled={disabled}
         placeholder={placeholder}
         value={isOpen ? searchTerm : (selectedOption?.label ?? "")}
@@ -64,13 +65,16 @@ export function Select({
         onClose={closeDropdown}
         className={styles.dropdown}
         matchAnchorWidth
+        dataFara="select-dropdown"
       >
         {filteredOptions.length === 0 ? (
-          <div className={styles.empty}>نتیجه‌ای یافت نشد</div>
+          <div className={styles.empty} data-fara-select-empty>نتیجه‌ای یافت نشد</div>
         ) : (
           filteredOptions.map((opt) => (
             <div
               key={opt.value}
+              data-fara-select-option
+              data-selected={opt.value === value || undefined}
               className={clsx(styles.option, opt.value === value && styles.optionSelected)}
               onMouseDown={() => handleSelect(opt.value)}
             >
