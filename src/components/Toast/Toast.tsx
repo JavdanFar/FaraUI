@@ -2,62 +2,55 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import styles from "./Toast.module.css";
+import {
+  dismissToast,
+  getToasts,
+  pauseToastTimer,
+  resumeToastTimer,
+  subscribeToToasts,
+  type ToastItem,
+} from "./toastStore";
 
-export interface ToastItem {
-  id: string;
-  message: string;
-  variant: "info" | "success" | "danger";
-  duration: number;
+export type ToastPosition =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+
+export interface ToasterProps {
+  position?: ToastPosition;
 }
 
-let toasts: ToastItem[] = [];
-let listeners: Array<() => void> = [];
+const positionClasses: Record<ToastPosition, string> = {
+  "top-left": styles.topLeft,
+  "top-center": styles.topCenter,
+  "top-right": styles.topRight,
+  "bottom-left": styles.bottomLeft,
+  "bottom-center": styles.bottomCenter,
+  "bottom-right": styles.bottomRight,
+};
 
-function notify() {
-  listeners.forEach((listener) => listener());
-}
+export function Toaster({ position = "bottom-center" }: ToasterProps) {
+  const [items, setItems] = useState<ToastItem[]>(getToasts);
 
-function dismissToast(id: string) {
-  toasts = toasts.filter((toast) => toast.id !== id);
-  notify();
-}
-
-export function showToast(
-  message: string,
-  variant: ToastItem["variant"] = "info",
-  duration = 3000,
-) {
-  const id = crypto.randomUUID();
-  toasts = [...toasts, { id, message, variant, duration }];
-  notify();
-
-  setTimeout(() => {
-    dismissToast(id);
-  }, duration);
-}
-
-export function Toaster() {
-  const [items, setItems] = useState<ToastItem[]>(toasts);
-
-  useEffect(() => {
-    function handleChange() {
-      setItems([...toasts]);
-    }
-
-    listeners.push(handleChange);
-    return () => {
-      listeners = listeners.filter((listener) => listener !== handleChange);
-    };
-  }, []);
+  useEffect(() => subscribeToToasts(() => setItems([...getToasts()])), []);
 
   return createPortal(
-    <div className={styles.container} data-fara-toaster>
+    <div
+      className={clsx(styles.container, positionClasses[position])}
+      data-fara-toaster
+      data-position={position}
+    >
       {items.map((toast) => (
         <div
           key={toast.id}
           className={clsx(styles.toast, styles[toast.variant])}
           data-fara-toast
           data-variant={toast.variant}
+          onMouseEnter={() => pauseToastTimer(toast.id)}
+          onMouseLeave={() => resumeToastTimer(toast.id)}
         >
           <span className={styles.message} data-fara-toast-message>{toast.message}</span>
           <button
