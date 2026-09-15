@@ -10,8 +10,8 @@ export interface DividerProps extends HTMLAttributes<HTMLDivElement> {
 export function Divider({ orientation = "horizontal", label, className, ...rest }: DividerProps) {
   if (label) {
     return (
-      <div className={clsx(styles.withLabel, className)} {...rest}>
-        <span className={styles.label}>{label}</span>
+      <div className={clsx(styles.withLabel, className)} data-fara-divider data-with-label {...rest}>
+        <span className={styles.label} data-fara-divider-label>{label}</span>
       </div>
     );
   }
@@ -20,6 +20,8 @@ export function Divider({ orientation = "horizontal", label, className, ...rest 
     <div
       role="separator"
       aria-orientation={orientation}
+      data-fara-divider
+      data-orientation={orientation}
       className={clsx(styles.divider, styles[orientation], className)}
       {...rest}
     />
