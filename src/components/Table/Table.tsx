@@ -10,10 +10,60 @@ import { useTableSelection } from "./useTableSelection";
 import { FilterIcon } from "./FilterIcon";
 import { TablePagination } from "./TablePagination";
 import { Spinner } from "../Spinner";
+import { AnchoredPopup } from "../AnchoredPopup";
 
 function getCellValue<T>(row: T, col: TableColumn<T>): string | number {
   if (col.accessor) return col.accessor(row);
   return (row as Record<string, unknown>)[col.key] as string | number;
+}
+
+function ColumnFilter({
+  header,
+  open,
+  highlighted,
+  onToggle,
+  onClose,
+  value,
+  onChange,
+}: {
+  header: string;
+  open: boolean;
+  highlighted: boolean;
+  onToggle: () => void;
+  onClose: () => void;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  return (
+    <span className={styles.filterWrapper}>
+      <button
+        ref={buttonRef}
+        type="button"
+        className={clsx(styles.filterButton, highlighted && styles.filterButtonActive)}
+        onClick={onToggle}
+        aria-label={`فیلتر ${header}`}
+      >
+        <FilterIcon />
+      </button>
+
+      <AnchoredPopup
+        open={open}
+        anchorRef={buttonRef}
+        onClose={onClose}
+        className={styles.filterPopover}
+      >
+        <input
+          autoFocus
+          className={styles.filterPopoverInput}
+          placeholder="فیلتر..."
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </AnchoredPopup>
+    </span>
+  );
 }
 
 export function Table<T>({
@@ -85,20 +135,6 @@ export function Table<T>({
     }
   }, [isSomeSelected]);
 
-  useEffect(() => {
-    if (!openFilterKey) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      const target = event.target as HTMLElement;
-      if (!target.closest("[data-table-filter]")) {
-        closeFilter();
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [openFilterKey, closeFilter]);
-
   const rowsToRender = paginatedData;
 
   return (
@@ -166,31 +202,15 @@ export function Table<T>({
                         )}
 
                         {isFilterable && (
-                          <span className={styles.filterWrapper} data-table-filter>
-                            <button
-                              type="button"
-                              className={clsx(
-                                styles.filterButton,
-                                hasActiveFilter && styles.filterButtonActive,
-                              )}
-                              onClick={() => toggleFilterOpen(col.key)}
-                              aria-label={`فیلتر ${col.header}`}
-                            >
-                              <FilterIcon />
-                            </button>
-
-                            {openFilterKey === col.key && (
-                              <span className={styles.filterPopover}>
-                                <input
-                                  autoFocus
-                                  className={styles.filterPopoverInput}
-                                  placeholder="فیلتر..."
-                                  value={columnFilters[col.key] ?? ""}
-                                  onChange={(e) => setColumnFilter(col.key, e.target.value)}
-                                />
-                              </span>
-                            )}
-                          </span>
+                          <ColumnFilter
+                            header={col.header}
+                            open={openFilterKey === col.key}
+                            highlighted={hasActiveFilter}
+                            onToggle={() => toggleFilterOpen(col.key)}
+                            onClose={closeFilter}
+                            value={columnFilters[col.key] ?? ""}
+                            onChange={(next) => setColumnFilter(col.key, next)}
+                          />
                         )}
                       </span>
                     </th>

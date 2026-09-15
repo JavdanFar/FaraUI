@@ -106,16 +106,13 @@
 }
 
 .filterPopover {
-    position: absolute;
-    top: calc(100% + var(--fara-spacing-2xs));
-    inset-inline-start: 0;
+    box-sizing: border-box;
     min-width: 160px;
     background-color: var(--fara-color-background);
     border: var(--fara-border-width-thin) solid var(--fara-color-border);
     border-radius: var(--fara-radius-md);
     box-shadow: var(--fara-shadow-md);
     padding: var(--fara-spacing-xs);
-    z-index: var(--fara-z-dropdown);
 }
 
 .filterPopoverInput {
