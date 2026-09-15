@@ -68,7 +68,7 @@ export function OtpInput({
   }
 
   return (
-    <div className={clsx(styles.wrapper, className)} dir="ltr">
+    <div data-fara-otp-input className={clsx(styles.wrapper, className)} dir="ltr">
       {digits.map((digit, index) => (
         <input
           key={index}
@@ -78,6 +78,9 @@ export function OtpInput({
           type="text"
           inputMode="numeric"
           maxLength={1}
+          data-fara-otp-input-slot
+          data-filled={digit !== "" || undefined}
+          data-error={error || undefined}
           className={clsx(styles.digit, error && styles.digitError)}
           value={digit}
           disabled={disabled}
