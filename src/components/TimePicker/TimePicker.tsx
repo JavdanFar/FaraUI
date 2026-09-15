@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./TimePicker.module.css";
 import { useSnapScroll } from "../../hooks/useSnapScroll";
+import { centerInScroller } from "../../utils/centerInScroller";
+import { AnchoredPopup } from "../AnchoredPopup";
 import { getCurrentTime } from "./getCurrentTime";
 import type { TimeValue } from "./getCurrentTime";
 
@@ -60,6 +62,7 @@ export function TimePicker({
 }: TimePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const defaultValue: TimeValue =
     defaultTime === "zero" ? { hour: 0, minute: 0, second: 0 } : getCurrentTime();
@@ -70,27 +73,9 @@ export function TimePicker({
   const secondColumnRef = useRef<HTMLDivElement>(null);
   const periodColumnRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleClickOutside(event: MouseEvent) {
-      const path = event.composedPath();
-      if (wrapperRef.current && !path.includes(wrapperRef.current)) {
-        setIsOpen(false);
-      }
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setIsOpen(false);
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
+  function closePicker() {
+    setIsOpen(false);
+  }
 
   function openPicker() {
     if (disabled) return;
@@ -101,8 +86,6 @@ export function TimePicker({
   const displayHour12 = draft.hour % 12 === 0 ? 12 : draft.hour % 12;
   const displayPeriod: "AM" | "PM" = draft.hour < 12 ? "AM" : "PM";
 
-  // Latest draft for the "center on open" effect below, so it can depend on
-  // [isOpen] only without re-running while the user scrolls the columns
   const draftRef = useRef(draft);
   useEffect(() => {
     draftRef.current = draft;
@@ -116,21 +99,13 @@ export function TimePicker({
     const currentPeriod: "AM" | "PM" = current.hour < 12 ? "AM" : "PM";
 
     const hourDisplayValue = format === "24h" ? current.hour : currentHour12;
-    hourColumnRef.current
-      ?.querySelector(`[data-value="${hourDisplayValue}"]`)
-      ?.scrollIntoView({ block: "center" });
-    minuteColumnRef.current
-      ?.querySelector(`[data-value="${current.minute}"]`)
-      ?.scrollIntoView({ block: "center" });
+    centerInScroller(hourColumnRef, `[data-value="${hourDisplayValue}"]`);
+    centerInScroller(minuteColumnRef, `[data-value="${current.minute}"]`);
     if (showSeconds) {
-      secondColumnRef.current
-        ?.querySelector(`[data-value="${current.second ?? 0}"]`)
-        ?.scrollIntoView({ block: "center" });
+      centerInScroller(secondColumnRef, `[data-value="${current.second ?? 0}"]`);
     }
     if (format === "12h") {
-      periodColumnRef.current
-        ?.querySelector(`[data-value="${currentPeriod}"]`)
-        ?.scrollIntoView({ block: "center" });
+      centerInScroller(periodColumnRef, `[data-value="${currentPeriod}"]`);
     }
   }, [isOpen, format, showSeconds]);
 
@@ -148,9 +123,7 @@ export function TimePicker({
     applyValue: () => void,
   ) {
     applyValue();
-    columnRef.current
-      ?.querySelector(`[data-value="${itemValue}"]`)
-      ?.scrollIntoView({ block: "center", behavior: "smooth" });
+    centerInScroller(columnRef, `[data-value="${itemValue}"]`, "smooth");
   }
 
   function setHourFrom24(hour24: number) {
@@ -204,6 +177,7 @@ export function TimePicker({
   return (
     <div ref={wrapperRef} className={clsx(styles.wrapper, className)} dir="rtl">
       <input
+        ref={inputRef}
         readOnly
         className={clsx(styles.input, inputClassName)}
         placeholder={placeholder}
@@ -212,8 +186,13 @@ export function TimePicker({
         onClick={openPicker}
       />
 
-      {isOpen && (
-        <div className={styles.panel}>
+      <AnchoredPopup
+        open={isOpen}
+        anchorRef={inputRef}
+        onClose={closePicker}
+        className={styles.panel}
+        gap={4}
+      >
           <div className={styles.scrollHeader}>
             <span className={styles.columnLabel}>ساعت</span>
             <span className={styles.columnLabel}>دقیقه</span>
@@ -356,8 +335,7 @@ export function TimePicker({
               تایید
             </button>
           </div>
-        </div>
-      )}
+      </AnchoredPopup>
     </div>
   );
 }
