@@ -14,20 +14,18 @@ export interface DrawerProps {
 }
 
 export function Drawer({ open, onClose, children, title, side = "end", className }: DrawerProps) {
-  const [shouldRender, setShouldRender] = useState(open);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setShouldRender(true);
-      requestAnimationFrame(() => {
+      const raf = requestAnimationFrame(() => {
         requestAnimationFrame(() => setIsVisible(true));
       });
-    } else {
-      setIsVisible(false);
-      const timeout = setTimeout(() => setShouldRender(false), 250);
-      return () => clearTimeout(timeout);
+      return () => cancelAnimationFrame(raf);
     }
+
+    const timeout = setTimeout(() => setIsVisible(false), 250);
+    return () => clearTimeout(timeout);
   }, [open]);
 
   useEffect(() => {
@@ -55,25 +53,25 @@ export function Drawer({ open, onClose, children, title, side = "end", className
     };
   }, [open, onClose]);
 
-  if (!shouldRender) return null;
+  if (!open && !isVisible) return null;
 
   return createPortal(
     <>
       <div
-        className={clsx(styles.overlay, isVisible && styles.overlayVisible)}
+        className={clsx(styles.overlay, open && isVisible && styles.overlayVisible)}
         data-fara-drawer-overlay
-        data-open={isVisible || undefined}
+        data-open={(open && isVisible) || undefined}
         onClick={onClose}
       />
       <div
         className={clsx(
           styles.panel,
           side === "start" ? styles.panelStart : styles.panelEnd,
-          isVisible && styles.panelVisible,
+          open && isVisible && styles.panelVisible,
           className,
         )}
         data-fara-drawer
-        data-open={isVisible || undefined}
+        data-open={(open && isVisible) || undefined}
         data-side={side}
       >
         <div className={styles.header} data-fara-drawer-header>
