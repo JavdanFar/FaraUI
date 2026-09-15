@@ -1,5 +1,4 @@
 export function ChevronIcon({ direction }: { direction: "previous" | "next" }) {
-  // RTL calendar: "previous" points right, "next" points left
   const points = direction === "previous" ? "9 18 15 12 9 6" : "15 18 9 12 15 6";
 
   return (
