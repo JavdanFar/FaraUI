@@ -56,6 +56,7 @@ import type {
   StepperStep,
   TableColumn,
   TimelineItem,
+  ToastPosition,
 } from "./index";
 
 /* ============================================================
@@ -234,8 +235,6 @@ export default function App() {
         <DataDisplaySection />
         <OverlaysSection />
       </main>
-
-      <Toaster />
     </div>
   );
 }
@@ -598,7 +597,18 @@ function FeedbackSection() {
   );
 }
 
+const toastPositionOptions: SelectOption[] = [
+  { value: "top-right", label: "بالا راست" },
+  { value: "top-center", label: "بالا وسط" },
+  { value: "top-left", label: "بالا چپ" },
+  { value: "bottom-right", label: "پایین راست" },
+  { value: "bottom-center", label: "پایین وسط" },
+  { value: "bottom-left", label: "پایین چپ" },
+];
+
 function MessageDemos() {
+  const [toastPosition, setToastPosition] = useState<ToastPosition>("bottom-center");
+
   return (
     <Subsection id="feedback-messages" title="پیام‌ها">
       <Demo name="Alert" title="چهار واریانت + قابل بستن" span="wide">
@@ -612,8 +622,13 @@ function MessageDemos() {
         </div>
       </Demo>
 
-      <Demo name="Toast" title="سه واریانت — با کلیک اجرا شود" span="wide">
+      <Demo name="Toast" title="سه واریانت + انتخاب موقعیت — با کلیک اجرا شود" span="wide">
         <div className="row">
+          <Select
+            options={toastPositionOptions}
+            value={toastPosition}
+            onChange={(value) => setToastPosition(value as ToastPosition)}
+          />
           <Button variant="secondary" onClick={() => showToast("پیام اطلاع‌رسانی", "info")}>
             Toast اطلاع‌رسانی
           </Button>
@@ -628,6 +643,8 @@ function MessageDemos() {
           </Button>
         </div>
       </Demo>
+
+      <Toaster position={toastPosition} />
     </Subsection>
   );
 }
