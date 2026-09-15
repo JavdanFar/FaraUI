@@ -13,6 +13,8 @@ export function Spinner({ size = "md", className, ref, ...rest }: SpinnerProps) 
       ref={ref}
       role="status"
       aria-label="در حال بارگذاری"
+      data-fara-spinner
+      data-size={size}
       className={clsx(styles.spinner, styles[size], className)}
       {...rest}
     />
