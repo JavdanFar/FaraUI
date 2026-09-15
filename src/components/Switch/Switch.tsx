@@ -13,17 +13,18 @@ export function Switch({ label, className, id, ref, ...rest }: SwitchProps) {
   const inputId = id ?? generatedId;
 
   return (
-    <label htmlFor={inputId} className={clsx(styles.wrapper, className)}>
+    <label htmlFor={inputId} data-fara-switch className={clsx(styles.wrapper, className)}>
       <input
         ref={ref}
         type="checkbox"
         role="switch"
         id={inputId}
+        data-fara-switch-input
         className={styles.input}
         {...rest}
       />
-      <span className={styles.track}>
-        <span className={styles.thumb} />
+      <span data-fara-switch-track className={styles.track}>
+        <span data-fara-switch-thumb className={styles.thumb} />
       </span>
       {label}
     </label>
