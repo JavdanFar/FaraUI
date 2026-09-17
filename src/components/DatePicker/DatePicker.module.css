@@ -253,7 +253,7 @@
 
 .footer {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     padding-top: var(--fara-spacing-sm);
     border-top: var(--fara-border-width-thin) solid var(--fara-color-border-light);
 }
