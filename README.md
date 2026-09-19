@@ -59,9 +59,24 @@ intended interaction direction.
 
 ## Browser and SSR notes
 
-Popup, modal, drawer, and toast components use browser APIs and portals when
-mounted. Render them on the client in SSR applications and import the package
-stylesheet from the application entry point.
+The basic presentational components can be imported in SSR applications.
+Components that render portals or depend on browser APIs must be rendered on the
+client: `Modal`, `Drawer`, `Toast`/`Toaster`, `Popover`, `Tooltip`, `DropdownMenu`,
+`Select`, `Combobox`, `DatePicker`, `DateRangePicker`, and `TimePicker`.
+
+In Next.js, load these components with SSR disabled:
+
+```tsx
+import dynamic from "next/dynamic";
+
+const ClientDatePicker = dynamic(
+  () => import("./ClientDatePicker").then((module) => module.ClientDatePicker),
+  { ssr: false },
+);
+```
+
+Import `fara-ui/styles.css` from the application entry point. Full SSR support
+for browser-dependent components is not part of the `0.1.0` contract.
 
 ## Development
 
@@ -147,9 +162,25 @@ FaraUI شامل کامپوننت‌های دکمه و کنترل‌های فرم
 
 ## نکات مرورگر و SSR
 
-کامپوننت‌های popup، modal، drawer و toast هنگام mount شدن از APIهای مرورگر و
-portal استفاده می‌کنند. در اپلیکیشن‌های SSR آن‌ها را در سمت client رندر کنید و
-stylesheet پکیج را از ورودی اپلیکیشن import کنید.
+کامپوننت‌های نمایشی ساده را می‌توان در اپلیکیشن‌های SSR import کرد. کامپوننت‌هایی
+که portal تولید می‌کنند یا به APIهای مرورگر وابسته هستند باید در سمت client
+رندر شوند: `Modal`، `Drawer`، `Toast`/`Toaster`، `Popover`، `Tooltip`،
+`DropdownMenu`، `Select`، `Combobox`، `DatePicker`، `DateRangePicker` و
+`TimePicker`.
+
+در Next.js این کامپوننت‌ها را با SSR غیرفعال بارگذاری کنید:
+
+```tsx
+import dynamic from "next/dynamic";
+
+const ClientDatePicker = dynamic(
+  () => import("./ClientDatePicker").then((module) => module.ClientDatePicker),
+  { ssr: false },
+);
+```
+
+`fara-ui/styles.css` را از ورودی اپلیکیشن import کنید. پشتیبانی کامل SSR برای
+کامپوننت‌های وابسته به مرورگر بخشی از قرارداد نسخه `0.1.0` نیست.
 
 ## توسعه
 
