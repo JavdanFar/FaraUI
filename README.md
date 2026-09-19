@@ -1,8 +1,6 @@
 # FaraUI
 
-> English | [فارسی](#فارسی)
-
-RTL-first React UI components for Persian applications, with built-in Jalali date
+React UI components for Persian applications, with built-in Jalali date
 and time controls and CSS hooks that can be overridden by consumers.
 
 ## Installation
@@ -94,109 +92,5 @@ npm pack --dry-run
 ```
 
 ## License
-
-MIT
-
----
-
-<a id="فارسی"></a>
-
-# FaraUI
-
-مجموعه‌ای از کامپوننت‌های رابط کاربری React با پشتیبانی اولویت‌دار از راست‌به‌چپ
-برای اپلیکیشن‌های فارسی، همراه با کنترل‌های تاریخ و زمان جلالی و hookهای CSS که
-قابل سفارشی‌سازی توسط مصرف‌کننده هستند.
-
-## نصب
-
-```bash
-npm install fara-ui
-```
-
-در حال حاضر FaraUI از React 19 و ReactDOM 19 پشتیبانی می‌کند.
-
-## استفاده
-
-کامپوننت‌ها را از ورودی اصلی پکیج و stylesheet همراه آن را یک‌بار در ورودی
-اپلیکیشن import کنید:
-
-```tsx
-import { Button, DatePicker } from "fara-ui";
-import "fara-ui/styles.css";
-
-export function Example() {
-  return (
-    <div dir="rtl">
-      <Button onClick={() => console.log("clicked")}>ادامه</Button>
-      <DatePicker onChange={(value) => console.log(value)} />
-    </div>
-  );
-}
-```
-
-این پکیج خروجی‌های ESM، CommonJS و declarationهای TypeScript را ارائه می‌دهد.
-
-## کامپوننت‌ها
-
-FaraUI شامل کامپوننت‌های دکمه و کنترل‌های فرم، overlayها و بازخورد، کامپوننت‌های
-ناوبری، نمایش داده و کنترل‌های تاریخ و زمان فارسی است:
-
-- Button، Input، Textarea، Checkbox، Radio، Switch، Slider، Rating، OtpInput
-- Select، Combobox، FileUpload، Form
-- Modal، Drawer، Popover، Tooltip، DropdownMenu، ConfirmDialog
-- Toast، Alert، Spinner، Skeleton، ProgressBar، Badge، NotificationBadge
-- Tabs، Accordion، Breadcrumb، Sidebar، Stepper، Timeline، Divider، Card، Chip
-- Table
-- DatePicker، DateRangePicker، TimePicker
-
-برای مشاهده hookهای پایدار `data-fara-*` به [STYLING.md](./STYLING.md) مراجعه
-کنید.
-
-## استایل و جهت نوشتار
-
-کامپوننت‌ها با CSS Modules و یک stylesheet تجمیع‌شده ارائه می‌شوند. ویژگی‌های
-عمومی `data-fara-*` روش پیشنهادی برای override کردن استایل‌ها در سطح اپلیکیشن
-هستند. هنگام ساخت رابط فارسی، `dir="rtl"` را روی یک container یا روی document
-قرار دهید. کنترل‌هایی که ذاتاً جهت‌دار هستند، جهت تعامل موردنظر خود را حفظ
-می‌کنند.
-
-## نکات مرورگر و SSR
-
-کامپوننت‌های نمایشی ساده را می‌توان در اپلیکیشن‌های SSR import کرد. کامپوننت‌هایی
-که portal تولید می‌کنند یا به APIهای مرورگر وابسته هستند باید در سمت client
-رندر شوند: `Modal`، `Drawer`، `Toast`/`Toaster`، `Popover`، `Tooltip`،
-`DropdownMenu`، `Select`، `Combobox`، `DatePicker`، `DateRangePicker` و
-`TimePicker`.
-
-در Next.js این کامپوننت‌ها را با SSR غیرفعال بارگذاری کنید:
-
-```tsx
-import dynamic from "next/dynamic";
-
-const ClientDatePicker = dynamic(
-  () => import("./ClientDatePicker").then((module) => module.ClientDatePicker),
-  { ssr: false },
-);
-```
-
-`fara-ui/styles.css` را از ورودی اپلیکیشن import کنید. پشتیبانی کامل SSR برای
-کامپوننت‌های وابسته به مرورگر بخشی از قرارداد نسخه `0.1.0` نیست.
-
-## توسعه
-
-```bash
-npm install
-npm run typecheck
-npm run lint
-npm run build
-```
-
-برای بررسی محتوای package بدون انتشار آن:
-
-```bash
-npm pack --dry-run
-```
-
-## مجوز
 
 MIT
