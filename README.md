@@ -76,19 +76,6 @@ const ClientDatePicker = dynamic(
 Import `fara-ui/styles.css` from the application entry point. Full SSR support
 for browser-dependent components is not part of the `0.1.0` contract.
 
-## Development
-
-```bash
-npm install
-npm run typecheck
-npm run lint
-npm run build
-```
-
-The generated package can be inspected without publishing it:
-
-```bash
-npm pack --dry-run
 ```
 
 ## License
