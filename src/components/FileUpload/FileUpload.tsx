@@ -83,7 +83,7 @@ export function FileUpload({
     if (accepted.length === 0) return;
 
     const wrapped: UploadedFile[] = accepted.map((file) => ({
-      id: crypto.randomUUID(),
+      id: `fara-file-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
       name: file.name,
       url: URL.createObjectURL(file),
       size: file.size,
@@ -183,7 +183,11 @@ export function FileUpload({
             </svg>
 
             <span data-fara-file-upload-label>{label}</span>
-            {hint && <span data-fara-file-upload-hint className={styles.hint}>{hint}</span>}
+            {hint && (
+              <span data-fara-file-upload-hint className={styles.hint}>
+                {hint}
+              </span>
+            )}
           </>
         )}
 
@@ -313,10 +317,7 @@ export function FileUpload({
                     {item.name}
                   </div>
                   {item.status === "error" && item.errorMessage ? (
-                    <div
-                      data-fara-file-upload-item-error-text
-                      className={styles.fileCardErrorText}
-                    >
+                    <div data-fara-file-upload-item-error-text className={styles.fileCardErrorText}>
                       {item.errorMessage}
                     </div>
                   ) : (
