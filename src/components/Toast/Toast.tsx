@@ -1,3 +1,4 @@
+import { useIsClient } from "../../hooks/useIsClient";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
@@ -37,6 +38,11 @@ export function Toaster({ position = "bottom-center" }: ToasterProps) {
 
   useEffect(() => subscribeToToasts(() => setItems([...getToasts()])), []);
 
+  const isClient = useIsClient();
+  if (!isClient) {
+    return null;
+  }
+
   return createPortal(
     <div
       className={clsx(styles.container, positionClasses[position])}
@@ -52,7 +58,9 @@ export function Toaster({ position = "bottom-center" }: ToasterProps) {
           onMouseEnter={() => pauseToastTimer(toast.id)}
           onMouseLeave={() => resumeToastTimer(toast.id)}
         >
-          <span className={styles.message} data-fara-toast-message>{toast.message}</span>
+          <span className={styles.message} data-fara-toast-message>
+            {toast.message}
+          </span>
           <button
             type="button"
             className={styles.closeButton}

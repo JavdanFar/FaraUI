@@ -1,3 +1,4 @@
+import { useIsClient } from "../../hooks/useIsClient";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -53,7 +54,11 @@ export function Drawer({ open, onClose, children, title, side = "end", className
     };
   }, [open, onClose]);
 
-  if (!open && !isVisible) return null;
+  const isClient = useIsClient();
+
+  if (!isClient || (!open && !isVisible)) {
+    return null;
+  }
 
   return createPortal(
     <>
@@ -76,11 +81,18 @@ export function Drawer({ open, onClose, children, title, side = "end", className
       >
         <div className={styles.header} data-fara-drawer-header>
           {title && <h2 data-fara-drawer-title>{title}</h2>}
-          <button className={styles.closeButton} data-fara-drawer-close onClick={onClose} aria-label="بستن">
+          <button
+            className={styles.closeButton}
+            data-fara-drawer-close
+            onClick={onClose}
+            aria-label="بستن"
+          >
             ✕
           </button>
         </div>
-        <div className={styles.body} data-fara-drawer-body>{children}</div>
+        <div className={styles.body} data-fara-drawer-body>
+          {children}
+        </div>
       </div>
     </>,
     document.body,

@@ -1,3 +1,4 @@
+import { useIsClient } from "../../hooks/useIsClient";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -124,7 +125,8 @@ export function AnchoredPopup({
     };
   }, [open, anchorRef]);
 
-  if (!open) return null;
+  const isClient = useIsClient();
+  if (!isClient || !open) return null;
 
   const faraAttrs = dataFara ? { [`data-fara-${dataFara}`]: "" } : undefined;
 

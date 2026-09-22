@@ -1,3 +1,4 @@
+import { useIsClient } from "../../hooks/useIsClient";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -51,7 +52,11 @@ export function Modal({ open, onClose, children, title, className }: ModalProps)
     };
   }, [open, onClose]);
 
-  if (!open && !isVisible) return null;
+  const isClient = useIsClient();
+
+  if (!isClient || (!open && !isVisible)) {
+    return null;
+  }
 
   return createPortal(
     <div
@@ -68,7 +73,12 @@ export function Modal({ open, onClose, children, title, className }: ModalProps)
       >
         <div className={styles.header} data-fara-modal-header>
           {title && <h2 data-fara-modal-title>{title}</h2>}
-          <button className={styles.closeButton} data-fara-modal-close onClick={onClose} aria-label="بستن">
+          <button
+            className={styles.closeButton}
+            data-fara-modal-close
+            onClick={onClose}
+            aria-label="بستن"
+          >
             ✕
           </button>
         </div>
