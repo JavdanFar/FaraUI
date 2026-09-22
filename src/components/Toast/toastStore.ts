@@ -11,6 +11,7 @@ interface ToastTimer {
   timeout: number;
 }
 
+let toastCounter = 0;
 let toasts: ToastItem[] = [];
 let listeners: Array<() => void> = [];
 const timers = new Map<string, ToastTimer>();
@@ -49,7 +50,9 @@ export function showToast(
   variant: ToastItem["variant"] = "info",
   duration = 3000,
 ) {
-  const id = crypto.randomUUID();
+  if (typeof window === "undefined") return;
+
+  const id = `fara-toast-${Date.now().toString(36)}-${toastCounter++}`;
   toasts = [...toasts, { id, message, variant, duration }];
 
   timers.set(id, {
