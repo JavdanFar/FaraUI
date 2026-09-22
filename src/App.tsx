@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import "./index";
+import { formatJalali, gregorianToJalali } from "./entry-points/jalali";
 import {
   Accordion,
   Alert,
@@ -42,8 +43,6 @@ import {
   TimePicker,
   Timeline,
   Tooltip,
-  formatJalali,
-  gregorianToJalali,
   showToast,
   Toaster,
   useStepper,
@@ -174,7 +173,15 @@ function Section({
   );
 }
 
-function Subsection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+function Subsection({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="subsection" id={id}>
       <h3 className="subsectionTitle">{title}</h3>
@@ -183,7 +190,15 @@ function Subsection({ id, title, children }: { id: string; title: string; childr
   );
 }
 
-function SubsectionWide({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
+function SubsectionWide({
+  id,
+  title,
+  children,
+}: {
+  id: string;
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="subsection" id={id}>
       <h3 className="subsectionTitle">{title}</h3>
@@ -224,8 +239,8 @@ export default function App() {
         <header className="pageHeader">
           <h1 className="pageTitle">کتابخانه کامپوننت فارسی</h1>
           <p className="pageSubtitle">
-            ۳۹ کامپوننت آماده استفاده با منطق کامل — تقویم جلالی، فرم‌ها، جدول داده و لایه‌ها.
-            برای تعامل با هر نمونه، کلیک و هاور کنید.
+            ۳۹ کامپوننت آماده استفاده با منطق کامل — تقویم جلالی، فرم‌ها، جدول داده و لایه‌ها. برای
+            تعامل با هر نمونه، کلیک و هاور کنید.
           </p>
         </header>
 
@@ -445,7 +460,11 @@ function FormsSection() {
       </Subsection>
 
       <Subsection id="forms-validation" title="اعتبارسنجی فرم">
-        <Demo name="Form" title="قواعد declarative، touched و فوکوس روی اولین فیلد نامعتبر" span="wide">
+        <Demo
+          name="Form"
+          title="قواعد declarative، touched و فوکوس روی اولین فیلد نامعتبر"
+          span="wide"
+        >
           <Form
             initialValues={{ name: "", email: "", city: "", terms: false }}
             rules={{
@@ -694,10 +713,7 @@ function MessageDemos() {
           <Button variant="success" onClick={() => showToast("با موفقیت ذخیره شد", "success")}>
             Toast موفقیت
           </Button>
-          <Button
-            variant="danger"
-            onClick={() => showToast("حذف ناموفق بود", "danger", 5000)}
-          >
+          <Button variant="danger" onClick={() => showToast("حذف ناموفق بود", "danger", 5000)}>
             Toast خطا (۵ ثانیه)
           </Button>
         </div>
@@ -843,9 +859,24 @@ const userColumns: TableColumn<User>[] = [
 ];
 
 const timelineItems: TimelineItem[] = [
-  { title: "ثبت سفارش", description: "سفارش شما با موفقیت ثبت شد", timestamp: "۱۴۰۴/۰۶/۱۲ — ۱۰:۳۰", variant: "primary" },
-  { title: "پرداخت", description: "پرداخت آنلاین انجام شد", timestamp: "۱۴۰۴/۰۶/۱۲ — ۱۰:۳۵", variant: "primary" },
-  { title: "ارسال", description: "بسته به پست تحویل داده شد", timestamp: "۱۴۰۴/۰۶/۱۴ — ۰۹:۰۰", variant: "secondary" },
+  {
+    title: "ثبت سفارش",
+    description: "سفارش شما با موفقیت ثبت شد",
+    timestamp: "۱۴۰۴/۰۶/۱۲ — ۱۰:۳۰",
+    variant: "primary",
+  },
+  {
+    title: "پرداخت",
+    description: "پرداخت آنلاین انجام شد",
+    timestamp: "۱۴۰۴/۰۶/۱۲ — ۱۰:۳۵",
+    variant: "primary",
+  },
+  {
+    title: "ارسال",
+    description: "بسته به پست تحویل داده شد",
+    timestamp: "۱۴۰۴/۰۶/۱۴ — ۰۹:۰۰",
+    variant: "secondary",
+  },
   { title: "تحویل", description: "در انتظار تحویل به مشتری", variant: "secondary" },
 ];
 

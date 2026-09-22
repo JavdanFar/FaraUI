@@ -21,17 +21,25 @@
     "url": "https://github.com/JavdanFar/FaraUI/issues"
   },
   "type": "module",
-  "main": "./dist/fara-ui.cjs.js",
-  "module": "./dist/fara-ui.es.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/fara-ui.es.js",
-      "require": "./dist/fara-ui.cjs.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./jalali": {
+      "types": "./dist/entry-points/jalali.d.ts",
+      "import": "./dist/jalali.js",
+      "require": "./dist/jalali.cjs"
     },
     "./styles.css": "./dist/fara-ui.css"
   },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],

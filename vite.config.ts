@@ -14,10 +14,13 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+        jalali: resolve(__dirname, "src/entry-points/jalali.ts"),
+      },
       name: "FaraUI",
-      fileName: (format) => `fara-ui.${format}.js`,
       formats: ["es", "cjs"],
+      fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
@@ -26,6 +29,7 @@ export default defineConfig({
           react: "React",
           "react-dom": "ReactDOM",
         },
+        banner: (chunk) => (chunk.name === "index" ? '"use client";' : ""),
       },
     },
     cssCodeSplit: false,
