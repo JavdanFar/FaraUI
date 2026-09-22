@@ -24,19 +24,15 @@ export function Alert({
   ...rest
 }: AlertProps) {
   const [dismissed, setDismissed] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [closing, setClosing] = useState(false);
   const timeoutRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setIsVisible(true));
-    return () => {
-      cancelAnimationFrame(frame);
-      clearTimeout(timeoutRef.current);
-    };
+    return () => clearTimeout(timeoutRef.current);
   }, []);
 
   function handleClose() {
-    setIsVisible(false);
+    setClosing(true);
     timeoutRef.current = window.setTimeout(() => {
       setDismissed(true);
       onClose?.();
@@ -51,12 +47,14 @@ export function Alert({
       role="alert"
       data-fara-alert
       data-variant={variant}
-      data-open={isVisible || undefined}
-      className={clsx(styles.alert, styles[variant], isVisible && styles.visible, className)}
+      data-open={!closing || undefined}
+      className={clsx(styles.alert, styles[variant], closing && styles.closing, className)}
       {...rest}
     >
       {icon}
-      <div className={styles.content} data-fara-alert-content>{children}</div>
+      <div className={styles.content} data-fara-alert-content>
+        {children}
+      </div>
       {closable && (
         <button
           type="button"

@@ -6,12 +6,23 @@
     border-radius: var(--fara-radius-md);
     font-size: var(--fara-font-size-md);
     border: var(--fara-border-width-thin) solid transparent;
+    opacity: 1;
+    animation: fara-alert-fade-in var(--fara-transition-normal) both;
+}
+
+.alert.closing {
     opacity: 0;
     transition: opacity var(--fara-transition-normal);
 }
 
-.alert.visible {
-    opacity: 1;
+@keyframes fara-alert-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
