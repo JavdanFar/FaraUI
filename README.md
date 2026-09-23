@@ -1,7 +1,24 @@
+[پارسی](./README.fa.md)
+
 # FaraUI
 
-React UI components for Persian applications, with built-in Jalali date
-and time controls and CSS hooks that can be overridden by consumers.
+React UI components for Persian applications — RTL by default, with
+built-in Jalali (Persian) date and time controls, CSS Modules, and design
+tokens that consuming applications can override.
+
+## Features
+
+- **RTL-first** — components are built for right-to-left interfaces from the
+  ground up, not adapted afterward.
+- **Persian calendar built in** — `DatePicker`, `DateRangePicker`, and
+  `TimePicker` work natively with the Jalali calendar.
+- **SSR-ready** — every component works out of the box in Next.js and other
+  server-rendering frameworks, including the App Router.
+- **Themeable** — CSS custom properties and a documented set of
+  `data-fara-*` attributes give applications stable hooks for styling,
+  without depending on internal class names.
+- **Typed** — written in TypeScript, with declaration files published
+  alongside the package.
 
 ## Installation
 
@@ -11,14 +28,14 @@ npm install fara-ui
 
 FaraUI currently supports React 19 and ReactDOM 19.
 
-## Usage
+## Quick start
 
-Import components from the package entry point and import the bundled stylesheet
-once in your application:
+Import the stylesheet once, near the root of your application, and start
+using components:
 
 ```tsx
-import { Button, DatePicker } from "fara-ui";
 import "fara-ui/styles.css";
+import { Button, DatePicker } from "fara-ui";
 
 export function Example() {
   return (
@@ -30,53 +47,65 @@ export function Example() {
 }
 ```
 
-The package provides ESM, CommonJS, and TypeScript declaration outputs.
+Set `dir="rtl"` on `<html>` or an application container when building a
+Persian interface. The package ships ESM, CommonJS, and TypeScript
+declaration outputs.
+
+## SSR and Next.js
+
+All components are marked `"use client"` and can be imported directly in
+Next.js App Router projects, including from within Server Components — no
+`dynamic(..., { ssr: false })` wrapper is needed:
+
+```tsx
+import { Modal, DatePicker } from "fara-ui";
+```
+
+Components that render into a portal (`Modal`, `Drawer`, `Toaster`,
+`Popover`, `DropdownMenu`, and the date/time pickers) render nothing on the
+server and appear right after the page hydrates in the browser. This is
+expected and does not produce hydration warnings.
+
+Pure Jalali date/time helpers have no client-only code and are published as
+a separate entry point, so they can be called from Server Components as
+well:
+
+```tsx
+// app/some-page.tsx (Server Component)
+import { formatJalali, getTodayJalali } from "fara-ui/jalali";
+
+export default function Page() {
+  return <p>{formatJalali(getTodayJalali())}</p>;
+}
+```
+
+Import `fara-ui/styles.css` once from the root layout — `app/layout.tsx` in
+the App Router, or `_app.tsx` in the Pages Router.
 
 ## Components
 
-FaraUI exports buttons and form controls, overlays and feedback components,
-navigation components, data display components, and Persian date/time controls:
+**Form controls:** Button, Input, Textarea, Checkbox, Radio, Switch, Slider,
+Rating, OtpInput, Select, Combobox, FileUpload, Form
 
-- Button, Input, Textarea, Checkbox, Radio, Switch, Slider, Rating, OtpInput
-- Select, Combobox, FileUpload, Form
-- Modal, Drawer, Popover, Tooltip, DropdownMenu, ConfirmDialog
-- Toast, Alert, Spinner, Skeleton, ProgressBar, Badge, NotificationBadge
-- Tabs, Accordion, Breadcrumb, Sidebar, Stepper, Timeline, Divider, Card, Chip
-- Table
-- DatePicker, DateRangePicker, TimePicker
+**Overlays and feedback:** Modal, Drawer, Popover, Tooltip, DropdownMenu,
+ConfirmDialog, Toast, Alert, Spinner, Skeleton, ProgressBar
 
-See [STYLING.md](./STYLING.md) for the stable `data-fara-*` styling hooks.
+**Navigation:** Tabs, Accordion, Breadcrumb, Sidebar, Stepper
 
-## Styling and directionality
+**Data display:** Table, Timeline, Card, Chip, Badge, NotificationBadge,
+Avatar, Divider
 
-Components ship with CSS Modules and a bundled stylesheet. The public
-`data-fara-*` attributes are the recommended selectors for application-level
-overrides. Set `dir="rtl"` on an application container or the document when
-building a Persian interface. Direction-sensitive controls preserve their
-intended interaction direction.
+**Date and time:** DatePicker, DateRangePicker, TimePicker
 
-## Browser and SSR notes
+## Styling and theming
 
-The basic presentational components can be imported in SSR applications.
-Components that render portals or depend on browser APIs must be rendered on the
-client: `Modal`, `Drawer`, `Toast`/`Toaster`, `Popover`, `Tooltip`, `DropdownMenu`,
-`Select`, `Combobox`, `DatePicker`, `DateRangePicker`, and `TimePicker`.
+Components ship with CSS Modules and a single bundled stylesheet
+(`fara-ui/styles.css`). Design tokens are exposed as CSS custom properties,
+and every component also exposes a stable set of `data-fara-*` attributes
+as public selectors for application-level overrides — these are safer to
+rely on than internal class names, which may change between versions.
 
-In Next.js, load these components with SSR disabled:
-
-```tsx
-import dynamic from "next/dynamic";
-
-const ClientDatePicker = dynamic(
-  () => import("./ClientDatePicker").then((module) => module.ClientDatePicker),
-  { ssr: false },
-);
-```
-
-Import `fara-ui/styles.css` from the application entry point. Full SSR support
-for browser-dependent components is not part of the `0.1.0` contract.
-
-```
+See [STYLING.md](./STYLING.md) for the full list of tokens and hooks.
 
 ## License
 
