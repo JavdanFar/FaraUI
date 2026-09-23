@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./OtpInput.module.css";
 
@@ -12,6 +12,29 @@ export interface OtpInputProps {
   className?: string;
 }
 
+const PERSIAN_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
+const ARABIC_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+
+function normalizeDigit(char: string): string {
+  const persianIndex = PERSIAN_DIGITS.indexOf(char);
+  if (persianIndex !== -1) return String(persianIndex);
+  const arabicIndex = ARABIC_DIGITS.indexOf(char);
+  if (arabicIndex !== -1) return String(arabicIndex);
+  return char;
+}
+
+function toDigitsArray(raw: string, length: number): string[] {
+  const digits = raw
+    .split("")
+    .map(normalizeDigit)
+    .filter((char) => /\d/.test(char))
+    .slice(0, length);
+  while (digits.length < length) {
+    digits.push("");
+  }
+  return digits;
+}
+
 export function OtpInput({
   length = 4,
   value,
@@ -22,26 +45,34 @@ export function OtpInput({
   className,
 }: OtpInputProps) {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const [digits, setDigits] = useState<string[]>(() => toDigitsArray(value, length));
+  const [prevValue, setPrevValue] = useState(value);
+  const isComplete = !digits.includes("");
 
-  const digits = value.split("").slice(0, length);
-  while (digits.length < length) {
-    digits.push("");
+  if (value !== prevValue) {
+    setPrevValue(value);
+    if (value !== digits.join("")) {
+      setDigits(toDigitsArray(value, length));
+    }
   }
 
-  function updateValue(index: number, char: string) {
-    const nextDigits = [...digits];
-    nextDigits[index] = char;
+  function commit(nextDigits: string[]) {
+    setDigits(nextDigits);
     const nextValue = nextDigits.join("");
     onChange(nextValue);
 
-    if (nextValue.length === length && !nextValue.includes("")) {
+    if (!nextDigits.includes("")) {
       onComplete?.(nextValue);
+      inputRefs.current.forEach((input) => input?.blur());
     }
   }
 
   function handleChange(index: number, rawValue: string) {
-    const char = rawValue.replace(/\D/g, "").slice(-1);
-    updateValue(index, char);
+    const normalized = normalizeDigit(rawValue.slice(-1));
+    const char = /\d/.test(normalized) ? normalized : "";
+    const next = [...digits];
+    next[index] = char;
+    commit(next);
 
     if (char && index < length - 1) {
       inputRefs.current[index + 1]?.focus();
@@ -49,26 +80,55 @@ export function OtpInput({
   }
 
   function handleKeyDown(index: number, e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Backspace" && !digits[index] && index > 0) {
+    if (e.key === "Backspace") {
+      if (digits[index]) {
+        e.preventDefault();
+        const next = [...digits];
+        next[index] = "";
+        commit(next);
+        return;
+      }
+
+      if (index > 0) {
+        e.preventDefault();
+        inputRefs.current[index - 1]?.focus();
+      }
+      return;
+    }
+
+    if (e.key === "ArrowLeft" && index > 0) {
+      e.preventDefault();
       inputRefs.current[index - 1]?.focus();
+      return;
+    }
+
+    if (e.key === "ArrowRight" && index < length - 1) {
+      e.preventDefault();
+      inputRefs.current[index + 1]?.focus();
+      return;
     }
   }
 
   function handlePaste(e: React.ClipboardEvent) {
     e.preventDefault();
-    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, length);
-    onChange(pasted.padEnd(length, ""));
+    const pastedDigits = toDigitsArray(e.clipboardData.getData("text"), length);
+    commit(pastedDigits);
 
-    if (pasted.length === length) {
-      onComplete?.(pasted);
+    const firstEmpty = pastedDigits.indexOf("");
+    if (firstEmpty === -1) {
       inputRefs.current[length - 1]?.focus();
     } else {
-      inputRefs.current[pasted.length]?.focus();
+      inputRefs.current[firstEmpty]?.focus();
     }
   }
 
   return (
-    <div data-fara-otp-input className={clsx(styles.wrapper, className)} dir="ltr">
+    <div
+      data-fara-otp-input
+      data-complete={isComplete || undefined}
+      className={clsx(styles.wrapper, className)}
+      dir="ltr"
+    >
       {digits.map((digit, index) => (
         <input
           key={index}

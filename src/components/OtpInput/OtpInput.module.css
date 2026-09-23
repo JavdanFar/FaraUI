@@ -30,3 +30,7 @@
     opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
 }
+
+.wrapper[data-complete] .digit:not(.digitError) {
+    border-color: var(--fara-color-primary);
+}
