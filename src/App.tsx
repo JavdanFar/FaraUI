@@ -974,13 +974,12 @@ function TableDemo({
           data={users}
           rowKey={(row) => row.id}
           emptyMessage="داده‌ای موجود نیست"
-          sorting={{ enabled: true, mode: "client" }}
-          filtering={{ enabled: true, mode: "client" }}
-          globalSearch={{ enabled: true, mode: "client", placeholder: "جستجو در جدول..." }}
-          pagination={{ enabled: true, mode: "client", pageSize: 5, pageSizeOptions: [5, 10] }}
+          sorting={{ enabled: true }}
+          filtering={{ enabled: true }}
+          globalSearch={{ enabled: true, placeholder: "جستجو در جدول..." }}
+          pagination={{ enabled: true, pageSize: 5, pageSizeOptions: [5, 10] }}
           selection={{
             enabled: true,
-            mode: "client",
             onChange: (_keys, rows) => onSelectionChange(rows),
           }}
         />
