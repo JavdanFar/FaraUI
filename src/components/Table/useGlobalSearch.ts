@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { TableColumn, GlobalSearchConfig } from "./types";
+import { normalizePersianText } from "../../utils/normalizePersianText";
 
 interface UseGlobalSearchOptions<T> {
   data: T[];
@@ -8,6 +9,8 @@ interface UseGlobalSearchOptions<T> {
   getCellValue: (row: T, col: TableColumn<T>) => string | number;
 }
 
+const DEBOUNCE_MS = 250;
+
 export function useGlobalSearch<T>({
   data,
   columns,
@@ -15,37 +18,51 @@ export function useGlobalSearch<T>({
   getCellValue,
 }: UseGlobalSearchOptions<T>) {
   const enabled = config.enabled ?? false;
-  const mode = config.mode ?? "server";
+  const mode = config.mode ?? "client";
   const isServer = mode === "server";
 
-  const [internalTerm, setInternalTerm] = useState("");
-  const currentTerm = isServer ? (config.value ?? "") : internalTerm;
+  const externalTerm = isServer ? (config.value ?? "") : undefined;
 
-  function setSearchTerm(value: string) {
-    if (isServer) {
-      config.onChange?.(value);
-    } else {
-      setInternalTerm(value);
-    }
+  const [internalTerm, setInternalTerm] = useState("");
+  const [draft, setDraft] = useState(externalTerm ?? internalTerm);
+  const [prevExternalTerm, setPrevExternalTerm] = useState(externalTerm);
+
+  if (isServer && externalTerm !== prevExternalTerm) {
+    setPrevExternalTerm(externalTerm);
+    setDraft(externalTerm ?? "");
   }
 
-  const searchedData = useMemo(() => {
-    if (!enabled || isServer || !currentTerm.trim()) return data;
+  const committedTerm = isServer ? (externalTerm ?? "") : internalTerm;
 
-    const term = currentTerm.trim().toLowerCase();
+  useEffect(() => {
+    if (draft === committedTerm) return;
+
+    const handle = setTimeout(() => {
+      if (isServer) {
+        config.onChange?.(draft);
+      } else {
+        setInternalTerm(draft);
+      }
+    }, DEBOUNCE_MS);
+
+    return () => clearTimeout(handle);
+  }, [draft]);
+
+  const searchedData = useMemo(() => {
+    if (!enabled || isServer || !committedTerm.trim()) return data;
+
+    const term = normalizePersianText(committedTerm);
     return data.filter((row) =>
       columns.some((col) =>
-        String(getCellValue(row, col) ?? "")
-          .toLowerCase()
-          .includes(term),
+        normalizePersianText(String(getCellValue(row, col) ?? "")).includes(term),
       ),
     );
-  }, [data, columns, currentTerm, enabled, isServer, getCellValue]);
+  }, [data, columns, committedTerm, enabled, isServer, getCellValue]);
 
   return {
     searchedData,
-    searchTerm: currentTerm,
-    setSearchTerm,
+    searchTerm: draft,
+    setSearchTerm: setDraft,
     enabled,
     placeholder: config.placeholder ?? "جستجو...",
   };

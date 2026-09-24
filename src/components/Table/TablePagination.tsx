@@ -24,7 +24,7 @@ export function TablePagination({
 
   return (
     <div className={styles.pagination} data-fara-table-pagination>
-      <span className={styles.paginationInfo} data-fara-table-pagination-info>
+      <span className={styles.paginationInfo} data-fara-table-pagination-info aria-live="polite">
         نمایش {startItem}-{endItem} از {totalItems}
       </span>
 
@@ -32,6 +32,7 @@ export function TablePagination({
         <select
           className={styles.pageSizeSelect}
           data-fara-table-page-size-select
+          aria-label="تعداد ردیف در هر صفحه"
           value={pageSize}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
         >

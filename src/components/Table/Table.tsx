@@ -17,6 +17,14 @@ function getCellValue<T>(row: T, col: TableColumn<T>): string | number {
   return (row as Record<string, unknown>)[col.key] as string | number;
 }
 
+function ariaSortFor(
+  active: boolean,
+  direction: "asc" | "desc" | null,
+): "ascending" | "descending" | "none" {
+  if (!active || !direction) return "none";
+  return direction === "asc" ? "ascending" : "descending";
+}
+
 function ColumnFilter({
   header,
   open,
@@ -129,7 +137,7 @@ export function Table<T>({
     isAllSelected,
     isSomeSelected,
     isRowSelected,
-  } = useTableSelection({ data: paginatedData, rowKey, config: selection });
+  } = useTableSelection({ data: sortedData, pageData: paginatedData, rowKey, config: selection });
 
   const selectAllRef = useRef<HTMLInputElement>(null);
 
@@ -165,7 +173,7 @@ export function Table<T>({
             <thead className={styles.thead} data-fara-table-head>
               <tr>
                 {selectionEnabled && (
-                  <th className={styles.checkboxCell} data-fara-table-checkbox-cell>
+                  <th scope="col" className={styles.checkboxCell} data-fara-table-checkbox-cell>
                     <input
                       ref={selectAllRef}
                       type="checkbox"
@@ -173,7 +181,7 @@ export function Table<T>({
                       data-fara-table-checkbox
                       checked={isAllSelected}
                       onChange={toggleAll}
-                      aria-label="انتخاب همه ردیف‌ها"
+                      aria-label="انتخاب همه ردیف‌های این صفحه"
                     />
                   </th>
                 )}
@@ -182,31 +190,40 @@ export function Table<T>({
                   const isSortable = sortingEnabled && col.sortable;
                   const isFilterable = filteringEnabled && col.filterable;
                   const hasActiveFilter = Boolean(columnFilters[col.key]?.trim());
+                  const isActiveSort = sortKey === col.key;
 
                   return (
-                    <th key={col.key} className={styles.th} data-fara-table-header-cell>
+                    <th
+                      key={col.key}
+                      scope="col"
+                      className={styles.th}
+                      data-fara-table-header-cell
+                      aria-sort={isSortable ? ariaSortFor(isActiveSort, sortDirection) : undefined}
+                    >
                       <span className={styles.thContent}>
-                        <span
-                          onClick={() => isSortable && toggleSort(col)}
-                          className={clsx(isSortable && styles.thSortable)}
-                        >
-                          {col.header}
-                        </span>
-
-                        {isSortable && (
-                          <span
+                        {isSortable ? (
+                          <button
+                            type="button"
+                            className={styles.thSortable}
                             onClick={() => toggleSort(col)}
-                            data-fara-table-sort-icon
-                            data-active={sortKey === col.key || undefined}
-                            className={clsx(
-                              styles.sortIcon,
-                              sortKey === col.key && styles.sortIconActive,
-                            )}
                           >
-                            {sortKey === col.key && sortDirection === "asc" && "▲"}
-                            {sortKey === col.key && sortDirection === "desc" && "▼"}
-                            {sortKey !== col.key && "⇅"}
-                          </span>
+                            {col.header}
+                            <span
+                              aria-hidden="true"
+                              data-fara-table-sort-icon
+                              data-active={isActiveSort || undefined}
+                              className={clsx(
+                                styles.sortIcon,
+                                isActiveSort && styles.sortIconActive,
+                              )}
+                            >
+                              {isActiveSort && sortDirection === "asc" && "▲"}
+                              {isActiveSort && sortDirection === "desc" && "▼"}
+                              {!isActiveSort && "⇅"}
+                            </span>
+                          </button>
+                        ) : (
+                          <span>{col.header}</span>
                         )}
 
                         {isFilterable && (

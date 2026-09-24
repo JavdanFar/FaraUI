@@ -68,7 +68,6 @@ export interface TableProps<T> {
 
 export interface SelectionConfig<T> {
   enabled?: boolean;
-  mode?: FeatureMode;
   selectedKeys?: string[];
   onChange?: (selectedKeys: string[], selectedRows: T[]) => void;
 }

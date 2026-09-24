@@ -53,12 +53,27 @@
 }
 
 .thSortable {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--fara-spacing-2xs);
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
     cursor: pointer;
     user-select: none;
 }
 
 .thSortable:hover {
     color: var(--fara-color-text);
+}
+
+.thSortable:focus-visible {
+    outline: none;
+    box-shadow: var(--fara-shadow-focus);
+    border-radius: var(--fara-radius-sm);
 }
 
 .thContent {
@@ -208,6 +223,11 @@
 .paginationButton:disabled {
     opacity: var(--fara-opacity-disabled);
     cursor: not-allowed;
+}
+
+.paginationButton:focus-visible {
+    outline: none;
+    box-shadow: var(--fara-shadow-focus);
 }
 
 .paginationCurrent {

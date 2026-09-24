@@ -10,16 +10,20 @@ const defaultPageSizeOptions = [10, 25, 50];
 
 export function useTablePagination<T>({ data, config }: UseTablePaginationOptions<T>) {
   const enabled = config.enabled ?? false;
-  const mode = config.mode ?? "server";
+  const mode = config.mode ?? "client";
   const isServer = mode === "server";
+
+  if (import.meta.env.DEV && enabled && isServer && config.totalItems === undefined) {
+    console.warn(
+      '[fara-ui] Table: pagination.mode is "server" but pagination.totalItems was not provided, so the pagination controls will not render. Pass pagination.totalItems, or set pagination.mode="client" to paginate the given data array automatically.',
+    );
+  }
 
   const [internalPage, setInternalPage] = useState(1);
   const [internalPageSize, setInternalPageSize] = useState(config.pageSize ?? 10);
 
   const currentPageSize = isServer ? (config.pageSize ?? 10) : internalPageSize;
-
   const currentTotalItems = isServer ? (config.totalItems ?? 0) : data.length;
-
   const totalPages = enabled ? Math.max(1, Math.ceil(currentTotalItems / currentPageSize)) : 1;
 
   const rawPage = isServer ? (config.page ?? 1) : internalPage;
@@ -43,6 +47,7 @@ export function useTablePagination<T>({ data, config }: UseTablePaginationOption
   function changePageSize(newSize: number) {
     if (isServer) {
       config.onPageSizeChange?.(newSize);
+      config.onPageChange?.(1);
     } else {
       setInternalPageSize(newSize);
       setInternalPage(1);

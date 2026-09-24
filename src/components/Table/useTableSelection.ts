@@ -3,11 +3,17 @@ import type { SelectionConfig } from "./types";
 
 interface UseTableSelectionOptions<T> {
   data: T[];
+  pageData: T[];
   rowKey: (row: T) => string;
   config: SelectionConfig<T>;
 }
 
-export function useTableSelection<T>({ data, rowKey, config }: UseTableSelectionOptions<T>) {
+export function useTableSelection<T>({
+  data,
+  pageData,
+  rowKey,
+  config,
+}: UseTableSelectionOptions<T>) {
   const enabled = config.enabled ?? false;
 
   const [internalSelected, setInternalSelected] = useState<string[]>([]);
@@ -39,17 +45,22 @@ export function useTableSelection<T>({ data, rowKey, config }: UseTableSelection
   function toggleAll() {
     if (!enabled) return;
 
-    const allKeys = data.map(rowKey);
-    const allSelected = allKeys.every((key) => selectedKeys.includes(key));
+    const pageKeys = pageData.map(rowKey);
+    const allPageSelected =
+      pageKeys.length > 0 && pageKeys.every((key) => selectedKeys.includes(key));
 
-    updateSelection(allSelected ? [] : allKeys);
+    const nextKeys = allPageSelected
+      ? selectedKeys.filter((key) => !pageKeys.includes(key))
+      : [...selectedKeys.filter((key) => !pageKeys.includes(key)), ...pageKeys];
+
+    updateSelection(nextKeys);
   }
 
-  const allKeys = data.map(rowKey);
+  const pageKeys = pageData.map(rowKey);
   const isAllSelected =
-    enabled && allKeys.length > 0 && allKeys.every((key) => selectedKeys.includes(key));
+    enabled && pageKeys.length > 0 && pageKeys.every((key) => selectedKeys.includes(key));
   const isSomeSelected =
-    enabled && allKeys.some((key) => selectedKeys.includes(key)) && !isAllSelected;
+    enabled && pageKeys.some((key) => selectedKeys.includes(key)) && !isAllSelected;
 
   return {
     enabled,

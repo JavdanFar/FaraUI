@@ -12,7 +12,7 @@ const emptySortState: SortState = { key: null, direction: null };
 
 export function useTableSort<T>({ data, columns, config, getCellValue }: UseTableSortOptions<T>) {
   const enabled = config.enabled ?? false;
-  const mode = config.mode ?? "server";
+  const mode = config.mode ?? "client";
   const isServer = mode === "server";
 
   const [internalState, setInternalState] = useState<SortState>(emptySortState);
@@ -56,7 +56,8 @@ export function useTableSort<T>({ data, columns, config, getCellValue }: UseTabl
 
       const strA = String(valueA ?? "");
       const strB = String(valueB ?? "");
-      return direction === "asc" ? strA.localeCompare(strB, "fa") : strB.localeCompare(strA, "fa");
+      const compared = strA.localeCompare(strB, "fa", { numeric: true });
+      return direction === "asc" ? compared : -compared;
     });
 
     return result;

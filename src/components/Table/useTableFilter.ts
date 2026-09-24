@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { TableColumn, FilteringConfig } from "./types";
+import { normalizePersianText } from "../../utils/normalizePersianText";
 
 interface UseTableFilterOptions<T> {
   data: T[];
@@ -9,6 +10,7 @@ interface UseTableFilterOptions<T> {
 }
 
 const emptyFilters: Record<string, string> = {};
+const DEBOUNCE_MS = 250;
 
 export function useTableFilter<T>({
   data,
@@ -17,27 +19,41 @@ export function useTableFilter<T>({
   getCellValue,
 }: UseTableFilterOptions<T>) {
   const enabled = config.enabled ?? false;
-  const mode = config.mode ?? "server";
+  const mode = config.mode ?? "client";
   const isServer = mode === "server";
 
-  const [internalFilters, setInternalFilters] = useState<Record<string, string>>({});
+  const externalFilters = isServer ? (config.state ?? emptyFilters) : undefined;
 
-  const currentFilters = useMemo(
-    () => (isServer ? (config.state ?? emptyFilters) : internalFilters),
-    [isServer, config.state, internalFilters],
-  );
+  const [internalFilters, setInternalFilters] = useState<Record<string, string>>({});
+  const [draftFilters, setDraftFilters] = useState<Record<string, string>>(externalFilters ?? {});
+  const [prevExternalFilters, setPrevExternalFilters] = useState(externalFilters);
+
+  if (isServer && externalFilters !== prevExternalFilters) {
+    setPrevExternalFilters(externalFilters);
+    setDraftFilters(externalFilters ?? {});
+  }
+
+  const committedFilters = isServer ? (externalFilters ?? emptyFilters) : internalFilters;
 
   const [openFilterKey, setOpenFilterKey] = useState<string | null>(null);
 
   function setColumnFilter(key: string, value: string) {
-    const next = { ...currentFilters, [key]: value };
-
-    if (isServer) {
-      config.onChange?.(next);
-    } else {
-      setInternalFilters(next);
-    }
+    setDraftFilters((prev) => ({ ...prev, [key]: value }));
   }
+
+  useEffect(() => {
+    if (draftFilters === committedFilters) return;
+
+    const handle = setTimeout(() => {
+      if (isServer) {
+        config.onChange?.(draftFilters);
+      } else {
+        setInternalFilters(draftFilters);
+      }
+    }, DEBOUNCE_MS);
+
+    return () => clearTimeout(handle);
+  }, [draftFilters]);
 
   function toggleFilterOpen(key: string) {
     setOpenFilterKey((prev) => (prev === key ? null : key));
@@ -50,23 +66,23 @@ export function useTableFilter<T>({
   const filteredData = useMemo(() => {
     if (!enabled || isServer) return data;
 
-    const activeFilters = Object.entries(currentFilters).filter(([, value]) => value.trim());
+    const activeFilters = Object.entries(committedFilters).filter(([, value]) => value.trim());
     if (activeFilters.length === 0) return data;
 
     return data.filter((row) =>
       activeFilters.every(([key, value]) => {
         const column = columns.find((col) => col.key === key);
         if (!column) return true;
-        return String(getCellValue(row, column) ?? "")
-          .toLowerCase()
-          .includes(value.toLowerCase());
+        return normalizePersianText(String(getCellValue(row, column) ?? "")).includes(
+          normalizePersianText(value),
+        );
       }),
     );
-  }, [data, columns, currentFilters, enabled, isServer, getCellValue]);
+  }, [data, columns, committedFilters, enabled, isServer, getCellValue]);
 
   return {
     filteredData,
-    columnFilters: currentFilters,
+    columnFilters: draftFilters,
     setColumnFilter,
     openFilterKey,
     toggleFilterOpen,
