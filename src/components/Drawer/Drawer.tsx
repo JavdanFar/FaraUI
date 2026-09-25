@@ -1,20 +1,31 @@
 import { useIsClient } from "../../hooks/useIsClient";
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import styles from "./Drawer.module.css";
+import { lockBodyScroll, unlockBodyScroll } from "../../utils/bodyScrollLock";
 
-export interface DrawerProps {
+export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
   title?: string;
   side?: "start" | "end";
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
-export function Drawer({ open, onClose, children, title, side = "end", className }: DrawerProps) {
+export function Drawer({
+  open,
+  onClose,
+  children,
+  title,
+  side = "end",
+  className,
+  ref,
+  ...rest
+}: DrawerProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -36,21 +47,12 @@ export function Drawer({ open, onClose, children, title, side = "end", className
       if (e.key === "Escape") onClose();
     }
 
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const originalPaddingRight = document.body.style.paddingRight;
-    const originalOverflow = document.body.style.overflow;
-
-    document.body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
-
     document.addEventListener("keydown", handleEscape);
+    lockBodyScroll();
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = originalOverflow;
-      document.body.style.paddingRight = originalPaddingRight;
+      unlockBodyScroll();
     };
   }, [open, onClose]);
 
@@ -69,6 +71,8 @@ export function Drawer({ open, onClose, children, title, side = "end", className
         onClick={onClose}
       />
       <div
+        {...rest}
+        ref={ref}
         className={clsx(
           styles.panel,
           side === "start" ? styles.panelStart : styles.panelEnd,
