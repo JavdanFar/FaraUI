@@ -57,8 +57,7 @@
     font-size: var(--fara-font-size-md);
     color: var(--fara-color-text-tertiary);
     text-align: center;
-    margin: var(--fara-spacing-sm);
-    margin-top: var(--fara-spacing-xs);
+    margin: var(--fara-spacing-xs) 0 var(--fara-spacing-xs);
 }
 
 .scrollWrapper {
