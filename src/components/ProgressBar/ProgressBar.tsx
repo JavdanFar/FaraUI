@@ -1,4 +1,5 @@
 import type { HTMLAttributes, Ref } from "react";
+import { useId } from "react";
 import clsx from "clsx";
 import styles from "./ProgressBar.module.css";
 
@@ -22,12 +23,13 @@ export function ProgressBar({
   ...rest
 }: ProgressBarProps) {
   const clampedValue = Math.min(100, Math.max(0, value));
+  const labelId = useId();
 
   return (
     <div ref={ref} data-fara-progress-bar className={className} {...rest}>
       {(label || showValue) && (
         <div className={styles.labelRow} data-fara-progress-label-row>
-          <span>{label}</span>
+          <span id={label ? labelId : undefined}>{label}</span>
           {showValue && !indeterminate && <span>{clampedValue}%</span>}
         </div>
       )}
@@ -36,6 +38,7 @@ export function ProgressBar({
         className={styles.track}
         data-fara-progress-track
         role="progressbar"
+        aria-labelledby={label ? labelId : undefined}
         aria-valuenow={indeterminate ? undefined : clampedValue}
         aria-valuemin={0}
         aria-valuemax={100}
