@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Timeline.module.css";
 
@@ -9,17 +9,26 @@ export interface TimelineItem {
   variant?: "primary" | "secondary";
 }
 
-export interface TimelineProps {
+export interface TimelineProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   items: TimelineItem[];
   orientation?: "vertical" | "horizontal";
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
-export function Timeline({ items, orientation = "vertical", className }: TimelineProps) {
+export function Timeline({
+  items,
+  orientation = "vertical",
+  className,
+  ref,
+  ...rest
+}: TimelineProps) {
   const isHorizontal = orientation === "horizontal";
 
   return (
     <div
+      {...rest}
+      ref={ref}
       className={clsx(styles.timeline, isHorizontal && styles.timelineHorizontal, className)}
       role="list"
       data-fara-timeline
