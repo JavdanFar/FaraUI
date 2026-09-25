@@ -61,8 +61,7 @@
     font-size: var(--fara-font-size-md);
     color: var(--fara-color-text-tertiary);
     text-align: center;
-    margin: var(--fara-spacing-sm);
-    margin-top: var(--fara-spacing-xs);
+    margin: var(--fara-spacing-xs) 0 var(--fara-spacing-xs);
 }
 
 .header {
@@ -283,6 +282,13 @@
 .footerButtonPrimary:hover {
     background-color: var(--fara-color-primary-hover);
     color: var(--fara-color-text-inverse);
+}
+
+.footerButton:disabled {
+    opacity: var(--fara-opacity-disabled);
+    cursor: not-allowed;
+    background-color: var(--fara-color-background-secondary);
+    color: var(--fara-color-text-secondary);
 }
 
 .monthsGrid {

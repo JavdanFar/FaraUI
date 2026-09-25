@@ -38,24 +38,29 @@ interface JalCalResult {
   march: number;
 }
 
+const JALALI_BREAKS = [
+  -61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394,
+  2456, 3178,
+];
+
+export function isSupportedJalaliYear(year: number): boolean {
+  return year >= JALALI_BREAKS[0] && year < JALALI_BREAKS[JALALI_BREAKS.length - 1];
+}
+
 function jalCal(jy: number): JalCalResult {
-  const breaks = [
-    -61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394,
-    2456, 3178,
-  ];
-  const bl = breaks.length;
+  const bl = JALALI_BREAKS.length;
   const gy = jy + 621;
   let leapJ = -14;
-  let jp = breaks[0];
+  let jp = JALALI_BREAKS[0];
 
-  if (jy < jp || jy >= breaks[bl - 1]) {
+  if (!isSupportedJalaliYear(jy)) {
     throw new Error(`Invalid Jalali year ${jy}`);
   }
 
   let jm;
   let jump = 0;
   for (let i = 1; i < bl; i += 1) {
-    jm = breaks[i];
+    jm = JALALI_BREAKS[i];
     jump = jm - jp;
     if (jy < jm) break;
     leapJ = leapJ + div(jump, 33) * 8 + div(mod(jump, 33), 4);
