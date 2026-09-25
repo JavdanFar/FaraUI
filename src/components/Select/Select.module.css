@@ -57,6 +57,11 @@
     color: var(--fara-color-text-inverse);
 }
 
+.optionActive {
+    background-color: var(--fara-color-secondary);
+    color: var(--fara-color-text);
+}
+
 .empty {
     padding: var(--fara-spacing-sm) var(--fara-spacing-md);
     color: var(--fara-color-text-tertiary);
