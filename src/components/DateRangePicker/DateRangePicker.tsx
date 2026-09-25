@@ -1,6 +1,8 @@
-import { useRef, useState } from "react";
+import type { InputHTMLAttributes, KeyboardEvent, Ref } from "react";
+import { useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./DateRangePicker.module.css";
+import { mergeRefs } from "../../utils/mergeRefs";
 import { AnchoredPopup } from "../AnchoredPopup";
 import {
   getJalaliMonthLength,
@@ -14,11 +16,16 @@ import {
   PERSIAN_WEEKDAYS,
   type JalaliDate,
 } from "../DatePicker/jalali";
+import {
+  MAX_CALENDAR_YEAR,
+  MIN_CALENDAR_YEAR,
+  compareJalali,
+  compareYearMonth,
+  type YearMonth,
+} from "../DatePicker/calendarBounds";
 import { ChevronIcon } from "../DatePicker/ChevronIcon";
 
 const FRIDAY_WEEKDAY_INDEX = 6;
-const MIN_YEAR = 1300;
-const MAX_YEAR = 1500;
 
 export interface DateRangeValue {
   start: JalaliDate;
@@ -27,7 +34,8 @@ export interface DateRangeValue {
   endGregorian?: Date;
 }
 
-export interface DateRangePickerProps {
+export interface DateRangePickerProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "defaultValue" | "onChange"> {
   value?: DateRangeValue | null;
   defaultValue?: DateRangeValue | null;
   onChange?: (value: DateRangeValue) => void;
@@ -35,13 +43,9 @@ export interface DateRangePickerProps {
   maxDate?: Date | JalaliDate;
   disabledDates?: (date: Date) => boolean;
   includeGregorian?: boolean;
-  placeholder?: string;
-  disabled?: boolean;
-  className?: string;
   inputClassName?: string;
+  ref?: Ref<HTMLInputElement>;
 }
-
-type YearMonth = { year: number; month: number };
 
 function isJalaliDateInput(input: Date | JalaliDate): input is JalaliDate {
   return !(input instanceof Date);
@@ -49,17 +53,6 @@ function isJalaliDateInput(input: Date | JalaliDate): input is JalaliDate {
 
 function toJalali(input: Date | JalaliDate): JalaliDate {
   return isJalaliDateInput(input) ? input : gregorianToJalali(input);
-}
-
-function compareJalali(a: JalaliDate, b: JalaliDate): number {
-  if (a.year !== b.year) return a.year - b.year;
-  if (a.month !== b.month) return a.month - b.month;
-  return a.day - b.day;
-}
-
-function compareYearMonth(a: YearMonth, b: YearMonth): number {
-  if (a.year !== b.year) return a.year - b.year;
-  return a.month - b.month;
 }
 
 function addMonths(year: number, month: number, delta: number): YearMonth {
@@ -86,10 +79,13 @@ export function DateRangePicker({
   maxDate,
   disabledDates,
   includeGregorian = true,
-  placeholder = "انتخاب بازه‌ی تاریخ",
+  placeholder = "انتخاب بازهی تاریخ",
   disabled = false,
   className,
   inputClassName,
+  ref,
+  onKeyDown,
+  ...rest
 }: DateRangePickerProps) {
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<DateRangeValue | null>(defaultValue);
@@ -98,6 +94,7 @@ export function DateRangePicker({
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const assignInputRef = useMemo(() => mergeRefs(inputRef, ref), [inputRef, ref]);
   const today = getTodayJalali();
 
   const [viewYear, setViewYear] = useState(currentValue?.start.year ?? today.year);
@@ -111,10 +108,10 @@ export function DateRangePicker({
   const maxJalali = maxDate ? toJalali(maxDate) : null;
   const minYearMonth: YearMonth = minJalali
     ? { year: minJalali.year, month: minJalali.month }
-    : { year: MIN_YEAR, month: 1 };
+    : { year: MIN_CALENDAR_YEAR, month: 1 };
   const maxYearMonth: YearMonth = maxJalali
     ? { year: maxJalali.year, month: maxJalali.month }
-    : { year: MAX_YEAR, month: 12 };
+    : { year: MAX_CALENDAR_YEAR, month: 12 };
 
   function isDateDisabled(cellDate: JalaliDate): boolean {
     if (minJalali && compareJalali(cellDate, minJalali) < 0) return true;
@@ -176,9 +173,18 @@ export function DateRangePicker({
   function handleGoToToday() {
     setViewYear(today.year);
     setViewMonth(today.month);
+    if (isDateDisabled(today)) return;
     setDraftStart(today);
     setDraftEnd(null);
     setHoverDate(null);
+  }
+
+  function handleInputKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter" || event.key === " " || event.key === "ArrowDown") {
+      event.preventDefault();
+      openPicker();
+    }
+    onKeyDown?.(event);
   }
 
   function handleConfirm() {
@@ -287,7 +293,8 @@ export function DateRangePicker({
       dir="rtl"
     >
       <input
-        ref={inputRef}
+        {...rest}
+        ref={assignInputRef}
         readOnly
         data-fara-date-range-picker-input
         className={clsx(styles.input, inputClassName)}
@@ -295,6 +302,7 @@ export function DateRangePicker({
         disabled={disabled}
         value={displayValue}
         onClick={openPicker}
+        onKeyDown={handleInputKeyDown}
       />
 
       <AnchoredPopup
