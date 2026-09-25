@@ -17,6 +17,14 @@
     color: var(--fara-color-text-secondary);
     text-decoration: none;
     cursor: pointer;
+    padding: var(--fara-spacing-2xs);
+}
+
+.linkButton {
+    border: none;
+    background: none;
+    padding: 0;
+    font: inherit;
 }
 
 .link:hover {

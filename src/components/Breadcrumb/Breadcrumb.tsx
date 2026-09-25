@@ -1,3 +1,5 @@
+import type { HTMLAttributes, Ref } from "react";
+import clsx from "clsx";
 import styles from "./Breadcrumb.module.css";
 
 export interface BreadcrumbItem {
@@ -6,15 +8,28 @@ export interface BreadcrumbItem {
   onClick?: () => void;
 }
 
-export interface BreadcrumbProps {
+export interface BreadcrumbProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   items: BreadcrumbItem[];
   separator?: string;
   className?: string;
+  ref?: Ref<HTMLElement>;
 }
 
-export function Breadcrumb({ items, separator = "/", className }: BreadcrumbProps) {
+export function Breadcrumb({
+  items,
+  separator = "/",
+  className,
+  ref,
+  ...rest
+}: BreadcrumbProps) {
   return (
-    <nav aria-label="مسیر ناوبری" className={className} data-fara-breadcrumb>
+    <nav
+      {...rest}
+      ref={ref}
+      aria-label="مسیر ناوبری"
+      className={className}
+      data-fara-breadcrumb
+    >
       <ol className={styles.list} data-fara-breadcrumb-list>
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
@@ -34,7 +49,7 @@ export function Breadcrumb({ items, separator = "/", className }: BreadcrumbProp
                 >
                   {item.label}
                 </span>
-              ) : (
+              ) : item.href ? (
                 <a
                   href={item.href}
                   onClick={item.onClick}
@@ -43,6 +58,15 @@ export function Breadcrumb({ items, separator = "/", className }: BreadcrumbProp
                 >
                   {item.label}
                 </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={item.onClick}
+                  className={clsx(styles.link, styles.linkButton)}
+                  data-fara-breadcrumb-link
+                >
+                  {item.label}
+                </button>
               )}
 
               {!isLast && (
