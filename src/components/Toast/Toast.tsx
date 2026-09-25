@@ -52,9 +52,14 @@ export function Toaster({ position = "bottom-center" }: ToasterProps) {
       {items.map((toast) => (
         <div
           key={toast.id}
-          className={clsx(styles.toast, styles[toast.variant])}
+          className={clsx(
+            styles.toast,
+            styles[toast.variant],
+            toast.closing && styles.toastClosing,
+          )}
           data-fara-toast
           data-variant={toast.variant}
+          data-closing={toast.closing || undefined}
           onMouseEnter={() => pauseToastTimer(toast.id)}
           onMouseLeave={() => resumeToastTimer(toast.id)}
         >

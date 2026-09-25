@@ -142,3 +142,10 @@
         width: 100%;
     }
 }
+
+.toast.toastClosing {
+    opacity: 0;
+    animation: none;
+    pointer-events: none;
+    transition: opacity var(--fara-transition-fast) var(--fara-easing-standard);
+}

@@ -3,13 +3,18 @@ export interface ToastItem {
   message: string;
   variant: "info" | "success" | "danger";
   duration: number;
+  closing?: boolean;
 }
 
 interface ToastTimer {
   remaining: number;
   startedAt: number;
   timeout: number;
+  paused: boolean;
 }
+
+const MAX_VISIBLE_TOASTS = 5;
+const TOAST_EXIT_MS = 150;
 
 let toastCounter = 0;
 let toasts: ToastItem[] = [];
@@ -41,8 +46,17 @@ function removeTimer(id: string) {
 
 export function dismissToast(id: string) {
   removeTimer(id);
-  toasts = toasts.filter((toast) => toast.id !== id);
+
+  const target = toasts.find((toast) => toast.id === id);
+  if (!target || target.closing) return;
+
+  toasts = toasts.map((toast) => (toast.id === id ? { ...toast, closing: true } : toast));
   notify();
+
+  window.setTimeout(() => {
+    toasts = toasts.filter((toast) => toast.id !== id);
+    notify();
+  }, TOAST_EXIT_MS);
 }
 
 export function showToast(
@@ -59,21 +73,29 @@ export function showToast(
     remaining: duration,
     startedAt: Date.now(),
     timeout: window.setTimeout(() => dismissToast(id), duration),
+    paused: false,
   });
+
+  const visible = toasts.filter((toast) => !toast.closing);
+  if (visible.length > MAX_VISIBLE_TOASTS) {
+    visible.slice(0, visible.length - MAX_VISIBLE_TOASTS).forEach((toast) => dismissToast(toast.id));
+  }
 
   notify();
 }
 
 export function pauseToastTimer(id: string) {
   const entry = timers.get(id);
-  if (!entry) return;
+  if (!entry || entry.paused) return;
+  entry.paused = true;
   clearTimeout(entry.timeout);
   entry.remaining = Math.max(0, entry.remaining - (Date.now() - entry.startedAt));
 }
 
 export function resumeToastTimer(id: string) {
   const entry = timers.get(id);
-  if (!entry) return;
+  if (!entry || !entry.paused) return;
+  entry.paused = false;
   entry.startedAt = Date.now();
   entry.timeout = window.setTimeout(() => dismissToast(id), entry.remaining);
 }
