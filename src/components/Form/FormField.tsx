@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useId } from "react";
 import { useFormContext } from "./FormContext";
 
 interface ValueFieldProps<TValue> {
@@ -6,6 +7,8 @@ interface ValueFieldProps<TValue> {
   onChange: (event: unknown) => void;
   onBlur: () => void;
   ref: (element: HTMLElement | null) => void;
+  "aria-invalid"?: true;
+  "aria-describedby"?: string;
 }
 
 interface BooleanFieldProps {
@@ -13,15 +16,25 @@ interface BooleanFieldProps {
   onChange: (event: unknown) => void;
   onBlur: () => void;
   ref: (element: HTMLElement | null) => void;
+  "aria-invalid"?: true;
+  "aria-describedby"?: string;
 }
 
 export type FieldProps<TValue = string> = TValue extends boolean
   ? BooleanFieldProps
   : ValueFieldProps<TValue>;
 
+export interface FieldHelpers {
+  errorId: string;
+}
+
 export interface FormFieldProps<TValue = string> {
   name: string;
-  children: (props: FieldProps<TValue>, error?: string) => ReactNode;
+  children: (
+    props: FieldProps<TValue>,
+    error: string | undefined,
+    helpers: FieldHelpers,
+  ) => ReactNode;
 }
 
 function toValue(event: unknown) {
@@ -35,6 +48,7 @@ function toValue(event: unknown) {
 
 export function FormField<TValue = string>({ name, children }: FormFieldProps<TValue>) {
   const { values, errors, touched, setValue, blurField, registerField } = useFormContext();
+  const errorId = `${useId()}-error`;
 
   const fieldValue = values[name];
   const error = touched[name] ? errors[name] : undefined;
@@ -44,7 +58,9 @@ export function FormField<TValue = string>({ name, children }: FormFieldProps<TV
     onChange: (event: unknown) => setValue(name, toValue(event)),
     onBlur: () => blurField(name),
     ref: (element: HTMLElement | null) => registerField(name, element),
+    "aria-invalid": error ? true : undefined,
+    "aria-describedby": error ? errorId : undefined,
   } as FieldProps<TValue>;
 
-  return children(fieldProps, error);
+  return children(fieldProps, error, { errorId });
 }

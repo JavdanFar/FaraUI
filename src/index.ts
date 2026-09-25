@@ -28,7 +28,15 @@ export { Select } from "./components/Select";
 export type { SelectProps, SelectOption } from "./components/Select";
 
 export { Form } from "./components/Form";
-export type { FormProps, FormRule, FormRules, FormFieldProps, FieldProps } from "./components/Form";
+export type {
+  FormProps,
+  FormHandle,
+  FormRule,
+  FormRules,
+  FormFieldProps,
+  FieldProps,
+  FieldHelpers,
+} from "./components/Form";
 
 export { Switch } from "./components/Switch";
 export type { SwitchProps } from "./components/Switch";

@@ -1,8 +1,16 @@
-import type { FormEvent, ReactNode } from "react";
-import { useRef, useState } from "react";
+import type { FormEvent, ReactNode, Ref } from "react";
+import { useImperativeHandle, useRef, useState } from "react";
 import { FormContext } from "./FormContext";
 import type { FormRule, FormRules } from "./formValidation";
 import { validateFieldValue } from "./formValidation";
+
+export interface FormHandle<T> {
+  getValues: () => T;
+  getErrors: () => Record<string, string | undefined>;
+  setValue: (name: string, value: unknown) => void;
+  setValues: (values: Partial<T>) => void;
+  reset: (values?: T) => void;
+}
 
 export interface FormProps<T extends Record<string, unknown>> {
   initialValues: T;
@@ -10,6 +18,7 @@ export interface FormProps<T extends Record<string, unknown>> {
   onSubmit: (values: T) => void;
   children: ReactNode;
   className?: string;
+  ref?: Ref<FormHandle<T>>;
 }
 
 export function Form<T extends Record<string, unknown>>({
@@ -18,6 +27,7 @@ export function Form<T extends Record<string, unknown>>({
   onSubmit,
   children,
   className,
+  ref,
 }: FormProps<T>) {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
@@ -26,17 +36,21 @@ export function Form<T extends Record<string, unknown>>({
 
   const valuesRecord: Record<string, unknown> = values;
   const rulesRecord = rules as unknown as Record<string, FormRule | undefined>;
+  const ruleKeys = Object.keys(rulesRecord);
 
   function setValue(name: string, value: unknown) {
-    const nextValues = { ...values, [name]: value };
+    const nextValues = { ...values, [name]: value } as T;
     setValues(nextValues);
 
-    if (touched[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: validateFieldValue(value, rulesRecord[name], nextValues),
-      }));
+    if (!touched[name]) return;
+
+    const nextErrors = { ...errors };
+    for (const key of ruleKeys) {
+      if (touched[key]) {
+        nextErrors[key] = validateFieldValue(nextValues[key], rulesRecord[key], nextValues);
+      }
     }
+    setErrors(nextErrors);
   }
 
   function blurField(name: string) {
@@ -55,7 +69,6 @@ export function Form<T extends Record<string, unknown>>({
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const ruleKeys = Object.keys(rulesRecord);
     const nextErrors: Record<string, string | undefined> = {};
     for (const name of ruleKeys) {
       nextErrors[name] = validateFieldValue(
@@ -76,6 +89,25 @@ export function Form<T extends Record<string, unknown>>({
 
     onSubmit(values);
   }
+
+  useImperativeHandle(ref, () => ({
+    getValues: () => values,
+    getErrors: () => errors,
+    setValue,
+    setValues: (next: Partial<T>) => {
+      setValues((prev) => ({ ...prev, ...next }) as T);
+      setErrors((prev) => {
+        const nextErrors = { ...prev };
+        for (const key of Object.keys(next)) delete nextErrors[key];
+        return nextErrors;
+      });
+    },
+    reset: (next?: T) => {
+      setValues(next ?? initialValues);
+      setErrors({});
+      setTouched({});
+    },
+  }));
 
   return (
     <FormContext.Provider value={{ values: valuesRecord, errors, touched, setValue, blurField, registerField }}>

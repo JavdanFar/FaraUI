@@ -34,7 +34,11 @@ export function validateFieldValue(
   if (typeof value === "string") {
     if (rule.minLength && value.trim().length < rule.minLength[0]) return rule.minLength[1];
     if (rule.maxLength && value.length > rule.maxLength[0]) return rule.maxLength[1];
-    if (rule.pattern && !rule.pattern[0].test(value)) return rule.pattern[1];
+    if (rule.pattern) {
+      const [pattern, message] = rule.pattern;
+      if (pattern.global || pattern.sticky) pattern.lastIndex = 0;
+      if (!pattern.test(value)) return message;
+    }
   }
 
   if (typeof value === "number") {
