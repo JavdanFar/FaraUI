@@ -1,15 +1,17 @@
-import { useId, useRef, useState } from "react";
+import type { DragEvent, HTMLAttributes, Ref } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./FileUpload.module.css";
 import type { RejectedFile, UploadedFile } from "./types";
 import { formatFileSize, isImageFileName, validateFiles } from "./utils";
 import { Modal } from "../Modal";
 
-export interface FileUploadProps {
+export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
   onFilesSelected: (files: UploadedFile[]) => void;
   files?: UploadedFile[];
   onRemoveFile?: (id: string) => void;
 
+  name?: string;
   accept?: string;
   multiple?: boolean;
   disabled?: boolean;
@@ -25,12 +27,14 @@ export interface FileUploadProps {
   enablePreviewModal?: boolean;
 
   variant?: "default" | "preview";
+  ref?: Ref<HTMLDivElement>;
 }
 
 export function FileUpload({
   onFilesSelected,
   files,
   onRemoveFile,
+  name,
   accept,
   multiple = false,
   disabled = false,
@@ -43,11 +47,14 @@ export function FileUpload({
   onRejected,
   enablePreviewModal = true,
   variant = "default",
+  ref,
+  ...rest
 }: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [previewItem, setPreviewItem] = useState<UploadedFile | null>(null);
   const [rejections, setRejections] = useState<RejectedFile[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const createdUrlsRef = useRef<Set<string>>(new Set());
   const inputId = useId();
 
   const isPreviewVariant = variant === "preview";
@@ -65,11 +72,15 @@ export function FileUpload({
       : isImageFileName(previewFile.name));
 
   function processFiles(fileList: FileList | null) {
-    if (!fileList) return;
+    const rawFiles = fileList ? Array.from(fileList) : [];
 
-    const rawFiles = multiple ? Array.from(fileList) : Array.from(fileList).slice(0, 1);
+    if (inputRef.current) inputRef.current.value = "";
 
-    const { accepted, rejected } = validateFiles(rawFiles, {
+    if (rawFiles.length === 0) return;
+
+    const selectedFiles = multiple ? rawFiles : rawFiles.slice(0, 1);
+
+    const { accepted, rejected } = validateFiles(selectedFiles, {
       accept,
       maxSize,
       maxFiles,
@@ -82,21 +93,42 @@ export function FileUpload({
 
     if (accepted.length === 0) return;
 
-    const wrapped: UploadedFile[] = accepted.map((file) => ({
-      id: `fara-file-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
-      name: file.name,
-      url: URL.createObjectURL(file),
-      size: file.size,
-      file,
-      status: "idle",
-    }));
+    const wrapped: UploadedFile[] = accepted.map((file) => {
+      const url = URL.createObjectURL(file);
+      createdUrlsRef.current.add(url);
+
+      return {
+        id: `fara-file-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`,
+        name: file.name,
+        url,
+        size: file.size,
+        file,
+        status: "idle",
+      };
+    });
 
     onFilesSelected(wrapped);
-
-    if (inputRef.current) inputRef.current.value = "";
   }
 
-  function handleDrop(e: React.DragEvent) {
+  useEffect(() => {
+    const liveUrls = new Set((files ?? []).map((item) => item.url));
+
+    for (const url of createdUrlsRef.current) {
+      if (liveUrls.has(url)) continue;
+      URL.revokeObjectURL(url);
+      createdUrlsRef.current.delete(url);
+    }
+  }, [files]);
+
+  useEffect(
+    () => () => {
+      for (const url of createdUrlsRef.current) URL.revokeObjectURL(url);
+      createdUrlsRef.current.clear();
+    },
+    [],
+  );
+
+  function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
     setIsDragActive(false);
     if (isDisabled) return;
@@ -104,7 +136,7 @@ export function FileUpload({
   }
 
   return (
-    <div data-fara-file-upload className={className}>
+    <div {...rest} ref={ref} data-fara-file-upload className={className}>
       <div
         role="button"
         tabIndex={isDisabled ? -1 : 0}
@@ -122,21 +154,46 @@ export function FileUpload({
           isDisabled && styles.dropzoneDisabled,
         )}
         onClick={() => {
+          if (isDisabled) return;
+
           const hasPreviewImage = isPreviewVariant && previewFile && previewFileIsImage;
-          if (!isDisabled && !hasPreviewImage) inputRef.current?.click();
+
+          if (hasPreviewImage && previewFile) {
+            if (enablePreviewModal) {
+              setPreviewItem(previewFile);
+            }
+
+            return;
+          }
+
+          inputRef.current?.click();
         }}
         onKeyDown={(e) => {
+          if (e.key !== "Enter" && e.key !== " ") return;
+          if (isDisabled) return;
+
+          e.preventDefault();
+
           const hasPreviewImage = isPreviewVariant && previewFile && previewFileIsImage;
-          if ((e.key === "Enter" || e.key === " ") && !isDisabled && !hasPreviewImage) {
-            e.preventDefault();
-            inputRef.current?.click();
+
+          if (hasPreviewImage && previewFile) {
+            if (enablePreviewModal) {
+              setPreviewItem(previewFile);
+            }
+
+            return;
           }
+
+          inputRef.current?.click();
         }}
         onDragOver={(e) => {
           e.preventDefault();
           if (!isDisabled) setIsDragActive(true);
         }}
-        onDragLeave={() => setIsDragActive(false)}
+        onDragLeave={(e) => {
+          if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+          setIsDragActive(false);
+        }}
         onDrop={handleDrop}
       >
         {isPreviewVariant && previewFile && previewFileIsImage ? (
@@ -195,6 +252,7 @@ export function FileUpload({
           id={inputId}
           ref={inputRef}
           type="file"
+          name={name}
           data-fara-file-upload-input
           className={styles.hiddenInput}
           accept={accept}
@@ -224,6 +282,8 @@ export function FileUpload({
             const isClickable = canPreviewInModal || !isImage;
 
             function handleCardClick() {
+              console.log("CLICK", item);
+              console.log("canPreviewInModal:", canPreviewInModal);
               if (canPreviewInModal) {
                 setPreviewItem(item);
               } else if (!isImage) {
