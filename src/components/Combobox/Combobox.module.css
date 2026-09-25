@@ -64,6 +64,10 @@
     background-color: var(--fara-color-secondary);
 }
 
+.optionActive {
+    background-color: var(--fara-color-secondary);
+}
+
 .empty {
     padding: var(--fara-spacing-sm) var(--fara-spacing-md);
     color: var(--fara-color-text-tertiary);

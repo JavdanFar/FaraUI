@@ -1,37 +1,47 @@
-import { useId, useRef, useState } from "react";
+import type { InputHTMLAttributes, Ref } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import clsx from "clsx";
 import styles from "./Combobox.module.css";
 import { Chip } from "../Chip";
 import { AnchoredPopup } from "../AnchoredPopup";
+import { nextActiveIndex } from "../../utils/nextActiveIndex";
 
 export interface ComboboxOption {
   value: string;
   label: string;
 }
 
-export interface ComboboxProps {
+export interface ComboboxProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "value" | "onChange" | "size"
+> {
   options: ComboboxOption[];
-  value: string[];
+  value?: string[];
   onChange: (value: string[]) => void;
-  placeholder?: string;
-  disabled?: boolean;
   emptyMessage?: string;
-  className?: string;
+  ref?: Ref<HTMLInputElement>;
 }
 
 export function Combobox({
   options,
-  value,
+  value = [],
   onChange,
   placeholder = "انتخاب کنید...",
   disabled = false,
   emptyMessage = "نتیجه‌ای یافت نشد",
   className,
+  ref,
+  onBlur,
+  onFocus,
+  onKeyDown,
+  ...rest
 }: ComboboxProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeIndex, setActiveIndex] = useState(-1);
   const triggerRef = useRef<HTMLDivElement>(null);
-  const inputId = useId();
+  const listRef = useRef<HTMLDivElement>(null);
+  const listId = useId();
 
   const selectedOptions = options.filter((opt) => value.includes(opt.value));
   const filteredOptions = options.filter(
@@ -40,9 +50,18 @@ export function Combobox({
       opt.label.toLowerCase().includes(searchTerm.trim().toLowerCase()),
   );
 
+  const activeOption = activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
+
+  function openDropdown() {
+    if (disabled) return;
+    setIsOpen(true);
+    setActiveIndex(filteredOptions.length > 0 ? 0 : -1);
+  }
+
   function selectOption(optionValue: string) {
     onChange([...value, optionValue]);
     setSearchTerm("");
+    setActiveIndex(0);
   }
 
   function removeOption(optionValue: string) {
@@ -56,11 +75,51 @@ export function Combobox({
   function closeDropdown() {
     setIsOpen(false);
     setSearchTerm("");
+    setActiveIndex(-1);
   }
 
-  function handleBackspace(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Backspace" && searchTerm === "" && selectedOptions.length > 0) {
-      removeOption(selectedOptions[selectedOptions.length - 1].value);
+  useEffect(() => {
+    if (!isOpen || activeIndex < 0) return;
+    const node = listRef.current?.children[activeIndex];
+    if (node instanceof HTMLElement) node.scrollIntoView({ block: "nearest" });
+  }, [isOpen, activeIndex]);
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    switch (event.key) {
+      case "ArrowDown":
+      case "ArrowUp": {
+        event.preventDefault();
+        if (!isOpen) {
+          openDropdown();
+          return;
+        }
+        if (filteredOptions.length === 0) return;
+        const step = event.key === "ArrowDown" ? 1 : -1;
+        setActiveIndex((prev) => nextActiveIndex(prev, step, filteredOptions.length));
+        return;
+      }
+      case "Home":
+        if (!isOpen) return;
+        event.preventDefault();
+        setActiveIndex(0);
+        return;
+      case "End":
+        if (!isOpen) return;
+        event.preventDefault();
+        setActiveIndex(filteredOptions.length - 1);
+        return;
+      case "Enter":
+        event.preventDefault();
+        if (!activeOption) return;
+        selectOption(activeOption.value);
+        return;
+      case "Backspace":
+        if (searchTerm === "" && selectedOptions.length > 0) {
+          removeOption(selectedOptions[selectedOptions.length - 1].value);
+        }
+        return;
+      default:
+        return;
     }
   }
 
@@ -84,15 +143,35 @@ export function Combobox({
         ))}
 
         <input
-          id={inputId}
+          ref={ref}
+          id={listId}
           className={styles.searchInput}
           data-fara-combobox-search-input
+          role="combobox"
+          aria-expanded={isOpen && !disabled}
+          aria-controls={`${listId}-listbox`}
+          aria-autocomplete="list"
+          aria-activedescendant={
+            isOpen && activeOption ? `${listId}-option-${activeIndex}` : undefined
+          }
           disabled={disabled}
           placeholder={selectedOptions.length === 0 ? placeholder : ""}
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          onFocus={() => setIsOpen(true)}
-          onKeyDown={handleBackspace}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setIsOpen(true);
+            setActiveIndex(0);
+          }}
+          onFocus={(event) => {
+            openDropdown();
+            onFocus?.(event);
+          }}
+          onBlur={onBlur}
+          onKeyDown={(event) => {
+            handleKeyDown(event);
+            onKeyDown?.(event);
+          }}
+          {...rest}
         />
       </div>
 
@@ -104,17 +183,22 @@ export function Combobox({
         matchAnchorWidth
         dataFara="combobox-dropdown"
       >
-        <div role="listbox" data-fara-combobox-option-list>
+        <div ref={listRef} id={`${listId}-listbox`} role="listbox" data-fara-combobox-option-list>
           {filteredOptions.length === 0 ? (
-            <div className={styles.empty} data-fara-combobox-empty>{emptyMessage}</div>
+            <div className={styles.empty} data-fara-combobox-empty>
+              {emptyMessage}
+            </div>
           ) : (
-            filteredOptions.map((opt) => (
+            filteredOptions.map((opt, index) => (
               <div
                 key={opt.value}
+                id={`${listId}-option-${index}`}
                 role="option"
                 aria-selected={false}
                 data-fara-combobox-option
-                className={styles.option}
+                data-active={index === activeIndex || undefined}
+                className={clsx(styles.option, index === activeIndex && styles.optionActive)}
+                onMouseEnter={() => setActiveIndex(index)}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   selectOption(opt.value);
