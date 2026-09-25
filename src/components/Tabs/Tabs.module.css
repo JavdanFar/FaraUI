@@ -40,3 +40,7 @@
 .panel {
     padding-top: var(--fara-spacing-md);
 }
+
+.panel[hidden] {
+    display: none;
+}

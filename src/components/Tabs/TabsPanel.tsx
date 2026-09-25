@@ -1,19 +1,35 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
+import clsx from "clsx";
 import styles from "./Tabs.module.css";
 import { useTabsContext } from "./TabsContext";
 
-export interface TabsPanelProps {
+export interface TabsPanelProps extends HTMLAttributes<HTMLDivElement> {
   value: string;
   children: ReactNode;
+  className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
-export function TabsPanel({ value, children }: TabsPanelProps) {
+export function TabsPanel({
+  value,
+  children,
+  className,
+  ref,
+  ...rest
+}: TabsPanelProps) {
   const { activeTab } = useTabsContext();
-
-  if (activeTab !== value) return null;
+  const isActive = activeTab === value;
 
   return (
-    <div className={styles.panel} role="tabpanel" data-fara-tabs-panel>
+    <div
+      {...rest}
+      ref={ref}
+      hidden={!isActive}
+      className={clsx(styles.panel, className)}
+      role="tabpanel"
+      data-fara-tabs-panel
+      data-active={isActive || undefined}
+    >
       {children}
     </div>
   );
