@@ -1,19 +1,21 @@
 import { useIsClient } from "../../hooks/useIsClient";
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import styles from "./Modal.module.css";
+import { lockBodyScroll, unlockBodyScroll } from "../../utils/bodyScrollLock";
 
-export interface ModalProps {
+export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
   title?: string;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
-export function Modal({ open, onClose, children, title, className }: ModalProps) {
+export function Modal({ open, onClose, children, title, className, ref, ...rest }: ModalProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -35,20 +37,12 @@ export function Modal({ open, onClose, children, title, className }: ModalProps)
       if (e.key === "Escape") onClose();
     }
 
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const originalPaddingRight = document.body.style.paddingRight;
-    const originalOverflow = document.body.style.overflow;
-
     document.addEventListener("keydown", handleEscape);
-    document.body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
+    lockBodyScroll();
 
     return () => {
       document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = originalOverflow;
-      document.body.style.paddingRight = originalPaddingRight;
+      unlockBodyScroll();
     };
   }, [open, onClose]);
 
@@ -63,13 +57,16 @@ export function Modal({ open, onClose, children, title, className }: ModalProps)
       className={clsx(styles.overlay, open && isVisible && styles.overlayVisible)}
       data-fara-modal-overlay
       data-open={(open && isVisible) || undefined}
-      onMouseDown={onClose}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
     >
       <div
+        {...rest}
+        ref={ref}
         className={clsx(styles.modal, open && isVisible && styles.modalVisible, className)}
         data-fara-modal
         data-open={(open && isVisible) || undefined}
-        onMouseDown={(e) => e.stopPropagation()}
       >
         <div className={styles.header} data-fara-modal-header>
           {title && <h2 data-fara-modal-title>{title}</h2>}
