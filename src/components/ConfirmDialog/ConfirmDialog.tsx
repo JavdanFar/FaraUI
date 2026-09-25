@@ -27,15 +27,20 @@ export function ConfirmDialog({
   danger = false,
   loading = false,
 }: ConfirmDialogProps) {
+  function handleClose() {
+    if (loading) return;
+    onClose();
+  }
+
   return (
-    <Modal open={open} onClose={onClose} title={title}>
+    <Modal open={open} onClose={handleClose} title={title}>
       <p className={styles.message} data-fara-confirm-dialog-message>{message}</p>
 
       <div className={styles.actions} data-fara-confirm-dialog-actions data-loading={loading || undefined}>
         <Button
           variant="secondary"
           data-fara-confirm-dialog-cancel
-          onClick={onClose}
+          onClick={handleClose}
           disabled={loading}
         >
           {cancelLabel}
