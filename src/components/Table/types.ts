@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 
 export type SortDirection = "asc" | "desc" | null;
 export type FeatureMode = "server" | "client";
@@ -50,7 +50,7 @@ export interface PaginationConfig {
   onPageSizeChange?: (size: number) => void;
 }
 
-export interface TableProps<T> {
+export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   columns: TableColumn<T>[];
   data: T[];
   rowKey: (row: T) => string;
@@ -58,6 +58,7 @@ export interface TableProps<T> {
   className?: string;
   maxHeight?: string;
   loading?: boolean;
+  ref?: Ref<HTMLDivElement>;
 
   sorting?: SortingConfig;
   filtering?: FilteringConfig;

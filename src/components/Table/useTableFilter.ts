@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { TableColumn, FilteringConfig } from "./types";
 import { normalizePersianText } from "../../utils/normalizePersianText";
 
@@ -9,8 +9,16 @@ interface UseTableFilterOptions<T> {
   getCellValue: (row: T, col: TableColumn<T>) => string | number;
 }
 
-const emptyFilters: Record<string, string> = {};
+type FilterMap = Record<string, string>;
+
+const emptyFilters: FilterMap = {};
 const DEBOUNCE_MS = 250;
+
+function filtersEqual(a: FilterMap, b: FilterMap): boolean {
+  const keys = Object.keys(a);
+  if (keys.length !== Object.keys(b).length) return false;
+  return keys.every((key) => a[key] === b[key]);
+}
 
 export function useTableFilter<T>({
   data,
@@ -21,19 +29,24 @@ export function useTableFilter<T>({
   const enabled = config.enabled ?? false;
   const mode = config.mode ?? "client";
   const isServer = mode === "server";
+  const hasExternalState = config.state !== undefined;
+  const isControlled = hasExternalState && config.onChange !== undefined;
 
-  const externalFilters = isServer ? (config.state ?? emptyFilters) : undefined;
+  const externalFilters = hasExternalState ? (config.state ?? emptyFilters) : undefined;
 
-  const [internalFilters, setInternalFilters] = useState<Record<string, string>>({});
-  const [draftFilters, setDraftFilters] = useState<Record<string, string>>(externalFilters ?? {});
+  const [internalFilters, setInternalFilters] = useState<FilterMap>(config.state ?? {});
+  const [draftFilters, setDraftFilters] = useState<FilterMap>(config.state ?? {});
   const [prevExternalFilters, setPrevExternalFilters] = useState(externalFilters);
 
-  if (isServer && externalFilters !== prevExternalFilters) {
+  if (
+    hasExternalState &&
+    !filtersEqual(externalFilters ?? emptyFilters, prevExternalFilters ?? emptyFilters)
+  ) {
     setPrevExternalFilters(externalFilters);
     setDraftFilters(externalFilters ?? {});
   }
 
-  const committedFilters = isServer ? (externalFilters ?? emptyFilters) : internalFilters;
+  const committedFilters = hasExternalState ? (externalFilters ?? emptyFilters) : internalFilters;
 
   const [openFilterKey, setOpenFilterKey] = useState<string | null>(null);
 
@@ -41,16 +54,23 @@ export function useTableFilter<T>({
     setDraftFilters((prev) => ({ ...prev, [key]: value }));
   }
 
+  const committedRef = useRef(committedFilters);
   useEffect(() => {
-    if (draftFilters === committedFilters) return;
+    committedRef.current = committedFilters;
+  });
 
-    const handle = setTimeout(() => {
-      if (isServer) {
-        config.onChange?.(draftFilters);
-      } else {
-        setInternalFilters(draftFilters);
-      }
-    }, DEBOUNCE_MS);
+  const commitRef = useRef<(value: FilterMap) => void>(() => {});
+  useEffect(() => {
+    commitRef.current = (value) => {
+      if (!isControlled) setInternalFilters(value);
+      config.onChange?.(value);
+    };
+  });
+
+  useEffect(() => {
+    if (filtersEqual(draftFilters, committedRef.current)) return;
+
+    const handle = setTimeout(() => commitRef.current(draftFilters), DEBOUNCE_MS);
 
     return () => clearTimeout(handle);
   }, [draftFilters]);

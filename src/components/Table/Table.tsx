@@ -91,6 +91,8 @@ export function Table<T>({
   globalSearch = {},
   pagination = {},
   selection = {},
+  ref,
+  ...rest
 }: TableProps<T>) {
   const {
     searchedData,
@@ -150,7 +152,7 @@ export function Table<T>({
   const rowsToRender = paginatedData;
 
   return (
-    <div data-fara-table className={clsx(styles.wrapper, className)}>
+    <div {...rest} ref={ref} data-fara-table className={clsx(styles.wrapper, className)}>
       {searchEnabled && (
         <input
           className={styles.globalSearch}

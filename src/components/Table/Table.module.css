@@ -251,7 +251,11 @@
 }
 
 .trSelected {
-    background-color: var(--fara-color-background-secondary);
+    background-color: var(--fara-color-secondary);
+}
+
+.tbody .trSelected:hover {
+    background-color: var(--fara-color-secondary-hover);
 }
 
 .tableContainer {

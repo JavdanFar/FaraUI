@@ -15,8 +15,11 @@ export function useTableSort<T>({ data, columns, config, getCellValue }: UseTabl
   const mode = config.mode ?? "client";
   const isServer = mode === "server";
 
-  const [internalState, setInternalState] = useState<SortState>(emptySortState);
-  const currentState = isServer ? (config.state ?? emptySortState) : internalState;
+  const hasExternalState = config.state !== undefined;
+  const isControlled = hasExternalState && config.onChange !== undefined;
+
+  const [internalState, setInternalState] = useState<SortState>(config.state ?? emptySortState);
+  const currentState = hasExternalState ? (config.state ?? emptySortState) : internalState;
 
   function toggleSort(col: TableColumn<T>) {
     if (!enabled || !col.sortable) return;
@@ -31,11 +34,8 @@ export function useTableSort<T>({ data, columns, config, getCellValue }: UseTabl
       nextState = emptySortState;
     }
 
-    if (isServer) {
-      config.onChange?.(nextState);
-    } else {
-      setInternalState(nextState);
-    }
+    if (!isControlled) setInternalState(nextState);
+    config.onChange?.(nextState);
   }
 
   const sortedData = useMemo(() => {

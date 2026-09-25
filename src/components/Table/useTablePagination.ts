@@ -19,14 +19,17 @@ export function useTablePagination<T>({ data, config }: UseTablePaginationOption
     );
   }
 
-  const [internalPage, setInternalPage] = useState(1);
+  const [internalPage, setInternalPage] = useState(config.page ?? 1);
   const [internalPageSize, setInternalPageSize] = useState(config.pageSize ?? 10);
+  const isPageControlled = config.page !== undefined && config.onPageChange !== undefined;
+  const isPageSizeControlled =
+    config.pageSize !== undefined && config.onPageSizeChange !== undefined;
 
-  const currentPageSize = isServer ? (config.pageSize ?? 10) : internalPageSize;
+  const currentPageSize = isPageSizeControlled ? (config.pageSize ?? 10) : internalPageSize;
   const currentTotalItems = isServer ? (config.totalItems ?? 0) : data.length;
   const totalPages = enabled ? Math.max(1, Math.ceil(currentTotalItems / currentPageSize)) : 1;
 
-  const rawPage = isServer ? (config.page ?? 1) : internalPage;
+  const rawPage = isPageControlled ? (config.page ?? 1) : internalPage;
   const currentPage = Math.min(Math.max(1, rawPage), totalPages);
 
   const paginatedData = useMemo(() => {
@@ -37,21 +40,15 @@ export function useTablePagination<T>({ data, config }: UseTablePaginationOption
   }, [data, enabled, isServer, currentPage, currentPageSize]);
 
   function changePage(newPage: number) {
-    if (isServer) {
-      config.onPageChange?.(newPage);
-    } else {
-      setInternalPage(newPage);
-    }
+    if (!isPageControlled) setInternalPage(newPage);
+    config.onPageChange?.(newPage);
   }
 
   function changePageSize(newSize: number) {
-    if (isServer) {
-      config.onPageSizeChange?.(newSize);
-      config.onPageChange?.(1);
-    } else {
-      setInternalPageSize(newSize);
-      setInternalPage(1);
-    }
+    if (!isPageSizeControlled) setInternalPageSize(newSize);
+    if (!isPageControlled) setInternalPage(1);
+    config.onPageSizeChange?.(newSize);
+    config.onPageChange?.(1);
   }
 
   return {

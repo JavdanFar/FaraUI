@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { TableColumn, GlobalSearchConfig } from "./types";
 import { normalizePersianText } from "../../utils/normalizePersianText";
 
@@ -21,29 +21,38 @@ export function useGlobalSearch<T>({
   const mode = config.mode ?? "client";
   const isServer = mode === "server";
 
-  const externalTerm = isServer ? (config.value ?? "") : undefined;
+  const hasExternalValue = config.value !== undefined;
+  const isControlled = hasExternalValue && config.onChange !== undefined;
+  const externalTerm = hasExternalValue ? (config.value ?? "") : undefined;
 
-  const [internalTerm, setInternalTerm] = useState("");
+  const [internalTerm, setInternalTerm] = useState(config.value ?? "");
   const [draft, setDraft] = useState(externalTerm ?? internalTerm);
   const [prevExternalTerm, setPrevExternalTerm] = useState(externalTerm);
 
-  if (isServer && externalTerm !== prevExternalTerm) {
+  if (hasExternalValue && externalTerm !== prevExternalTerm) {
     setPrevExternalTerm(externalTerm);
     setDraft(externalTerm ?? "");
   }
 
-  const committedTerm = isServer ? (externalTerm ?? "") : internalTerm;
+  const committedTerm = hasExternalValue ? (externalTerm ?? "") : internalTerm;
+
+  const committedRef = useRef(committedTerm);
+  useEffect(() => {
+    committedRef.current = committedTerm;
+  });
+
+  const commitRef = useRef<(value: string) => void>(() => {});
+  useEffect(() => {
+    commitRef.current = (value) => {
+      if (!isControlled) setInternalTerm(value);
+      config.onChange?.(value);
+    };
+  });
 
   useEffect(() => {
-    if (draft === committedTerm) return;
+    if (draft === committedRef.current) return;
 
-    const handle = setTimeout(() => {
-      if (isServer) {
-        config.onChange?.(draft);
-      } else {
-        setInternalTerm(draft);
-      }
-    }, DEBOUNCE_MS);
+    const handle = setTimeout(() => commitRef.current(draft), DEBOUNCE_MS);
 
     return () => clearTimeout(handle);
   }, [draft]);
