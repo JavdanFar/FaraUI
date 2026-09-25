@@ -90,13 +90,13 @@ Hooks are listed in short form: `-track` on `ProgressBar` means `data-fara-progr
 
 ### Navigation & compound
 
-- **Accordion**: `accordion` (Root), `-item`, `-trigger` (`data-open`), `-icon`, `-panel` (`data-open`), `-panel-inner`, `-panel-content`
+- **Accordion**: `accordion` (Root), `-item` (`data-open`), `-trigger` (`data-open`), `-icon`, `-panel` (`data-open`), `-panel-inner`, `-panel-content`
 - **Breadcrumb**: `breadcrumb` (root), `-list`, `-item` (`data-current`), `-current`, `-link`, `-separator`
 - **Button**: `button` (root, `data-variant`, `data-size`)
 - **Chip**: `chip` (root, `data-removable`), `-remove`
 - **Sidebar**: `sidebar` (root, `data-collapsed`), `-header`, `-header-content`, `-toggle`, `-body`
 - **Stepper**: `stepper` (root, `data-orientation`), `-list`, `-step` (`data-active`, `data-completed`), `-header`, `-circle` (`data-active`, `data-completed`), `-check-icon`, `-text`, `-label`, `-description`, `-connector` (`data-completed`), `-content`
-- **Tabs**: `tabs` (Root), `-list`, `-tab` (`data-active`), `-panel`
+- **Tabs**: `tabs` (Root), `-list`, `-tab` (`data-active`, `data-disabled`, `data-value`), `-panel` (`data-active`)
 - **Timeline**: `timeline` (root, `data-orientation`), `-item`, `-marker-column`, `-dot` (`data-variant`), `-connector`, `-content`, `-title`, `-timestamp`, `-description`
 
 ### Progress
