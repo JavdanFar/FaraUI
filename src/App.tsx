@@ -480,37 +480,53 @@ function FormsSection() {
           >
             <div className="column">
               <Form.Field name="name">
-                {(field, error) => (
+                {(field, error, helpers) => (
                   <div className="column">
                     <Input placeholder="نام و نام خانوادگی" {...field} error={!!error} />
-                    {error && <span className="fieldError">{error}</span>}
+                    {error && (
+                      <span className="fieldError" id={helpers.errorId}>
+                        {error}
+                      </span>
+                    )}
                   </div>
                 )}
               </Form.Field>
 
               <Form.Field name="email">
-                {(field, error) => (
+                {(field, error, helpers) => (
                   <div className="column">
                     <Input placeholder="ایمیل" {...field} error={!!error} />
-                    {error && <span className="fieldError">{error}</span>}
+                    {error && (
+                      <span className="fieldError" id={helpers.errorId}>
+                        {error}
+                      </span>
+                    )}
                   </div>
                 )}
               </Form.Field>
 
               <Form.Field name="city">
-                {(field, error) => (
+                {(field, error, helpers) => (
                   <div className="column">
                     <Select options={selectOptions} placeholder="شهر" {...field} />
-                    {error && <span className="fieldError">{error}</span>}
+                    {error && (
+                      <span className="fieldError" id={helpers.errorId}>
+                        {error}
+                      </span>
+                    )}
                   </div>
                 )}
               </Form.Field>
 
               <Form.Field<boolean> name="terms">
-                {(field, error) => (
+                {(field, error, helpers) => (
                   <div className="column">
                     <Checkbox label="قوانین را می‌پذیرم" {...field} />
-                    {error && <span className="fieldError">{error}</span>}
+                    {error && (
+                      <span className="fieldError" id={helpers.errorId}>
+                        {error}
+                      </span>
+                    )}
                   </div>
                 )}
               </Form.Field>
