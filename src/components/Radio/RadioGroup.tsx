@@ -1,3 +1,5 @@
+import type { HTMLAttributes, Ref } from "react";
+import clsx from "clsx";
 import { Radio } from "./Radio";
 import styles from "./Radio.module.css";
 
@@ -6,17 +8,34 @@ export interface RadioOption {
   label: string;
 }
 
-export interface RadioGroupProps {
+export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
   name: string;
   options: RadioOption[];
   value?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
+  ref?: Ref<HTMLDivElement>;
 }
 
-export function RadioGroup({ name, options, value, onChange, disabled = false }: RadioGroupProps) {
+export function RadioGroup({
+  name,
+  options,
+  value,
+  onChange,
+  disabled = false,
+  className,
+  ref,
+  ...rest
+}: RadioGroupProps) {
   return (
-    <div data-fara-radio-group className={styles.group}>
+    <div
+      ref={ref}
+      data-fara-radio-group
+      role="radiogroup"
+      aria-orientation="vertical"
+      className={clsx(styles.group, className)}
+      {...rest}
+    >
       {options.map((opt) => (
         <Radio
           key={opt.value}
