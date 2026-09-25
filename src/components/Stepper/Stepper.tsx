@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Stepper.module.css";
 
@@ -8,29 +8,40 @@ export interface StepperStep {
   content?: ReactNode;
 }
 
-export interface StepperProps {
+export interface StepperProps extends HTMLAttributes<HTMLDivElement> {
   steps: StepperStep[];
   activeStep: number;
-  completedSteps: Set<number>;
+  completedSteps?: Set<number>;
   onStepClick?: (index: number) => void;
   orientation?: "horizontal" | "vertical";
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
+
+const NO_COMPLETED_STEPS: Set<number> = new Set();
 
 export function Stepper({
   steps,
   activeStep,
-  completedSteps,
+  completedSteps = NO_COMPLETED_STEPS,
   onStepClick,
   orientation = "horizontal",
   className,
+  ref,
+  ...rest
 }: StepperProps) {
   const isVertical = orientation === "vertical";
 
   return (
-    <div data-fara-stepper data-orientation={orientation}>
+    <div
+      {...rest}
+      ref={ref}
+      className={className}
+      data-fara-stepper
+      data-orientation={orientation}
+    >
       <div
-        className={clsx(styles.stepper, isVertical && styles.stepperVertical, className)}
+        className={clsx(styles.stepper, isVertical && styles.stepperVertical)}
         role="list"
         data-fara-stepper-list
       >

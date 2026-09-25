@@ -69,7 +69,7 @@
 .circleActive {
     border-color: var(--fara-color-primary);
     color: var(--fara-color-primary);
-    box-shadow: 0 0 0 4px var(--fara-color-primary-bg);
+    box-shadow: 0 0 0 var(--fara-spacing-xs) var(--fara-color-primary-bg);
 }
 
 .circleCompleted {
