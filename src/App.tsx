@@ -57,6 +57,7 @@ import type {
   TableColumn,
   TimelineItem,
   ToastPosition,
+  UploadedFile,
 } from "./index";
 
 /* ============================================================
@@ -351,6 +352,8 @@ function FormsSection() {
   const [agree, setAgree] = useState(true);
   const [plan, setPlan] = useState("pro");
   const [notifications, setNotifications] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [listFiles, setListFiles] = useState<UploadedFile[]>([]);
 
   return (
     <Section
@@ -444,17 +447,33 @@ function FormsSection() {
       </Subsection>
 
       <Subsection id="forms-upload" title="آپلود فایل">
-        <Demo name="FileUpload" title="پیش‌نمایش تصویر با اعتبارسنجی حجم و نوع" span="wide">
+        <Demo name="FileUpload" title="پیش‌نمایش تصویر با اعتبارسنجی حجم و نوع">
           <FileUpload
             label="آپلود تصویر"
             hint="حداکثر ۲ مگابایت — فقط تصویر"
             accept="image/*"
-            multiple
             maxSize={2 * 1024 * 1024}
             variant="preview"
-            enablePreviewModal
-            onFilesSelected={() => showToast("فایل انتخاب شد", "success")}
+            files={uploadedFiles}
+            onFilesSelected={(picked) => {
+              setUploadedFiles((prev) => [...prev, ...picked]);
+              showToast("فایل انتخاب شد", "success");
+            }}
+            onRemoveFile={(id) => setUploadedFiles((prev) => prev.filter((f) => f.id !== id))}
             onRejected={(rejected) => rejected.forEach((r) => showToast(r.message, "danger"))}
+          />
+        </Demo>
+
+        <Demo name="FileUpload" title="لیست فایل‌ها با پیشرفت و حذف" span="wide">
+          <FileUpload
+            label="فایل‌ها را بکشید و رها کنید"
+            hint="چند فایل، حداکثر ۳ عدد"
+            multiple
+            maxFiles={3}
+            name="attachments"
+            files={listFiles}
+            onFilesSelected={(picked) => setListFiles((prev) => [...prev, ...picked])}
+            onRemoveFile={(id) => setListFiles((prev) => prev.filter((f) => f.id !== id))}
           />
         </Demo>
       </Subsection>
