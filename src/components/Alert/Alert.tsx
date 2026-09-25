@@ -32,6 +32,7 @@ export function Alert({
   }, []);
 
   function handleClose() {
+    if (closing) return;
     setClosing(true);
     timeoutRef.current = window.setTimeout(() => {
       setDismissed(true);
