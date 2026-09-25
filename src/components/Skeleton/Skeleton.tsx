@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Skeleton.module.css";
 
@@ -6,6 +6,7 @@ export interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "text" | "circle" | "rectangle";
   width?: string | number;
   height?: string | number;
+  ref?: Ref<HTMLDivElement>;
 }
 
 export function Skeleton({
@@ -14,10 +15,12 @@ export function Skeleton({
   height,
   className,
   style,
+  ref,
   ...rest
 }: SkeletonProps) {
   return (
     <div
+      ref={ref}
       className={clsx(
         styles.skeleton,
         variant === "text" && styles.text,
