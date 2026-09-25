@@ -114,7 +114,13 @@ export function AnchoredPopup({
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onCloseRef.current();
+      if (event.key !== "Escape") return;
+
+      if (popupRef.current?.contains(document.activeElement)) {
+        anchorRef.current?.focus();
+      }
+
+      onCloseRef.current();
     }
 
     document.addEventListener("mousedown", handlePointerDown);
