@@ -31,6 +31,20 @@
     background-color: var(--fara-color-border-light);
 }
 
+.withLabel[data-orientation='vertical'] {
+    flex-direction: column;
+    width: auto;
+    height: 100%;
+    align-self: stretch;
+    margin: 0 var(--fara-spacing-md);
+}
+
+.withLabel[data-orientation='vertical']::before,
+.withLabel[data-orientation='vertical']::after {
+    width: var(--fara-border-width-thin);
+    height: auto;
+}
+
 .label {
     font-size: var(--fara-font-size-sm);
     color: var(--fara-color-text-tertiary);
