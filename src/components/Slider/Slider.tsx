@@ -22,14 +22,14 @@ export interface SliderBaseProps extends Omit<
 
 export interface SliderProps extends SliderBaseProps {
   range?: false;
-  value: number;
+  value?: number;
   onChange: (value: number) => void;
   ref?: Ref<HTMLInputElement>;
 }
 
 export interface SliderRangeProps extends SliderBaseProps {
   range: true;
-  value: SliderRangeValue;
+  value?: SliderRangeValue;
   onChange: (value: SliderRangeValue) => void;
   ref?: Ref<HTMLInputElement>;
 }
@@ -60,8 +60,9 @@ export function Slider(props: SliderProps | SliderRangeProps) {
 
   const isRange = range === true;
 
-  const valueMin = isRange ? (value as SliderRangeValue).min : min;
-  const valueMax = isRange ? (value as SliderRangeValue).max : (value as number);
+  const rangeValue = isRange ? (value as SliderRangeValue | undefined) : undefined;
+  const valueMin = isRange ? (rangeValue?.min ?? min) : min;
+  const valueMax = isRange ? (rangeValue?.max ?? max) : ((value as number | undefined) ?? min);
 
   const percentMin = ((valueMin - min) / (max - min)) * 100;
   const percentMax = ((valueMax - min) / (max - min)) * 100;
@@ -145,8 +146,8 @@ export function Slider(props: SliderProps | SliderRangeProps) {
   const displayText = isRange
     ? `${formatValue ? formatValue(valueMin) : valueMin} — ${formatValue ? formatValue(valueMax) : valueMax}`
     : formatValue
-      ? formatValue(value as number)
-      : String(value);
+      ? formatValue(valueMax)
+      : String(valueMax);
 
   return (
     <div
