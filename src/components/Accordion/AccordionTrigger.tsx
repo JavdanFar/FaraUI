@@ -1,24 +1,39 @@
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Accordion.module.css";
 import { useAccordionContext } from "./AccordionContext";
 
-export interface AccordionTriggerProps {
+export interface AccordionTriggerProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value"> {
   value: string;
   children: ReactNode;
+  className?: string;
+  ref?: Ref<HTMLButtonElement>;
 }
 
-export function AccordionTrigger({ value, children }: AccordionTriggerProps) {
+export function AccordionTrigger({
+  value,
+  children,
+  className,
+  ref,
+  onClick,
+  ...rest
+}: AccordionTriggerProps) {
   const { openItems, toggleItem } = useAccordionContext();
   const isOpen = openItems.includes(value);
 
   return (
     <button
+      {...rest}
+      ref={ref}
       type="button"
-      className={styles.trigger}
+      className={clsx(styles.trigger, className)}
       data-fara-accordion-trigger
       data-open={isOpen || undefined}
-      onClick={() => toggleItem(value)}
+      onClick={(event) => {
+        toggleItem(value);
+        onClick?.(event);
+      }}
       aria-expanded={isOpen}
     >
       {children}

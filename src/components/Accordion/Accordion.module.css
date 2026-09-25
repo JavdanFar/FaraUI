@@ -61,6 +61,12 @@
 
 .panelInner {
     overflow: hidden;
+    visibility: hidden;
+    transition: visibility var(--fara-transition-normal);
+}
+
+.panelOpen .panelInner {
+    visibility: visible;
 }
 
 .panelContent {

@@ -1,20 +1,30 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Accordion.module.css";
 import { useAccordionContext } from "./AccordionContext";
 
-export interface AccordionPanelProps {
+export interface AccordionPanelProps extends HTMLAttributes<HTMLDivElement> {
   value: string;
   children: ReactNode;
+  className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
-export function AccordionPanel({ value, children }: AccordionPanelProps) {
+export function AccordionPanel({
+  value,
+  children,
+  className,
+  ref,
+  ...rest
+}: AccordionPanelProps) {
   const { openItems } = useAccordionContext();
   const isOpen = openItems.includes(value);
 
   return (
     <div
-      className={clsx(styles.panel, isOpen && styles.panelOpen)}
+      {...rest}
+      ref={ref}
+      className={clsx(styles.panel, isOpen && styles.panelOpen, className)}
       data-fara-accordion-panel
       data-open={isOpen || undefined}
     >
