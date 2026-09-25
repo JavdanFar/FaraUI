@@ -7,7 +7,7 @@
     position: absolute;
     bottom: calc(100% + var(--fara-spacing-xs));
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(2px);
     background-color: var(--fara-color-text);
     color: var(--fara-color-text-inverse);
     font-family: var(--fara-font-family);
@@ -18,12 +18,15 @@
     z-index: var(--fara-z-tooltip);
     pointer-events: none;
     opacity: 0;
-    transform: translateX(-50%) translateY(2px);
     transition: opacity var(--fara-transition-fast), transform var(--fara-transition-fast);
 }
 
-.tooltip::after {
-    content: '';
+.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.arrow {
     position: absolute;
     top: 100%;
     left: 50%;
@@ -33,7 +36,19 @@
     transition: border-top-color var(--fara-transition-fast);
 }
 
-.visible {
-    opacity: 1;
+.tooltip[data-placement="bottom"] {
+    top: calc(100% + var(--fara-spacing-xs));
+    bottom: auto;
+    transform: translateX(-50%) translateY(-2px);
+}
+
+.tooltip[data-placement="bottom"].visible {
     transform: translateX(-50%) translateY(0);
+}
+
+.tooltip[data-placement="bottom"] .arrow {
+    top: auto;
+    bottom: 100%;
+    border-top-color: transparent;
+    border-bottom-color: var(--fara-color-text);
 }
