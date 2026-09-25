@@ -20,9 +20,9 @@ export function Avatar({
   ref,
   ...rest
 }: AvatarProps) {
-  const [imageError, setImageError] = useState(false);
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
-  const showImage = src && !imageError;
+  const showImage = Boolean(src) && src !== failedSrc;
 
   return (
     <div
@@ -39,7 +39,7 @@ export function Avatar({
           alt={alt}
           className={styles.image}
           data-fara-avatar-image
-          onError={() => setImageError(true)}
+          onError={() => setFailedSrc(src ?? null)}
         />
       ) : (
         fallback
