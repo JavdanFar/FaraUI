@@ -282,8 +282,6 @@ export function FileUpload({
             const isClickable = canPreviewInModal || !isImage;
 
             function handleCardClick() {
-              console.log("CLICK", item);
-              console.log("canPreviewInModal:", canPreviewInModal);
               if (canPreviewInModal) {
                 setPreviewItem(item);
               } else if (!isImage) {
