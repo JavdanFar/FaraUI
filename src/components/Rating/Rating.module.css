@@ -13,7 +13,13 @@
     transition: color var(--fara-transition-fast), transform var(--fara-transition-fast);
 }
 
-.star:disabled {
+.star:focus-visible {
+    outline: none;
+    border-radius: var(--fara-radius-sm);
+    box-shadow: var(--fara-shadow-focus);
+}
+
+.star[aria-disabled='true'] {
     cursor: default;
 }
 
@@ -21,6 +27,6 @@
     color: var(--fara-color-star-active);
 }
 
-.star:not(:disabled):hover {
+.star:not([aria-disabled='true']):hover {
     transform: scale(1.15);
 }
