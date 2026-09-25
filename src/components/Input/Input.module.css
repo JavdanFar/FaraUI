@@ -8,6 +8,8 @@
     transition: border-color var(--fara-transition-fast);
     width: 100%;
     box-sizing: border-box;
+    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
+    font-size: var(--fara-font-size-md);
 }
 
 .input::placeholder {
@@ -32,19 +34,4 @@
 .error:focus {
     border-color: var(--fara-color-danger);
     box-shadow: var(--fara-shadow-danger-focus);
-}
-
-.sm {
-    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
-    font-size: var(--fara-font-size-sm);
-}
-
-.md {
-    padding: var(--fara-spacing-sm) var(--fara-spacing-md);
-    font-size: var(--fara-font-size-md);
-}
-
-.lg {
-    padding: var(--fara-spacing-md) var(--fara-spacing-lg);
-    font-size: var(--fara-font-size-lg);
 }
