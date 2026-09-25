@@ -8,10 +8,18 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   ref?: Ref<HTMLButtonElement>;
 }
 
-export function Button({ variant = "primary", size = "md", className, ref, ...rest }: ButtonProps) {
+export function Button({
+  variant = "primary",
+  size = "md",
+  type = "button",
+  className,
+  ref,
+  ...rest
+}: ButtonProps) {
   return (
     <button
       ref={ref}
+      type={type}
       className={clsx(styles.button, styles[variant], styles[size], className)}
       data-fara-button
       data-variant={variant}
