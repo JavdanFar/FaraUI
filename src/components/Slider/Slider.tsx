@@ -212,7 +212,10 @@ export function Slider(props: SliderProps | SliderRangeProps) {
           step={step}
           value={valueMax}
           disabled={disabled}
-          onChange={(e) => commitSingle(Number(e.target.value))}
+          onChange={(e) => {
+            if (isRange) return;
+            commitSingle(Number(e.target.value));
+          }}
           aria-label={label}
           tabIndex={isRange ? -1 : 0}
           {...rest}
