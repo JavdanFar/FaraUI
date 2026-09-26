@@ -153,6 +153,7 @@ export function OtpInput({
     <div
       {...rest}
       ref={ref}
+      tabIndex={-1}
       data-fara-otp-input
       data-complete={isComplete || undefined}
       className={clsx(styles.wrapper, className)}
