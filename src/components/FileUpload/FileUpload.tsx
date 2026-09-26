@@ -313,7 +313,18 @@ export function FileUpload({
                   isClickable && styles.fileCardClickable,
                   item.status === "error" && styles.fileCardError,
                 )}
+                role={isClickable ? "button" : undefined}
+                tabIndex={isClickable ? 0 : undefined}
                 onClick={isClickable ? handleCardClick : undefined}
+                onKeyDown={
+                  isClickable
+                    ? (e) => {
+                        if (e.key !== "Enter" && e.key !== " ") return;
+                        e.preventDefault();
+                        handleCardClick();
+                      }
+                    : undefined
+                }
               >
                 {isImage ? (
                   <img
