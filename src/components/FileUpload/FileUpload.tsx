@@ -7,9 +7,12 @@ import { formatFileSize, isImageFileName, validateFiles } from "./utils";
 import { Modal } from "../Modal";
 
 export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
-  onFilesSelected: (files: UploadedFile[]) => void;
+  onFilesSelected?: (files: UploadedFile[]) => void;
   files?: UploadedFile[];
   onRemoveFile?: (id: string) => void;
+
+  value?: UploadedFile[];
+  onChange?: (files: UploadedFile[]) => void;
 
   name?: string;
   accept?: string;
@@ -33,6 +36,8 @@ export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, "o
 export function FileUpload({
   onFilesSelected,
   files,
+  value,
+  onChange,
   onRemoveFile,
   name,
   accept,
@@ -50,6 +55,13 @@ export function FileUpload({
   ref,
   ...rest
 }: FileUploadProps) {
+  const currentFiles = files ?? value;
+
+  function removeFile(id: string) {
+    onRemoveFile?.(id);
+    onChange?.((currentFiles ?? []).filter((item) => item.id !== id));
+  }
+
   const [isDragActive, setIsDragActive] = useState(false);
   const [previewItem, setPreviewItem] = useState<UploadedFile | null>(null);
   const [rejections, setRejections] = useState<RejectedFile[]>([]);
@@ -58,13 +70,13 @@ export function FileUpload({
   const inputId = useId();
 
   const isPreviewVariant = variant === "preview";
-  const currentCount = files?.length ?? 0;
+  const currentCount = currentFiles?.length ?? 0;
   const isFull =
     !isPreviewVariant &&
     ((!multiple && currentCount > 0) || (maxFiles !== undefined && currentCount >= maxFiles));
   const isDisabled = disabled || isFull;
 
-  const previewFile = isPreviewVariant ? files?.[0] : undefined;
+  const previewFile = isPreviewVariant ? currentFiles?.[0] : undefined;
   const previewFileIsImage =
     previewFile &&
     (previewFile.file
@@ -107,18 +119,19 @@ export function FileUpload({
       };
     });
 
-    onFilesSelected(wrapped);
+    onFilesSelected?.(wrapped);
+    onChange?.([...(currentFiles ?? []), ...wrapped]);
   }
 
   useEffect(() => {
-    const liveUrls = new Set((files ?? []).map((item) => item.url));
+    const liveUrls = new Set((currentFiles ?? []).map((item) => item.url));
 
     for (const url of createdUrlsRef.current) {
       if (liveUrls.has(url)) continue;
       URL.revokeObjectURL(url);
       createdUrlsRef.current.delete(url);
     }
-  }, [files]);
+  }, [currentFiles]);
 
   useEffect(
     () => () => {
@@ -136,7 +149,7 @@ export function FileUpload({
   }
 
   return (
-    <div {...rest} ref={ref} data-fara-file-upload className={className}>
+    <div {...rest} ref={ref} tabIndex={-1} data-fara-file-upload className={className}>
       <div
         role="button"
         tabIndex={isDisabled ? -1 : 0}
@@ -205,14 +218,14 @@ export function FileUpload({
               className={styles.previewDropzoneImage}
             />
 
-            {onRemoveFile && (
+            {(onRemoveFile || onChange) && (
               <button
                 type="button"
                 data-fara-file-upload-preview-remove
                 className={styles.previewDropzoneRemove}
                 onClick={(e) => {
                   e.stopPropagation();
-                  onRemoveFile(previewFile.id);
+                  removeFile(previewFile.id);
                 }}
                 aria-label="حذف عکس"
               >
@@ -272,9 +285,9 @@ export function FileUpload({
         </div>
       )}
 
-      {!isPreviewVariant && files && files.length > 0 && (
+      {!isPreviewVariant && currentFiles && currentFiles.length > 0 && (
         <div data-fara-file-upload-file-list className={styles.fileGrid}>
-          {files.map((item) => {
+          {currentFiles.map((item) => {
             const isImage = item.file
               ? item.file.type.startsWith("image/")
               : isImageFileName(item.name);
@@ -387,14 +400,14 @@ export function FileUpload({
                   )}
                 </div>
 
-                {onRemoveFile && (
+                {(onRemoveFile || onChange) && (
                   <button
                     type="button"
                     data-fara-file-upload-item-remove
                     className={styles.fileCardRemove}
                     onClick={(e) => {
                       e.stopPropagation();
-                      onRemoveFile(item.id);
+                      removeFile(item.id);
                     }}
                     aria-label={`حذف ${item.name}`}
                   >
