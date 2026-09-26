@@ -20,6 +20,12 @@ function isEmpty(value: unknown) {
   return false;
 }
 
+function toComparableNumber(value: unknown): number | undefined {
+  if (typeof value === "number") return value;
+  if (value instanceof Date) return value.getTime();
+  return undefined;
+}
+
 export function validateFieldValue(
   value: unknown,
   rule: FormRule | undefined,
@@ -41,9 +47,10 @@ export function validateFieldValue(
     }
   }
 
-  if (typeof value === "number") {
-    if (rule.min && value < rule.min[0]) return rule.min[1];
-    if (rule.max && value > rule.max[0]) return rule.max[1];
+  const numericValue = toComparableNumber(value);
+  if (numericValue !== undefined) {
+    if (rule.min && numericValue < rule.min[0]) return rule.min[1];
+    if (rule.max && numericValue > rule.max[0]) return rule.max[1];
   }
 
   if (rule.validate) {

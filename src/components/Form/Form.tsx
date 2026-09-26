@@ -42,15 +42,15 @@ export function Form<T extends Record<string, unknown>>({
     const nextValues = { ...values, [name]: value } as T;
     setValues(nextValues);
 
-    if (!touched[name]) return;
-
+    let hasTouchedField = false;
     const nextErrors = { ...errors };
     for (const key of ruleKeys) {
       if (touched[key]) {
+        hasTouchedField = true;
         nextErrors[key] = validateFieldValue(nextValues[key], rulesRecord[key], nextValues);
       }
     }
-    setErrors(nextErrors);
+    if (hasTouchedField) setErrors(nextErrors);
   }
 
   function blurField(name: string) {
@@ -71,11 +71,7 @@ export function Form<T extends Record<string, unknown>>({
 
     const nextErrors: Record<string, string | undefined> = {};
     for (const name of ruleKeys) {
-      nextErrors[name] = validateFieldValue(
-        valuesRecord[name],
-        rulesRecord[name],
-        valuesRecord,
-      );
+      nextErrors[name] = validateFieldValue(valuesRecord[name], rulesRecord[name], valuesRecord);
     }
 
     setErrors(nextErrors);
@@ -110,7 +106,9 @@ export function Form<T extends Record<string, unknown>>({
   }));
 
   return (
-    <FormContext.Provider value={{ values: valuesRecord, errors, touched, setValue, blurField, registerField }}>
+    <FormContext.Provider
+      value={{ values: valuesRecord, errors, touched, setValue, blurField, registerField }}
+    >
       <form className={className} data-fara-form onSubmit={handleSubmit} noValidate>
         {children}
       </form>
