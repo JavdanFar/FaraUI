@@ -30,6 +30,7 @@ export function RadioGroup({
   return (
     <div
       ref={ref}
+      tabIndex={-1}
       data-fara-radio-group
       role="radiogroup"
       aria-orientation="vertical"
