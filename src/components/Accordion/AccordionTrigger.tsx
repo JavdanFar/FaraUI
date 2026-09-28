@@ -1,3 +1,5 @@
+"use client";
+
 import type { ButtonHTMLAttributes, ReactNode, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Accordion.module.css";

@@ -1,3 +1,5 @@
+"use client";
+
 import type { InputHTMLAttributes, KeyboardEvent, Ref } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";

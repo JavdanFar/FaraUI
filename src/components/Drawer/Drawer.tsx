@@ -1,3 +1,5 @@
+"use client";
+
 import { useIsClient } from "../../hooks/useIsClient";
 import type { HTMLAttributes, ReactNode, Ref } from "react";
 import { useEffect, useState } from "react";

@@ -1,3 +1,5 @@
+"use client";
+
 import type { HTMLAttributes, ReactNode, Ref } from "react";
 import clsx from "clsx";
 import styles from "./Tabs.module.css";

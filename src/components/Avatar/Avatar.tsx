@@ -1,3 +1,5 @@
+"use client";
+
 import type { HTMLAttributes, Ref } from "react";
 import { useState } from "react";
 import clsx from "clsx";

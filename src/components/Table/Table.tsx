@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import clsx from "clsx";
 import styles from "./Table.module.css";

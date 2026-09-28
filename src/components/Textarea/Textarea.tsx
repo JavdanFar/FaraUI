@@ -1,3 +1,5 @@
+"use client";
+
 import type { TextareaHTMLAttributes, Ref } from "react";
 import { useCallback, useEffect, useRef } from "react";
 import clsx from "clsx";

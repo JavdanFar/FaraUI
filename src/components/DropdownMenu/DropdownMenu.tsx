@@ -1,3 +1,5 @@
+"use client";
+
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
 import { useState, useRef, useEffect } from "react";
 import clsx from "clsx";

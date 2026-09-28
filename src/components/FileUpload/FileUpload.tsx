@@ -1,3 +1,5 @@
+"use client";
+
 import type { DragEvent, HTMLAttributes, Ref } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 import clsx from "clsx";
