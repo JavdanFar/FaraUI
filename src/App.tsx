@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import "./index";
-import { formatJalali, gregorianToJalali } from "./entry-points/jalali";
+import { formatJalali, gregorianToJalali } from "./jalali";
 import {
   Accordion,
   Alert,

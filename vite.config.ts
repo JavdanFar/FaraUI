@@ -16,7 +16,7 @@ export default defineConfig({
     lib: {
       entry: {
         index: resolve(__dirname, "src/index.ts"),
-        jalali: resolve(__dirname, "src/entry-points/jalali.ts"),
+        jalali: resolve(__dirname, "src/jalali.ts"),
       },
       name: "FaraUI",
       formats: ["es", "cjs"],

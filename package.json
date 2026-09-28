@@ -31,7 +31,7 @@
       "require": "./dist/index.cjs"
     },
     "./jalali": {
-      "types": "./dist/entry-points/jalali.d.ts",
+      "types": "./dist/jalali.d.ts",
       "import": "./dist/jalali.js",
       "require": "./dist/jalali.cjs"
     },
