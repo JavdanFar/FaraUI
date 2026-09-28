@@ -53,9 +53,13 @@ declaration outputs.
 
 ## SSR and Next.js
 
-All components are marked `"use client"` and can be imported directly in
-Next.js App Router projects, including from within Server Components — no
-`dynamic(..., { ssr: false })` wrapper is needed:
+FaraUI applies the `"use client"` directive per module, not to the whole
+library. Only the interactive components that need React state or browser
+APIs are marked as client components; everything else (Button, Card, Badge,
+Breadcrumb, Divider, Timeline, and friends) renders as a Server Component
+when imported into one — so static UI stays server-rendered with zero
+client JS of its own, and interactive controls work in the App Router
+without a `dynamic(..., { ssr: false })` wrapper:
 
 ```tsx
 import { Modal, DatePicker } from "fara-ui";
@@ -78,6 +82,10 @@ export default function Page() {
   return <p>{formatJalali(getTodayJalali())}</p>;
 }
 ```
+
+The package is published with `preserveModules`, so bundlers also
+tree-shake at module granularity: importing one component never pulls the
+rest of the library into the bundle.
 
 Import `fara-ui/styles.css` once from the root layout — `app/layout.tsx` in
 the App Router, or `_app.tsx` in the Pages Router.

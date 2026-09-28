@@ -42,7 +42,7 @@ export function Example() {
 
 ## رندر سمت سرور و Next.js
 
-تمام کامپوننت‌ها با دستورالعمل ⁦`"use client"`⁩ علامت‌گذاری شده‌اند و بدون نیاز به بستن در ⁦`dynamic(..., { ssr: false })`⁩ در App Router قابل استفاده‌اند، از جمله در فایل‌هایی که به‌صورت Server Component تعریف شده‌اند:
+دستورالعمل ⁦`"use client"`⁩ در FaraUI به‌صورت ماژول‌به‌ماژول اعمال می‌شود، نه روی کل کتابخانه. فقط کامپوننت‌های تعاملی‌ای که به state ری‌اکت یا APIهای مرورگر نیاز دارند به‌عنوان Client Component علامت می‌خورند؛ بقیه (⁦`Button`⁩، ⁦`Card`⁩، ⁦`Badge`⁩، ⁦`Breadcrumb`⁩، ⁦`Divider`⁩، ⁦`Timeline`⁩ و مشابه آن‌ها) وقتی داخل Server Component ایمپورت شوند، همان‌جا رندر سرور می‌شوند — یعنی رابط ایستا روی سرور می‌ماند و کنترل‌های تعاملی هم بدون نیاز به ⁦`dynamic(..., { ssr: false })`⁩ در App Router کار می‌کنند:
 
 ```tsx
 import { Modal, DatePicker } from "fara-ui";
@@ -60,6 +60,8 @@ export default function Page() {
   return <p>{formatJalali(getTodayJalali())}</p>;
 }
 ```
+
+بسته با ⁦`preserveModules`⁩ منتشر می‌شود؛ بنابراین باندلرها نیز در سطح ماژول tree-shake می‌کنند و ایمپورت یک کامپوننت، بقیه‌ی کتابخانه را وارد باندل نمی‌کند.
 
 فایل ⁦`fara-ui/styles.css`⁩ باید یک‌بار از layout ریشه‌ی برنامه وارد شود: ⁦`app/layout.tsx`⁩ در App Router، یا ⁦`_app.tsx`⁩ در Pages Router.
 
