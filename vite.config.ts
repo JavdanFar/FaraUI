@@ -23,13 +23,14 @@ export default defineConfig({
       fileName: (format, entryName) => `${entryName}.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
+      external: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime", "clsx"],
       output: {
+        preserveModules: true,
+        preserveModulesRoot: "src",
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
         },
-        banner: (chunk) => (chunk.name === "index" ? '"use client";' : ""),
       },
     },
     cssCodeSplit: false,
