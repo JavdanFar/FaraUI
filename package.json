@@ -44,6 +44,7 @@
     "dist"
   ],
   "peerDependencies": {
+    "clsx": "^2.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -54,10 +55,8 @@
     "typecheck": "tsc -b --pretty false",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "clsx": "^2.1.1"
-  },
   "devDependencies": {
+    "clsx": "^2.1.1",
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.13.2",
     "@types/react": "^19.2.17",
