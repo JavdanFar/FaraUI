@@ -7,6 +7,7 @@ import styles from "./Combobox.module.css";
 import { Chip } from "../Chip";
 import { AnchoredPopup } from "../AnchoredPopup";
 import { nextActiveIndex } from "../../utils/nextActiveIndex";
+import { normalizePersianText } from "../../utils/normalizePersianText";
 
 export interface ComboboxOption {
   value: string;
@@ -49,7 +50,7 @@ export function Combobox({
   const filteredOptions = options.filter(
     (opt) =>
       !value.includes(opt.value) &&
-      opt.label.toLowerCase().includes(searchTerm.trim().toLowerCase()),
+      normalizePersianText(opt.label).includes(normalizePersianText(searchTerm)),
   );
 
   const activeOption = activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
