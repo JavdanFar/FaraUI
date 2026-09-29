@@ -6,6 +6,7 @@ import clsx from "clsx";
 import styles from "./Select.module.css";
 import { AnchoredPopup } from "../AnchoredPopup";
 import { nextActiveIndex } from "../../utils/nextActiveIndex";
+import { normalizePersianText } from "../../utils/normalizePersianText";
 
 export interface SelectOption {
   value: string;
@@ -50,7 +51,7 @@ export function Select({
   const selectedOption = options.find((opt) => opt.value === value);
 
   const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
+    normalizePersianText(opt.label).includes(normalizePersianText(searchTerm)),
   );
 
   const activeOption = activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
