@@ -8,12 +8,15 @@ import type { RejectedFile, UploadedFile } from "./types";
 import { formatFileSize, isImageFileName, validateFiles } from "./utils";
 import { Modal } from "../Modal";
 
-export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
-  onFilesSelected?: (files: UploadedFile[]) => void;
+export interface FileUploadProps extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "onChange" | "defaultValue"
+> {
   files?: UploadedFile[];
   onRemoveFile?: (id: string) => void;
 
   value?: UploadedFile[];
+  defaultValue?: UploadedFile[];
   onChange?: (files: UploadedFile[]) => void;
 
   name?: string;
@@ -36,9 +39,9 @@ export interface FileUploadProps extends Omit<HTMLAttributes<HTMLDivElement>, "o
 }
 
 export function FileUpload({
-  onFilesSelected,
   files,
   value,
+  defaultValue,
   onChange,
   onRemoveFile,
   name,
@@ -57,11 +60,19 @@ export function FileUpload({
   ref,
   ...rest
 }: FileUploadProps) {
-  const currentFiles = files ?? value;
+  const isControlled = (files ?? value) !== undefined;
+  const [internalFiles, setInternalFiles] = useState<UploadedFile[] | undefined>(defaultValue);
+  const currentFiles = files ?? value ?? internalFiles;
+  const canRemove = !isControlled || Boolean(onRemoveFile || onChange);
+
+  function commitFiles(next: UploadedFile[]) {
+    if (!isControlled) setInternalFiles(next);
+    onChange?.(next);
+  }
 
   function removeFile(id: string) {
     onRemoveFile?.(id);
-    onChange?.((currentFiles ?? []).filter((item) => item.id !== id));
+    commitFiles((currentFiles ?? []).filter((item) => item.id !== id));
   }
 
   const [isDragActive, setIsDragActive] = useState(false);
@@ -121,8 +132,7 @@ export function FileUpload({
       };
     });
 
-    onFilesSelected?.(wrapped);
-    onChange?.([...(currentFiles ?? []), ...wrapped]);
+    commitFiles([...(currentFiles ?? []), ...wrapped]);
   }
 
   useEffect(() => {
@@ -142,6 +152,17 @@ export function FileUpload({
     },
     [],
   );
+
+  useEffect(() => {
+    const input = inputRef.current;
+    if (!input || !name) return;
+
+    const transfer = new DataTransfer();
+    for (const item of currentFiles ?? []) {
+      if (item.file) transfer.items.add(item.file);
+    }
+    input.files = transfer.files;
+  }, [currentFiles, name]);
 
   function handleDrop(e: DragEvent<HTMLDivElement>) {
     e.preventDefault();
@@ -220,7 +241,7 @@ export function FileUpload({
               className={styles.previewDropzoneImage}
             />
 
-            {(onRemoveFile || onChange) && (
+            {canRemove && (
               <button
                 type="button"
                 data-fara-file-upload-preview-remove
@@ -272,7 +293,7 @@ export function FileUpload({
           className={styles.hiddenInput}
           accept={accept}
           multiple={multiple}
-          disabled={isDisabled}
+          disabled={disabled}
           onChange={(e) => processFiles(e.target.files)}
         />
       </div>
@@ -413,7 +434,7 @@ export function FileUpload({
                   )}
                 </div>
 
-                {(onRemoveFile || onChange) && (
+                {canRemove && (
                   <button
                     type="button"
                     data-fara-file-upload-item-remove
