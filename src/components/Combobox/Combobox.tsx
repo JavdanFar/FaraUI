@@ -59,6 +59,7 @@ export function Combobox({
       !currentValue.includes(opt.value) &&
       normalizePersianText(opt.label).includes(normalizePersianText(searchTerm)),
   );
+  const allSelected = options.length > 0 && selectedOptions.length === options.length;
 
   const activeOption = activeIndex >= 0 ? filteredOptions[activeIndex] : undefined;
 
@@ -171,7 +172,7 @@ export function Combobox({
         <input
           ref={ref}
           id={listId}
-          className={styles.searchInput}
+          className={clsx(styles.searchInput, allSelected && styles.searchInputCollapsed)}
           data-fara-combobox-search-input
           role="combobox"
           aria-expanded={isOpen && !disabled}
