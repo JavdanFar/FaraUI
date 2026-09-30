@@ -14,9 +14,10 @@ export interface SelectOption {
 }
 
 export interface SelectProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "size"> {
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "size" | "defaultValue"> {
   options: SelectOption[];
   value?: string;
+  defaultValue?: string;
   onChange?: (value: string) => void;
   emptyMessage?: string;
   ref?: Ref<HTMLInputElement>;
@@ -25,16 +26,22 @@ export interface SelectProps
 export function Select({
   options,
   value,
+  defaultValue = "",
   onChange,
   placeholder = "انتخاب کنید...",
   disabled = false,
   emptyMessage = "نتیجه‌ای یافت نشد",
   className,
+  name,
   ref,
   onFocus,
   onKeyDown,
   ...rest
 }: SelectProps) {
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const currentValue = isControlled ? value : internalValue;
+
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -48,7 +55,7 @@ export function Select({
     else if (ref) ref.current = element;
   }
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const selectedOption = options.find((opt) => opt.value === currentValue);
 
   const filteredOptions = options.filter((opt) =>
     normalizePersianText(opt.label).includes(normalizePersianText(searchTerm)),
@@ -69,6 +76,7 @@ export function Select({
   }
 
   function handleSelect(optionValue: string) {
+    if (!isControlled) setInternalValue(optionValue);
     onChange?.(optionValue);
     closeDropdown();
   }
@@ -115,6 +123,15 @@ export function Select({
 
   return (
     <div data-fara-select className={clsx(styles.wrapper, className)}>
+      {name !== undefined && (
+        <input
+          type="hidden"
+          name={name}
+          value={currentValue}
+          disabled={disabled}
+          data-fara-select-value
+        />
+      )}
       <input
         ref={setTriggerRef}
         className={styles.trigger}
@@ -162,13 +179,13 @@ export function Select({
                 key={opt.value}
                 id={`${listId}-option-${index}`}
                 role="option"
-                aria-selected={opt.value === value}
+                aria-selected={opt.value === currentValue}
                 data-fara-select-option
-                data-selected={opt.value === value || undefined}
+                data-selected={opt.value === currentValue || undefined}
                 data-active={index === activeIndex || undefined}
                 className={clsx(
                   styles.option,
-                  opt.value === value && styles.optionSelected,
+                  opt.value === currentValue && styles.optionSelected,
                   index === activeIndex && styles.optionActive,
                 )}
                 onMouseEnter={() => setActiveIndex(index)}
