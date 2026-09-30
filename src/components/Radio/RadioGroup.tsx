@@ -1,6 +1,7 @@
 "use client";
 
 import type { HTMLAttributes, Ref } from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import { Radio } from "./Radio";
 import styles from "./Radio.module.css";
@@ -14,6 +15,7 @@ export interface RadioGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "o
   name: string;
   options: RadioOption[];
   value?: string;
+  defaultValue?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
   ref?: Ref<HTMLDivElement>;
@@ -23,12 +25,22 @@ export function RadioGroup({
   name,
   options,
   value,
+  defaultValue,
   onChange,
   disabled = false,
   className,
   ref,
   ...rest
 }: RadioGroupProps) {
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const currentValue = isControlled ? value : internalValue;
+
+  function handleChange(optionValue: string) {
+    if (!isControlled) setInternalValue(optionValue);
+    onChange?.(optionValue);
+  }
+
   return (
     <div
       ref={ref}
@@ -45,8 +57,8 @@ export function RadioGroup({
           name={name}
           label={opt.label}
           value={opt.value}
-          checked={value === opt.value}
-          onChange={() => onChange?.(opt.value)}
+          checked={currentValue === opt.value}
+          onChange={() => handleChange(opt.value)}
           disabled={disabled}
         />
       ))}
