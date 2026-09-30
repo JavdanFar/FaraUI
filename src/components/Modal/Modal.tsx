@@ -2,11 +2,12 @@
 
 import { useIsClient } from "../../hooks/useIsClient";
 import type { HTMLAttributes, ReactNode, Ref } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import styles from "./Modal.module.css";
 import { lockBodyScroll, unlockBodyScroll } from "../../utils/bodyScrollLock";
+import { registerOverlay } from "../../utils/overlayStack";
 
 export interface ModalProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   open: boolean;
@@ -32,21 +33,23 @@ export function Modal({ open, onClose, children, title, className, ref, ...rest 
     return () => clearTimeout(timeout);
   }, [open]);
 
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
   useEffect(() => {
     if (!open) return;
+    return registerOverlay(() => onCloseRef.current());
+  }, [open]);
 
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
+  const shouldLock = open || isVisible;
 
-    document.addEventListener("keydown", handleEscape);
+  useEffect(() => {
+    if (!shouldLock) return;
     lockBodyScroll();
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      unlockBodyScroll();
-    };
-  }, [open, onClose]);
+    return () => unlockBodyScroll();
+  }, [shouldLock]);
 
   const isClient = useIsClient();
 
