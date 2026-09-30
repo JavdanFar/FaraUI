@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import clsx from "clsx";
 import styles from "./AnchoredPopup.module.css";
+import { registerOverlay } from "../../utils/overlayStack";
 
 export interface AnchoredPopupProps {
   open: boolean;
@@ -51,7 +52,10 @@ export function AnchoredPopup({
   useLayoutEffect(() => {
     if (!open) return;
 
+    let frame: number | null = null;
+
     function update() {
+      frame = null;
       const anchor = anchorRef.current;
       const popup = popupRef.current;
       if (!anchor || !popup) return;
@@ -86,20 +90,27 @@ export function AnchoredPopup({
         Math.min(left, viewportWidth - viewportPadding - popupWidth),
       );
 
-      setPosition({
-        top,
-        left,
-        width: matchAnchorWidth ? rect.width : undefined,
-      });
+      const width = matchAnchorWidth ? rect.width : undefined;
+      setPosition((prev) =>
+        prev && prev.top === top && prev.left === left && prev.width === width
+          ? prev
+          : { top, left, width },
+      );
+    }
+
+    function scheduleUpdate() {
+      if (frame !== null) return;
+      frame = requestAnimationFrame(update);
     }
 
     update();
 
-    window.addEventListener("scroll", update, true);
-    window.addEventListener("resize", update);
+    window.addEventListener("scroll", scheduleUpdate, { capture: true, passive: true });
+    window.addEventListener("resize", scheduleUpdate);
     return () => {
-      window.removeEventListener("scroll", update, true);
-      window.removeEventListener("resize", update);
+      if (frame !== null) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate, { capture: true });
+      window.removeEventListener("resize", scheduleUpdate);
     };
   }, [open, anchorRef, dir, align, gap, matchAnchorWidth, viewportPadding, children]);
 
@@ -113,21 +124,18 @@ export function AnchoredPopup({
       onCloseRef.current();
     }
 
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key !== "Escape") return;
-
+    const unregisterOverlay = registerOverlay(() => {
       if (popupRef.current?.contains(document.activeElement)) {
         anchorRef.current?.focus();
       }
 
       onCloseRef.current();
-    }
+    });
 
     document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
+      unregisterOverlay();
     };
   }, [open, anchorRef]);
 
