@@ -12,7 +12,7 @@ export interface SliderRangeValue {
 
 export interface SliderBaseProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  "size" | "value" | "onChange" | "min" | "max"
+  "size" | "value" | "onChange" | "min" | "max" | "defaultValue"
 > {
   min?: number;
   max?: number;
@@ -25,14 +25,16 @@ export interface SliderBaseProps extends Omit<
 export interface SliderProps extends SliderBaseProps {
   range?: false;
   value?: number;
-  onChange: (value: number) => void;
+  defaultValue?: number;
+  onChange?: (value: number) => void;
   ref?: Ref<HTMLInputElement>;
 }
 
 export interface SliderRangeProps extends SliderBaseProps {
   range: true;
   value?: SliderRangeValue;
-  onChange: (value: SliderRangeValue) => void;
+  defaultValue?: SliderRangeValue;
+  onChange?: (value: SliderRangeValue) => void;
   ref?: Ref<HTMLInputElement>;
 }
 
@@ -43,6 +45,7 @@ interface DragState {
 export function Slider(props: SliderProps | SliderRangeProps) {
   const {
     value,
+    defaultValue,
     onChange,
     min = 0,
     max = 100,
@@ -60,11 +63,17 @@ export function Slider(props: SliderProps | SliderRangeProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [dragState, setDragState] = useState<DragState>({ activeHandle: null });
 
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState<number | SliderRangeValue | undefined>(
+    defaultValue,
+  );
+  const resolvedValue = isControlled ? value : internalValue;
+
   const isRange = range === true;
 
-  const rangeValue = isRange ? (value as SliderRangeValue | undefined) : undefined;
+  const rangeValue = isRange ? (resolvedValue as SliderRangeValue | undefined) : undefined;
   const valueMin = isRange ? (rangeValue?.min ?? min) : min;
-  const valueMax = isRange ? (rangeValue?.max ?? max) : ((value as number | undefined) ?? min);
+  const valueMax = isRange ? (rangeValue?.max ?? max) : ((resolvedValue as number | undefined) ?? min);
 
   const percentMin = ((valueMin - min) / (max - min)) * 100;
   const percentMax = ((valueMax - min) / (max - min)) * 100;
@@ -97,11 +106,13 @@ export function Slider(props: SliderProps | SliderRangeProps) {
   function commitRange(nextMin: number, nextMax: number) {
     const clampedMin = Math.min(nextMin, nextMax);
     const clampedMax = Math.max(nextMin, nextMax);
-    (onChange as SliderRangeProps["onChange"])({ min: clampedMin, max: clampedMax });
+    if (!isControlled) setInternalValue({ min: clampedMin, max: clampedMax });
+    (onChange as SliderRangeProps["onChange"])?.({ min: clampedMin, max: clampedMax });
   }
 
   function commitSingle(next: number) {
-    (onChange as SliderProps["onChange"])(next);
+    if (!isControlled) setInternalValue(next);
+    (onChange as SliderProps["onChange"])?.(next);
   }
 
   function handlePointerDown(event: React.PointerEvent<HTMLDivElement>) {
