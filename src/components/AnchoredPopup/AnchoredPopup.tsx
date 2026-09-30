@@ -118,9 +118,11 @@ export function AnchoredPopup({
     if (!open) return;
 
     function handlePointerDown(event: MouseEvent) {
-      const target = event.target as Node;
-      if (popupRef.current?.contains(target)) return;
-      if (anchorRef.current?.contains(target)) return;
+      const path = event.composedPath();
+      const popup = popupRef.current;
+      const anchor = anchorRef.current;
+      if (popup && path.includes(popup)) return;
+      if (anchor && path.includes(anchor)) return;
       onCloseRef.current();
     }
 
