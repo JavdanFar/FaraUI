@@ -16,29 +16,36 @@ export interface ComboboxOption {
 
 export interface ComboboxProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  "value" | "onChange" | "size"
+  "value" | "onChange" | "size" | "defaultValue"
 > {
   options: ComboboxOption[];
   value?: string[];
-  onChange: (value: string[]) => void;
+  defaultValue?: string[];
+  onChange?: (value: string[]) => void;
   emptyMessage?: string;
   ref?: Ref<HTMLInputElement>;
 }
 
 export function Combobox({
   options,
-  value = [],
+  value,
+  defaultValue,
   onChange,
   placeholder = "انتخاب کنید...",
   disabled = false,
   emptyMessage = "نتیجه‌ای یافت نشد",
   className,
+  name,
   ref,
   onBlur,
   onFocus,
   onKeyDown,
   ...rest
 }: ComboboxProps) {
+  const isControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState<string[] | undefined>(defaultValue);
+  const currentValue = isControlled ? value : (internalValue ?? []);
+
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -46,10 +53,10 @@ export function Combobox({
   const listRef = useRef<HTMLDivElement>(null);
   const listId = useId();
 
-  const selectedOptions = options.filter((opt) => value.includes(opt.value));
+  const selectedOptions = options.filter((opt) => currentValue.includes(opt.value));
   const filteredOptions = options.filter(
     (opt) =>
-      !value.includes(opt.value) &&
+      !currentValue.includes(opt.value) &&
       normalizePersianText(opt.label).includes(normalizePersianText(searchTerm)),
   );
 
@@ -61,14 +68,19 @@ export function Combobox({
     setActiveIndex(filteredOptions.length > 0 ? 0 : -1);
   }
 
+  function commit(next: string[]) {
+    if (!isControlled) setInternalValue(next);
+    onChange?.(next);
+  }
+
   function selectOption(optionValue: string) {
-    onChange([...value, optionValue]);
+    commit([...currentValue, optionValue]);
     setSearchTerm("");
     setActiveIndex(0);
   }
 
   function removeOption(optionValue: string) {
-    onChange(value.filter((v) => v !== optionValue));
+    commit(currentValue.filter((v) => v !== optionValue));
   }
 
   function handleTriggerClick() {
@@ -128,6 +140,17 @@ export function Combobox({
 
   return (
     <div data-fara-combobox className={clsx(styles.wrapper, className)}>
+      {name !== undefined &&
+        currentValue.map((selectedValue, index) => (
+          <input
+            key={`${selectedValue}-${index}`}
+            type="hidden"
+            name={name}
+            value={selectedValue}
+            disabled={disabled}
+            data-fara-combobox-value
+          />
+        ))}
       <div
         ref={triggerRef}
         data-fara-combobox-trigger
