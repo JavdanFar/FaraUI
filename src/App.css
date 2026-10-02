@@ -38,7 +38,7 @@ body {
     height: 100vh;
     overflow-y: auto;
     background-color: var(--fara-color-background);
-    border-left: 1px solid var(--fara-color-border-light);
+    border-inline-end: 1px solid var(--fara-color-border-light);
     padding: var(--fara-spacing-lg) var(--fara-spacing-md);
     box-sizing: border-box;
 }
@@ -95,7 +95,7 @@ body {
 }
 
 .navSubItem a {
-    padding-right: var(--fara-spacing-xl);
+    padding-inline-start: var(--fara-spacing-xl);
     font-size: var(--fara-font-size-xs);
 }
 
@@ -243,7 +243,7 @@ body {
 .demoTitle {
     font-size: var(--fara-font-size-xs);
     color: var(--fara-color-text-tertiary);
-    text-align: left;
+    text-align: end;
 }
 
 .preview {
@@ -283,18 +283,67 @@ body {
     background-color: var(--fara-color-background);
 }
 
-.sidebarNav {
+.sidebarDemoMain {
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: var(--fara-spacing-xs);
-    padding: var(--fara-spacing-sm);
-    font-size: var(--fara-font-size-sm);
 }
 
-.sidebarNav span {
-    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
-    border-radius: var(--fara-radius-sm);
+.sidebarDemoBar {
+    display: flex;
+    align-items: center;
+    gap: var(--fara-spacing-sm);
+    padding: var(--fara-spacing-sm);
+    border-bottom: 1px solid var(--fara-color-border-light);
+}
+
+.sidebarDemoContent {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--fara-spacing-md);
+    color: var(--fara-color-text-tertiary);
+    font-size: var(--fara-font-size-sm);
+    text-align: center;
+}
+
+.navTools {
+    margin-bottom: var(--fara-spacing-md);
+}
+
+.result {
+    font-size: var(--fara-font-size-sm);
     color: var(--fara-color-text-secondary);
+}
+
+.muted {
+    font-size: var(--fara-font-size-sm);
+    color: var(--fara-color-text-tertiary);
+}
+
+.statGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--fara-spacing-md);
+}
+
+.chipButton {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: var(--fara-radius-full);
+    opacity: 0.6;
+    transition: opacity var(--fara-transition-fast);
+}
+
+.chipButton[data-selected] {
+    opacity: 1;
+    outline: 2px solid var(--fara-color-primary);
+    outline-offset: 1px;
 }
 
 /* ----------------------------------------
