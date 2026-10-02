@@ -23,7 +23,7 @@ tokens that consuming applications can override.
 ## Installation
 
 ```bash
-npm install fara-ui
+npm install faraui
 ```
 
 FaraUI currently supports React 19 and ReactDOM 19.
@@ -34,8 +34,8 @@ Import the stylesheet once, near the root of your application, and start
 using components:
 
 ```tsx
-import "fara-ui/styles.css";
-import { Button, DatePicker } from "fara-ui";
+import "faraui/styles.css";
+import { Button, DatePicker } from "faraui";
 
 export function Example() {
   return (
@@ -62,7 +62,7 @@ client JS of its own, and interactive controls work in the App Router
 without a `dynamic(..., { ssr: false })` wrapper:
 
 ```tsx
-import { Modal, DatePicker } from "fara-ui";
+import { Modal, DatePicker } from "faraui";
 ```
 
 Components that render into a portal (`Modal`, `Drawer`, `Toaster`,
@@ -76,7 +76,7 @@ well:
 
 ```tsx
 // app/some-page.tsx (Server Component)
-import { formatJalali, getTodayJalali } from "fara-ui/jalali";
+import { formatJalali, getTodayJalali } from "faraui/jalali";
 
 export default function Page() {
   return <p>{formatJalali(getTodayJalali())}</p>;
@@ -87,7 +87,7 @@ The package is published with `preserveModules`, so bundlers also
 tree-shake at module granularity: importing one component never pulls the
 rest of the library into the bundle.
 
-Import `fara-ui/styles.css` once from the root layout — `app/layout.tsx` in
+Import `faraui/styles.css` once from the root layout — `app/layout.tsx` in
 the App Router, or `_app.tsx` in the Pages Router.
 
 ## Components
@@ -108,7 +108,7 @@ Avatar, Divider
 ## Styling and theming
 
 Components ship with CSS Modules and a single bundled stylesheet
-(`fara-ui/styles.css`). Design tokens are exposed as CSS custom properties,
+(`faraui/styles.css`). Design tokens are exposed as CSS custom properties,
 and every component also exposes a stable set of `data-fara-*` attributes
 as public selectors for application-level overrides — these are safer to
 rely on than internal class names, which may change between versions.

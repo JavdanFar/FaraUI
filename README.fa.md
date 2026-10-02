@@ -15,7 +15,7 @@
 ## نصب
 
 ```bash
-npm install fara-ui
+npm install faraui
 ```
 
 نسخه‌ی فعلی از React 19 و ReactDOM 19 پشتیبانی می‌کند.
@@ -25,8 +25,8 @@ npm install fara-ui
 فایل استایل را یک‌بار، در نقطه‌ی ورود برنامه، وارد کنید:
 
 ```tsx
-import "fara-ui/styles.css";
-import { Button, DatePicker } from "fara-ui";
+import "faraui/styles.css";
+import { Button, DatePicker } from "faraui";
 
 export function Example() {
   return (
@@ -45,7 +45,7 @@ export function Example() {
 دستورالعمل ⁦`"use client"`⁩ در FaraUI به‌صورت ماژول‌به‌ماژول اعمال می‌شود، نه روی کل کتابخانه. فقط کامپوننت‌های تعاملی‌ای که به state ری‌اکت یا APIهای مرورگر نیاز دارند به‌عنوان Client Component علامت می‌خورند؛ بقیه (⁦`Button`⁩، ⁦`Card`⁩، ⁦`Badge`⁩، ⁦`Breadcrumb`⁩، ⁦`Divider`⁩، ⁦`Timeline`⁩ و مشابه آن‌ها) وقتی داخل Server Component ایمپورت شوند، همان‌جا رندر سرور می‌شوند — یعنی رابط ایستا روی سرور می‌ماند و کنترل‌های تعاملی هم بدون نیاز به ⁦`dynamic(..., { ssr: false })`⁩ در App Router کار می‌کنند:
 
 ```tsx
-import { Modal, DatePicker } from "fara-ui";
+import { Modal, DatePicker } from "faraui";
 ```
 
 کامپوننت‌هایی که در قالب یک portal رندر می‌شوند — ⁦`Modal`⁩، ⁦`Drawer`⁩، ⁦`Toaster`⁩، ⁦`Popover`⁩، ⁦`DropdownMenu`⁩ و کنترل‌های تاریخ و ساعت — در مرحله‌ی رندر سرور خروجی تولید نمی‌کنند و بلافاصله پس از هیدریت شدن صفحه در مرورگر نمایش داده می‌شوند. این رفتار به‌عمد طراحی شده و هشدار هیدریشن ایجاد نمی‌کند.
@@ -54,7 +54,7 @@ import { Modal, DatePicker } from "fara-ui";
 
 ```tsx
 // app/some-page.tsx (Server Component)
-import { formatJalali, getTodayJalali } from "fara-ui/jalali";
+import { formatJalali, getTodayJalali } from "faraui/jalali";
 
 export default function Page() {
   return <p>{formatJalali(getTodayJalali())}</p>;
@@ -63,7 +63,7 @@ export default function Page() {
 
 بسته با ⁦`preserveModules`⁩ منتشر می‌شود؛ بنابراین باندلرها نیز در سطح ماژول tree-shake می‌کنند و ایمپورت یک کامپوننت، بقیه‌ی کتابخانه را وارد باندل نمی‌کند.
 
-فایل ⁦`fara-ui/styles.css`⁩ باید یک‌بار از layout ریشه‌ی برنامه وارد شود: ⁦`app/layout.tsx`⁩ در App Router، یا ⁦`_app.tsx`⁩ در Pages Router.
+فایل ⁦`faraui/styles.css`⁩ باید یک‌بار از layout ریشه‌ی برنامه وارد شود: ⁦`app/layout.tsx`⁩ در App Router، یا ⁦`_app.tsx`⁩ در Pages Router.
 
 ## کامپوننت‌ها
 
@@ -79,7 +79,7 @@ export default function Page() {
 
 ## استایل‌دهی و تم
 
-کامپوننت‌ها به‌همراه CSS Modules و یک فایل استایل یکپارچه (⁦`fara-ui/styles.css`⁩) منتشر می‌شوند. متغیرهای طراحی در قالب CSS custom properties در دسترس‌اند و هر کامپوننت مجموعه‌ای پایدار از ویژگی‌های ⁦`data-fara-*`⁩ را به‌عنوان selector عمومی برای بازنویسی در سطح برنامه ارائه می‌دهد. این ویژگی‌ها، برخلاف نام کلاس‌های داخلی که ممکن است میان نسخه‌ها تغییر کنند، مرجع پایداری برای استایل‌دهی محسوب می‌شوند.
+کامپوننت‌ها به‌همراه CSS Modules و یک فایل استایل یکپارچه (⁦`faraui/styles.css`⁩) منتشر می‌شوند. متغیرهای طراحی در قالب CSS custom properties در دسترس‌اند و هر کامپوننت مجموعه‌ای پایدار از ویژگی‌های ⁦`data-fara-*`⁩ را به‌عنوان selector عمومی برای بازنویسی در سطح برنامه ارائه می‌دهد. این ویژگی‌ها، برخلاف نام کلاس‌های داخلی که ممکن است میان نسخه‌ها تغییر کنند، مرجع پایداری برای استایل‌دهی محسوب می‌شوند.
 
 فهرست کامل متغیرها و ویژگی‌ها در [STYLING.md](./STYLING.md) مستند شده است.
 

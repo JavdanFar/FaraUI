@@ -1,5 +1,5 @@
 {
-  "name": "fara-ui",
+  "name": "faraui",
   "version": "0.4.0",
   "description": "RTL-first React UI component library for Persian applications",
   "keywords": [
@@ -35,7 +35,7 @@
       "import": "./dist/jalali.js",
       "require": "./dist/jalali.cjs"
     },
-    "./styles.css": "./dist/fara-ui.css"
+    "./styles.css": "./dist/faraui.css"
   },
   "sideEffects": [
     "**/*.css"

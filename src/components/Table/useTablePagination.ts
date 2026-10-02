@@ -15,7 +15,7 @@ export function useTablePagination<T>({ data, config }: UseTablePaginationOption
 
   if (import.meta.env.DEV && enabled && isServer && config.totalItems === undefined) {
     console.warn(
-      '[fara-ui] Table: pagination.mode is "server" but pagination.totalItems was not provided, so the pagination controls will not render. Pass pagination.totalItems, or set pagination.mode="client" to paginate the given data array automatically.',
+      '[FaraUI] Table: pagination.mode is "server" but pagination.totalItems was not provided, so the pagination controls will not render. Pass pagination.totalItems, or set pagination.mode="client" to paginate the given data array automatically.',
     );
   }
 
