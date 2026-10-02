@@ -89,8 +89,8 @@ export type { PopoverProps } from "./components/Popover";
 export { Drawer } from "./components/Drawer";
 export type { DrawerProps } from "./components/Drawer";
 
-export { Sidebar } from "./components/Sidebar";
-export type { SidebarProps } from "./components/Sidebar";
+export { Sidebar, SidebarItem, SidebarTrigger } from "./components/Sidebar";
+export type { SidebarProps, SidebarItemProps, SidebarTriggerProps } from "./components/Sidebar";
 
 export { ProgressBar } from "./components/ProgressBar";
 export type { ProgressBarProps } from "./components/ProgressBar";

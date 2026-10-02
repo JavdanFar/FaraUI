@@ -3,6 +3,7 @@
     height: 100%;
     width: 280px;
     flex-shrink: 0;
+    box-sizing: border-box;
     background-color: var(--fara-color-background);
     border-inline-end: var(--fara-border-width-thin) solid var(--fara-color-border);
     display: flex;
@@ -14,55 +15,148 @@
     width: 64px;
 }
 
+.collapsed:not(:has([data-fara-sidebar-item-icon])) {
+    width: 0;
+    border-inline-end-width: 0;
+}
+
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--fara-spacing-sm);
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
     padding: var(--fara-spacing-md);
     border-bottom: var(--fara-border-width-thin) solid var(--fara-color-border);
 }
 
-.headerContent {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    opacity: 1;
-    transition: opacity var(--fara-transition-fast);
-}
-
-.headerContentHidden {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.toggleButton {
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 28px;
-    height: 28px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: var(--fara-color-text-secondary);
-    border-radius: var(--fara-radius-sm);
-    transition: background-color var(--fara-transition-fast), transform var(--fara-transition-normal);
-}
-
-.toggleButton:hover {
-    background-color: var(--fara-color-background-secondary);
-}
-
-.toggleButtonCollapsed {
-    transform: rotate(180deg);
+.collapsed .header {
+    display: none;
 }
 
 .body {
     flex: 1;
+    min-width: 0;
     overflow-y: auto;
     overflow-x: hidden;
     padding: var(--fara-spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--fara-spacing-2xs);
+}
+
+.collapsed .body {
+    padding: var(--fara-spacing-sm);
+}
+
+.collapsed:not(:has([data-fara-sidebar-item-icon])) .body {
+    display: none;
+}
+
+.trigger {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background: none;
+    border-radius: var(--fara-radius-md);
+    color: var(--fara-color-text-secondary);
+    cursor: pointer;
+    transition: background-color var(--fara-transition-fast), color var(--fara-transition-fast);
+}
+
+.trigger:hover {
+    background-color: var(--fara-color-background-secondary);
+    color: var(--fara-color-text);
+}
+
+.trigger:focus-visible {
+    outline: none;
+    box-shadow: var(--fara-shadow-focus);
+}
+
+.trigger:disabled {
+    opacity: var(--fara-opacity-disabled);
+    cursor: not-allowed;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: var(--fara-spacing-sm);
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 36px;
+    padding: var(--fara-spacing-xs) var(--fara-spacing-sm);
+    border: none;
+    background: none;
+    border-radius: var(--fara-radius-md);
+    color: var(--fara-color-text-secondary);
+    font-family: inherit;
+    font-size: var(--fara-font-size-md);
+    text-align: start;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color var(--fara-transition-fast), color var(--fara-transition-fast);
+}
+
+.item:hover {
+    background-color: var(--fara-color-background-secondary);
+    color: var(--fara-color-text);
+}
+
+.item:focus-visible {
+    outline: none;
+    box-shadow: var(--fara-shadow-focus);
+}
+
+.itemActive {
+    background-color: var(--fara-color-primary-bg);
+    color: var(--fara-color-primary-text);
+    font-weight: var(--fara-font-weight-medium);
+}
+
+.itemActive:hover {
+    background-color: var(--fara-color-primary-bg);
+    color: var(--fara-color-primary-text);
+}
+
+.itemDisabled {
+    opacity: var(--fara-opacity-disabled);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.itemIcon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--fara-icon-size-md);
+    height: var(--fara-icon-size-md);
+    font-size: var(--fara-icon-size-md);
+    line-height: 1;
+}
+
+.itemLabel {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collapsed .item {
+    justify-content: center;
+    padding-inline: 0;
+}
+
+.collapsed .itemLabel {
+    display: none;
+}
+
+.collapsed .itemNoIcon {
+    display: none;
 }

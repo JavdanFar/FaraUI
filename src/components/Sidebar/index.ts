@@ -1,2 +1,6 @@
 export { Sidebar } from "./Sidebar";
 export type { SidebarProps } from "./Sidebar";
+export { SidebarItem } from "./SidebarItem";
+export type { SidebarItemProps } from "./SidebarItem";
+export { SidebarTrigger } from "./SidebarTrigger";
+export type { SidebarTriggerProps } from "./SidebarTrigger";

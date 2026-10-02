@@ -1,83 +1,46 @@
 "use client";
 
 import type { HTMLAttributes, Ref, ReactNode } from "react";
-import { useState } from "react";
+import { useMemo } from "react";
 import clsx from "clsx";
 import styles from "./Sidebar.module.css";
-import { CollapseIcon } from "./CollapseIcon";
+import { SidebarContext } from "./SidebarContext";
 
 export interface SidebarProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   title?: ReactNode;
-  ref?: Ref<HTMLElement>;
-  collapsible?: boolean;
   collapsed?: boolean;
-  defaultCollapsed?: boolean;
-  onCollapsedChange?: (collapsed: boolean) => void;
+  ref?: Ref<HTMLElement>;
 }
 
 export function Sidebar({
   title,
   children,
   className,
+  collapsed = false,
   ref,
-  collapsible,
-  collapsed,
-  defaultCollapsed,
-  onCollapsedChange,
   ...rest
 }: SidebarProps) {
-  const [uncontrolledCollapsed, setUncontrolledCollapsed] = useState(
-    collapsed ?? defaultCollapsed ?? false,
-  );
-
-  const isControlled = collapsed !== undefined && onCollapsedChange !== undefined;
-  const isCollapsed = isControlled ? collapsed : uncontrolledCollapsed;
-  const isCollapsible =
-    collapsible ??
-    (collapsed !== undefined ||
-      defaultCollapsed !== undefined ||
-      onCollapsedChange !== undefined);
-
-  function toggleCollapsed() {
-    const next = !isCollapsed;
-    if (!isControlled) setUncontrolledCollapsed(next);
-    onCollapsedChange?.(next);
-  }
+  const contextValue = useMemo(() => ({ collapsed }), [collapsed]);
 
   return (
-    <aside
-      {...rest}
-      ref={ref}
-      className={clsx(styles.sidebar, isCollapsed && styles.collapsed, className)}
-      data-fara-sidebar
-      data-collapsed={isCollapsed || undefined}
-    >
-      <div className={styles.header} data-fara-sidebar-header>
+    <SidebarContext.Provider value={contextValue}>
+      <aside
+        {...rest}
+        ref={ref}
+        className={clsx(styles.sidebar, collapsed && styles.collapsed, className)}
+        data-fara-sidebar
+        data-collapsed={collapsed || undefined}
+      >
         {title && (
-          <div
-            className={clsx(styles.headerContent, isCollapsed && styles.headerContentHidden)}
-            data-fara-sidebar-header-content
-          >
+          <div className={styles.header} data-fara-sidebar-header>
             {title}
           </div>
         )}
 
-        {isCollapsible && (
-          <button
-            type="button"
-            className={clsx(styles.toggleButton, isCollapsed && styles.toggleButtonCollapsed)}
-            data-fara-sidebar-toggle
-            onClick={toggleCollapsed}
-            aria-label={isCollapsed ? "باز کردن منو" : "بستن منو"}
-          >
-            <CollapseIcon />
-          </button>
-        )}
-      </div>
-
-      <div className={styles.body} data-fara-sidebar-body>
-        {children}
-      </div>
-    </aside>
+        <div className={styles.body} data-fara-sidebar-body>
+          {children}
+        </div>
+      </aside>
+    </SidebarContext.Provider>
   );
 }
