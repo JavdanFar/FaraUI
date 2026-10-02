@@ -94,7 +94,7 @@ Hooks are listed in short form: `-track` on `ProgressBar` means `data-fara-progr
 - **Breadcrumb**: `breadcrumb` (root), `-list`, `-item` (`data-current`), `-current`, `-link`, `-separator`
 - **Button**: `button` (root, `data-variant`, `data-size`)
 - **Chip**: `chip` (root, `data-removable`), `-remove`
-- **Sidebar**: `sidebar` (root, `data-collapsed`), `-header`, `-header-content`, `-toggle`, `-body`
+- **Sidebar**: `sidebar` (root, `data-collapsed`), `-header`, `-body`, `-item` (`data-active`, `data-disabled`, `data-has-icon`), `-item-icon`, `-item-label`, `-trigger` (`data-collapsed`)
 - **Stepper**: `stepper` (root, `data-orientation`), `-list`, `-step` (`data-active`, `data-completed`), `-header`, `-circle` (`data-active`, `data-completed`), `-check-icon`, `-text`, `-label`, `-description`, `-connector` (`data-completed`), `-content`
 - **Tabs**: `tabs` (Root), `-list`, `-tab` (`data-active`, `data-disabled`, `data-value`), `-panel` (`data-active`)
 - **Timeline**: `timeline` (root, `data-orientation`), `-item`, `-marker-column`, `-dot` (`data-variant`), `-connector`, `-content`, `-title`, `-timestamp`, `-description`
